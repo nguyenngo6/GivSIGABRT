@@ -21,60 +21,92 @@ class _SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(),
-      body: Form(
-        key: _formKey,
-        child: Column(
-          children: <Widget>[
-            TextFormField(
-              validator: (input) {
-                if(input.isEmpty){
-                  return 'Provide an email';
-                }
-              },
-              style: style,
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                hintText: "Email",
-                border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-              onSaved: (input) => _email = input,
-            ),
-            TextFormField(
-              validator: (input) {
-                if(input.length < 6){
-                  return 'Longer password please';
-                }
-              },
-              decoration: InputDecoration(
-                contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                hintText: "Password",
-                border:
-                  OutlineInputBorder(borderRadius: BorderRadius.circular(32.0))),
-              onSaved: (input) => _password = input,
-              obscureText: true,
-            ),
-            RaisedButton(
-              onPressed: signIn,
-              child: Text('Sign in'),
-              
-            ),
-            RaisedButton(
-              onPressed: signUp,
-              child: Text('Sign up'),
-            ),
-          ],
-        )
-      ),
+      body: new Container(
+        padding: new EdgeInsets.all(16.0),
+          child: Form(
+              key: _formKey,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  TextFormField(
+                    validator: (input) {
+                      if (input.isEmpty) {
+                        return 'Provide an email';
+                      }
+                    },
+                    autofocus: true,
+//                style: style,
+                    decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                        hintText: "Email",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(32.0))),
+                    onSaved: (input) => _email = input,
+                  ),
+                  new Container(height: 15.0),
+                  TextFormField(
+                    validator: (input) {
+                      if (input.isEmpty) {
+                        return 'Provide a password';
+                      } else if (input.length < 6) {
+                        return 'Password must have at least 6 characters';
+                      }
+                    },
+                    autofocus: true,
+                    decoration: InputDecoration(
+                        contentPadding:
+                            EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                        hintText: "Password",
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(32.0))),
+                    onSaved: (input) => _password = input,
+                    obscureText: true,
+                  ),
+                  new Container(height: 15.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      RaisedButton(
+                        onPressed: signIn,
+                        child: Text('Sign in'),
+                      ),
+                      Container(width: 50.0,),
+                      RaisedButton(
+                        onPressed: signUp,
+                        child: Text('Sign up'),
+                      ),
+                    ],
+                  ),
+
+                  FlatButton(
+                    child: Text(
+                      'Forgot password?',
+                      style: TextStyle(color: Colors.blue),
+                    ),
+                    onPressed: () {},
+                  ),
+
+                ],
+              ))),
     );
   }
-  Future <void> signIn() async {
-    if (_formKey.currentState.validate()){
+
+  Future<void> signIn() async {
+    if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       try {
         FirebaseAuth firebaseAuth = FirebaseAuth.instance;
-        FirebaseUser user =  await firebaseAuth.signInWithEmailAndPassword(email: _email, password: _password);
-        
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomePage(user: user, firebaseAuth: firebaseAuth)));          
+        FirebaseUser user = await firebaseAuth.signInWithEmailAndPassword(
+            email: _email, password: _password);
+
+        Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    HomePage(user: user, firebaseAuth: firebaseAuth)));
       } catch (e) {
         return AlertDialog(
           title: Text('error'),
@@ -82,8 +114,9 @@ class _SignInPageState extends State<SignInPage> {
       }
     }
   }
-  
+
   void signUp() {
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => SignUpPage()));
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => SignUpPage()));
   }
 }
