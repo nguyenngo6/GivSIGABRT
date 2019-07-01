@@ -6,6 +6,9 @@ import 'package:giver_app/UI/merchant_home_page.dart';
 import 'package:giver_app/UI/sign_in_page.dart';
 
 class BlockHomePage extends StatefulWidget {
+  const BlockHomePage ({Key key, @required this.user, this.firebaseAuth}) : super(key: key);
+  final FirebaseUser user;
+  final FirebaseAuth firebaseAuth;
   @override
   _BlockHomePageState createState() => _BlockHomePageState();
 }
@@ -31,9 +34,7 @@ class _BlockHomePageState extends State<BlockHomePage> {
                 Container(width: 50.0,),
                 RaisedButton(
                   onPressed: () {
-                    FirebaseUser user =
-                        FirebaseAuth.instance.currentUser() as FirebaseUser;
-                    user.sendEmailVerification();
+                    widget.user.sendEmailVerification();
                     signIn();
                   },
                   child: Text("Don't receive? Send Again"),
