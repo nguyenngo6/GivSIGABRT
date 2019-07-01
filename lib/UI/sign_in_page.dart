@@ -113,7 +113,7 @@ class _SignInPageState extends State<SignInPage> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      BlockHomePage()));
+                      BlockHomePage(user: user, firebaseAuth: firebaseAuth)));
         }
 
       } catch (e) {
