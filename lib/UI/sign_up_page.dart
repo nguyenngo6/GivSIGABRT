@@ -15,6 +15,13 @@ class _SignUpPageState extends State<SignUpPage> {
   String _phone;
   String _password;
   String _confirm;
+
+  final  _nameController = TextEditingController();
+  final  _emailController = TextEditingController();
+  final  _phoneController = TextEditingController();
+  final  _passController = TextEditingController();
+  final  _confirmController = TextEditingController();
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
@@ -30,10 +37,11 @@ class _SignUpPageState extends State<SignUpPage> {
                 children: <Widget>[
                   SizedBox(
                     width: 100,
-                    height: 80,
+                    height: 70,
                     child: Image.asset('assets/profile.png'),
                   ),
                   TextFormField(
+                    controller: _nameController,
                     validator: (input) {
                       if (input.isEmpty) {
                         return 'Provide an username';
@@ -50,9 +58,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     onSaved: (input) => _username = input,
                   ),
                   Container(
-                    height: 5.0,
+                    height: 4.0,
                   ),
                   TextFormField(
+                    controller: _emailController,
                     validator: (input) {
                       if (input.isEmpty) {
                         return 'Provide an email';
@@ -69,9 +78,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     onSaved: (input) => _email = input,
                   ),
                   Container(
-                    height: 5.0,
+                    height: 4.0,
                   ),
                   TextFormField(
+                    controller: _phoneController,
                     validator: (input) {
                       if (input.isEmpty) {
                         return 'Provide an phone';
@@ -88,9 +98,10 @@ class _SignUpPageState extends State<SignUpPage> {
                     onSaved: (input) => _phone = input,
                   ),
                   Container(
-                    height: 5.0,
+                    height: 4.0,
                   ),
                   TextFormField(
+                    controller: _passController,
                     validator: (input) {
                       if (input.isEmpty) {
                         return 'Provide a password';
@@ -109,17 +120,19 @@ class _SignUpPageState extends State<SignUpPage> {
                     obscureText: true,
                   ),
                   Container(
-                    height: 5.0,
+                    height: 4.0,
                   ),
                   TextFormField(
+                    controller: _confirmController,
                     validator: (input) {
                       if (input.isEmpty) {
                         return 'Provide a confirm password';
                       } else if (input.length < 6) {
                         return 'Password must have at least 6 characters';
+                      } else if (input != _passController.text) {
+                        return 'Confirm password did not match!';
                       }
                     },
-                    autofocus: true,
                     decoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 15.0),
@@ -145,7 +158,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           'Have an account? Login !',
                           style: TextStyle(color: Colors.black54),
                         ),
-                        onPressed: () {},
+                        onPressed: backLogin,
                       ),
                     ],
                   ),
@@ -158,11 +171,21 @@ class _SignUpPageState extends State<SignUpPage> {
 
   Future<void> signUp() async {
     if (_formKey.currentState.validate()) {
+//      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Processing Data')));// bug when not using inside Scafford
       _formKey.currentState.save();
       try {
         FirebaseUser user = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: _email, password: _password);
-        user.sendEmailVerification();
+        user.sendEmailVerification();// not implemented yet
+        if (user.isEmailVerified){
+
+        }
+        Firestore.instance.runTransaction((Transaction transaction) async {
+          CollectionReference reference = Firestore.instance.collection(
+              'users');
+          await reference
+              .add({"username": _username, "email": _email, "phone": _phone});
+        });
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => SignInPage()));
       } catch (e) {
