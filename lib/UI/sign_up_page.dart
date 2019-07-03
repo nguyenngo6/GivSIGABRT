@@ -177,14 +177,13 @@ class _SignUpPageState extends State<SignUpPage> {
         FirebaseUser user = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: _email, password: _password);
         user.sendEmailVerification();// not implemented yet
-        if (user.isEmailVerified){
-
-        }
+        print("send email to-->");
+        print(_emailController.text);
         Firestore.instance.runTransaction((Transaction transaction) async {
           CollectionReference reference = Firestore.instance.collection(
               'users');
-          await reference
-              .add({"username": _username, "email": _email, "phone": _phone});
+          await reference.document(user.uid)
+              .setData({"username": _username, "email": _email, "phone": _phone, "level": 2});
         });
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => SignInPage()));
