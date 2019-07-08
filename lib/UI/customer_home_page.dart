@@ -30,7 +30,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
               case ConnectionState.waiting:
                 return Text('Loading..');
               default:
-                return Text(snapshot.data.data['username']);
+                return Text(snapshot.data.data['email']);
             }
           },
         ));

@@ -33,9 +33,9 @@ class _HomePageState extends State<HomePage> {
             print(snapshot.data.data['level']);
             switch (snapshot.data.data['level']) {
               case 1:
-                return MerchantHomePage(user: widget.user);
-              case 2:
                 return CustomerHomePage(user: widget.user);
+              case 2:
+                return MerchantHomePage(user: widget.user);
             }
           }
         },
