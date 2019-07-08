@@ -167,6 +167,7 @@ class _SignUpPageState extends State<SignUpPage> {
         Firestore.instance.runTransaction((Transaction transaction) async {
           CollectionReference reference = Firestore.instance.collection(
               'users');
+              
           await reference.document(user.uid)
               .setData({"email": _email, "level": _selected});
           DocumentReference docRef = Firestore.instance.collection('users').document(user.uid);
