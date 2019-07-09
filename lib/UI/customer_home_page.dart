@@ -6,6 +6,7 @@ import 'package:giver_app/UI/sign_in_page.dart';
 class CustomerHomePage extends StatefulWidget {
   const CustomerHomePage({Key key, @required this.user}) : super(key: key);
   final FirebaseUser user;
+
   @override
   _CustomerHomePageState createState() => _CustomerHomePageState();
 }
