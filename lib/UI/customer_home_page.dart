@@ -189,25 +189,6 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
   signOut() {
     FirebaseAuth.instance.signOut();
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => SignInPage()));
-
-        body: StreamBuilder<DocumentSnapshot>(
-          stream: Firestore.instance
-              .collection('users')
-              .document(widget.user.uid)
-              .snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-            if (snapshot.hasError) {
-              return Text('Error: ${snapshot.error}');
-            }
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return Text('Loading..');
-              default:
-                return Text(snapshot.data.data['email']);
-            }
-          },
-        ));
+        context, MaterialPageRoute(builder: (context) => SignInPage()));       
   }
 }
