@@ -11,53 +11,55 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpPageState extends State<SignUpPage> {
   TextStyle style = TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
-  String _username;
   String _email;
-  String _phone;
   String _password;
   String _confirm;
+  int _selected = 0;
 
-  final  _nameController = TextEditingController();
   final  _emailController = TextEditingController();
-  final  _phoneController = TextEditingController();
-  final  _passController = TextEditingController();
+  final  _passwordController = TextEditingController();
   final  _confirmController = TextEditingController();
+
+  void onChanged(int value) {
+    setState((){
+      _selected = value;
+    });
+  }
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
-//      appBar: new AppBar(),
-      body: new Container(
+      appBar: new AppBar(),
+      body:
+         new Container(
           padding: new EdgeInsets.all(10.0),
           child: Form(
               key: _formKey,
-              child: Column(
+              child:           
+              Column(
+                
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
-                  SizedBox(
-                    width: 100,
-                    height: 70,
-                    child: Image.asset('assets/profile.png'),
+                  RadioListTile(
+                  value: 1,
+                  title: new Text('Level 1'),
+                  groupValue: _selected,
+                  onChanged: (int value){onChanged(value);},
+                  activeColor: Colors.red,
+                  subtitle: new Text('Customer'),
+
                   ),
-                  TextFormField(
-                    controller: _nameController,
-                    validator: (input) {
-                      if (input.isEmpty) {
-                        return 'Provide an username';
-                      }
-                    },
-                    autofocus: true,
-//                style: style,
-                    decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 15.0),
-                        hintText: "Username",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(32.0))),
-                    onSaved: (input) => _username = input,
-                  ),
+                  RadioListTile(
+                  value: 2,
+                  title: new Text('Level 2'),
+                  groupValue: _selected,
+                  onChanged: (int value){onChanged(value);},
+                  activeColor: Colors.red,
+                  subtitle: new Text('Merchant'),
+
+                  ),                          
                   Container(
                     height: 4.0,
                   ),
@@ -69,7 +71,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       }
                     },
                     autofocus: true,
-//                style: style,
                     decoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 15.0),
@@ -82,27 +83,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     height: 4.0,
                   ),
                   TextFormField(
-                    controller: _phoneController,
-                    validator: (input) {
-                      if (input.isEmpty) {
-                        return 'Provide an phone';
-                      }
-                    },
-                    autofocus: true,
-//                style: style,
-                    decoration: InputDecoration(
-                        contentPadding:
-                            EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 15.0),
-                        hintText: "Phone",
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(32.0))),
-                    onSaved: (input) => _phone = input,
-                  ),
-                  Container(
-                    height: 4.0,
-                  ),
-                  TextFormField(
-                    controller: _passController,
+                    controller: _passwordController,
                     validator: (input) {
                       if (input.isEmpty) {
                         return 'Provide a password';
@@ -130,7 +111,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         return 'Provide a confirm password';
                       } else if (input.length < 6) {
                         return 'Password must have at least 6 characters';
-                      } else if (input != _passController.text) {
+                      } else if (input != _passwordController.text) {
                         return 'Confirm password did not match!';
                       }
                     },
@@ -146,6 +127,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   Container(
                     height: 5.0,
                   ),
+                  
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -163,10 +145,8 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ],
                   ),
-
-
                 ],
-              ))),
+              ))),           
     );
   }
   Future<void> signUp() async {
@@ -182,8 +162,15 @@ class _SignUpPageState extends State<SignUpPage> {
         Firestore.instance.runTransaction((Transaction transaction) async {
           CollectionReference reference = Firestore.instance.collection(
               'users');
-          await reference.document(user.uid)
-              .setData({"username": _username, "email": _email, "phone": _phone, "level": 1});
+              
+          await reference.document(user.uid).setData({"email": _email, "level": _selected});
+          DocumentReference docRef = Firestore.instance.collection('users').document(user.uid);
+          if (_selected == 1) {
+            docRef.collection('usedCoupons').document().setData({"customerID" : user.uid});
+          }
+          else {
+            docRef.collection('ownedCoupons').document().setData({"merchantID" : user.uid});
+          }
         });
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => SignInPage()));

@@ -25,7 +25,7 @@ class _MerchantHomePageState extends State<MerchantHomePage> {
             switch(snapshot.connectionState) {
               case ConnectionState.waiting: return Text('Loading..');
               default:
-               return Text(snapshot.data.data['name']);
+               return Text(snapshot.data.data['email']);
            }
         },
       ),
