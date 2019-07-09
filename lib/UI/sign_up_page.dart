@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:giver_app/UI/sign_in_page.dart';
 
+
 class SignUpPage extends StatefulWidget {
   @override
   _SignUpPageState createState() => _SignUpPageState();
@@ -70,7 +71,6 @@ class _SignUpPageState extends State<SignUpPage> {
                       }
                     },
                     autofocus: true,
-//                style: style,
                     decoration: InputDecoration(
                         contentPadding:
                             EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 15.0),
@@ -145,15 +145,10 @@ class _SignUpPageState extends State<SignUpPage> {
                       ),
                     ],
                   ),
-                  
-
-
                 ],
-              ))),
-            
+              ))),           
     );
   }
-
   Future<void> signUp() async {
     if (_formKey.currentState.validate()) {
 //      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Processing Data')));// bug when not using inside Scafford
@@ -168,17 +163,14 @@ class _SignUpPageState extends State<SignUpPage> {
           CollectionReference reference = Firestore.instance.collection(
               'users');
               
-          await reference.document(user.uid)
-              .setData({"email": _email, "level": _selected});
+          await reference.document(user.uid).setData({"email": _email, "level": _selected});
           DocumentReference docRef = Firestore.instance.collection('users').document(user.uid);
           if (_selected == 1) {
             docRef.collection('usedCoupons').document().setData({"customerID" : user.uid});
-
           }
           else {
             docRef.collection('ownedCoupons').document().setData({"merchantID" : user.uid});
           }
-          
         });
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => SignInPage()));

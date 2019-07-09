@@ -34,6 +34,8 @@ class _BlockHomePageState extends State<BlockHomePage> {
                 Container(width: 50.0,),
                 RaisedButton(
                   onPressed: () {
+                    print("send email to-->");
+                    print(widget.user.email);
                     widget.user.sendEmailVerification();
                     signIn();
                   },
