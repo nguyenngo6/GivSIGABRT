@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:giver_app/UI/sign_in_page.dart';
 
+
 class SignUpPage extends StatefulWidget {
   @override
   _SignUpPageState createState() => _SignUpPageState();
@@ -168,7 +169,6 @@ class _SignUpPageState extends State<SignUpPage> {
               ))),
     );
   }
-
   Future<void> signUp() async {
     if (_formKey.currentState.validate()) {
 //      Scaffold.of(context).showSnackBar(SnackBar(content: Text('Processing Data')));// bug when not using inside Scafford
@@ -177,14 +177,13 @@ class _SignUpPageState extends State<SignUpPage> {
         FirebaseUser user = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: _email, password: _password);
         user.sendEmailVerification();// not implemented yet
-        if (user.isEmailVerified){
-
-        }
+        print("send email to-->");
+        print(_emailController.text);
         Firestore.instance.runTransaction((Transaction transaction) async {
           CollectionReference reference = Firestore.instance.collection(
               'users');
-          await reference
-              .add({"username": _username, "email": _email, "phone": _phone});
+          await reference.document(user.uid)
+              .setData({"username": _username, "email": _email, "phone": _phone, "level": 1});
         });
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (context) => SignInPage()));
