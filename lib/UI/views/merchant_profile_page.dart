@@ -1,7 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:giver_app/UI/coupon.dart';
+import 'package:giver_app/model/coupon.dart';
+import 'package:giver_app/services/firebase_service.dart';
 
 class MerchantProfilePage extends StatefulWidget {
   @override
@@ -11,7 +12,7 @@ class MerchantProfilePage extends StatefulWidget {
 class _MerchantProfilePageState extends State<MerchantProfilePage> {
   
   Future getCoupons() async {
-    CollectionReference couponReference = Firestore.instance.collection("users");
+    CollectionReference couponReference = Firestore.instance.collection("coupons");
     QuerySnapshot qn = await couponReference.getDocuments();    
 
     return qn.documents;        
@@ -20,8 +21,8 @@ class _MerchantProfilePageState extends State<MerchantProfilePage> {
   navigateToCoupon(DocumentSnapshot coupon) {
     Navigator.push(context, MaterialPageRoute(builder: (context) => Coupon()));
   } 
-  
-  
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,8 +33,7 @@ class _MerchantProfilePageState extends State<MerchantProfilePage> {
       body: ListView(
         children: <Widget>[
           Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            
+            crossAxisAlignment: CrossAxisAlignment.start,           
             children: <Widget>[
               Padding(
                 padding: EdgeInsets.only(left: 20.0, right: 20.0, top: 20.0),
@@ -92,8 +92,7 @@ class _MerchantProfilePageState extends State<MerchantProfilePage> {
                          child: Text('Loading...'),
                        );
                      } else {
-                       return ListView.builder(
-                         
+                       return ListView.builder(                                           
                          itemCount:  snapshot.data.length,
                          itemBuilder: (_, index){
                            return ListTile(
@@ -108,6 +107,22 @@ class _MerchantProfilePageState extends State<MerchantProfilePage> {
                  
                   
                )
+            ],
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 20.0, right: 20.0, top: 10.0),
+                child: Text('Tommy Hilfiger',
+                style: TextStyle(
+                  fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 17.0
+                 ),
+                 ),
+               ),
             ],
           )
         ],

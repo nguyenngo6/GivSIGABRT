@@ -20,7 +20,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final  _emailController = TextEditingController();
   final  _passwordController = TextEditingController();
   final  _confirmController = TextEditingController();
-  final _usernameController = TextEditingController();
+  final  _usernameController = TextEditingController();
 
   void onChanged(int value) {
     setState((){

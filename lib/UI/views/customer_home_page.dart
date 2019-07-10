@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:giver_app/UI/merchant_profile_page.dart';
 import 'package:giver_app/UI/sign_in_page.dart';
 
 class CustomerHomePage extends StatefulWidget {
@@ -144,7 +145,10 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                   return Text('Loading..');
                 } else {
                   return SizedBox(
-                    child: ListView(children: getMerchants(snapshot)),
+                    child: ListView(
+                      children: getMerchants(snapshot),
+                      ),
+                    
                   );
                 }
               },
@@ -178,6 +182,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
     return snapshot.data.documents
         .map((doc) => new ListTile(
             title: new Text(doc["username"]),
+            onTap: () => navigateToMerchantProfile(),
             subtitle: new Text(doc["email"].toString())))
         .toList();
   }
@@ -185,6 +190,9 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
     print("count:");
     print(snapshot.data.documents.length);
     return snapshot.data.documents.length;
+  }
+  navigateToMerchantProfile() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MerchantProfilePage()));
   }
 
   signOut() {

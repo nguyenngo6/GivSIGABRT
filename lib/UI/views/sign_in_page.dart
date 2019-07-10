@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:giver_app/UI/customer_home_page.dart';
-import 'package:giver_app/UI/home_page.dart';
-import 'package:giver_app/UI/block_home_page.dart';
-import 'package:giver_app/UI/merchant_home_page.dart';
-import 'package:giver_app/UI/sign_up_page.dart';
+import 'package:giver_app/UI/views/customer_home_page.dart';
+import 'package:giver_app/UI/views/home_page.dart';
+import 'package:giver_app/UI/views/block_home_page.dart';
+import 'package:giver_app/UI/views/merchant_home_page.dart';
+import 'package:giver_app/UI/views/sign_up_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignInPage extends StatefulWidget {
