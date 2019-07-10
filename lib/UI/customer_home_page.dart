@@ -174,7 +174,6 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
       ),
     );
   }
-
   getMerchants(AsyncSnapshot<QuerySnapshot> snapshot) {
     return snapshot.data.documents
         .map((doc) => new ListTile(
@@ -182,7 +181,6 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
             subtitle: new Text(doc["email"].toString())))
         .toList();
   }
-
   getMerchantsSize(AsyncSnapshot<QuerySnapshot> snapshot) {
     print("count:");
     print(snapshot.data.documents.length);
@@ -192,6 +190,6 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
   signOut() {
     FirebaseAuth.instance.signOut();
     Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => SignInPage()));
+        context, MaterialPageRoute(builder: (context) => SignInPage()));       
   }
 }
