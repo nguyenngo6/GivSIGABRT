@@ -22,7 +22,7 @@ class _AddCouponsState extends State<AddCoupon> {
 
   void _addData() {
     Firestore.instance.runTransaction((Transaction transaction) async {
-      DocumentReference reference1 = await Firestore.instance.collection("coupons").add({
+      DocumentReference addDataCoupon = await Firestore.instance.collection("coupons").add({
 //        "user": widget.user,
         "description": description,
         "ownedBy": ownedBy,
@@ -30,8 +30,8 @@ class _AddCouponsState extends State<AddCoupon> {
         "usedBy": usedBy,
 //        "isUse": isUse,
       });
-      CollectionReference reference2 = Firestore.instance.collection("users").document(widget.user.uid).collection("ownedCoupons");
-      await reference2.document(reference1.documentID).setData({"merchantId": Firestore.instance.collection("users").document(widget.user.uid)});
+      CollectionReference addUidMerchant = Firestore.instance.collection("users").document(widget.user.uid).collection("ownedCoupons");
+      await addUidMerchant.document(addDataCoupon.documentID).setData({"merchantId": Firestore.instance.collection("users").document(widget.user.uid)});
     });
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => new MerchantHomePage(user: widget.user)));
   }

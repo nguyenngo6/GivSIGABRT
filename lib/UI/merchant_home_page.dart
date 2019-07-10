@@ -1,8 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:giver_app/UI/coupon.dart';
 import 'package:giver_app/UI/sign_in_page.dart';
 import 'package:giver_app/UI/add_coupon_page.dart';
+import 'package:giver_app/UI/edit_coupon_page.dart';
 
 class MerchantHomePage extends StatefulWidget {
   const MerchantHomePage({Key key, @required this.user}) : super(key: key);
@@ -144,9 +146,7 @@ class _MerchantHomePageState extends State<MerchantHomePage> {
                     ConnectionState.waiting) {
                   return Text('Loading..');
                 } else {
-                  return SizedBox(
-                    child: ListView(children: getCoupons(snapshot)),
-                  );
+                    return new Coupon();
                 }
               },
             ),
