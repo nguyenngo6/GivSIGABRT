@@ -8,7 +8,6 @@ enum WidgetMarker { listOfMerchants, listOfCoupons }
 class CustomerHomePage extends StatefulWidget {
   const CustomerHomePage({Key key, @required this.user}) : super(key: key);
   final FirebaseUser user;
-
   @override
   _CustomerHomePageState createState() => _CustomerHomePageState();
 }
@@ -17,7 +16,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
   CollectionReference usersReference = Firestore.instance.collection("users");
   CollectionReference couponsReference =
       Firestore.instance.collection("coupons");
-  String chosenMerchantId;
+  String merchantId;
   WidgetMarker selectedWidgetMarker = WidgetMarker.listOfMerchants;
   TextEditingController editingController = TextEditingController();
   int _selectedIndex = 0;
@@ -130,70 +129,60 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
   }
 
 //function return list of coupons
-  getCoupons(String uid) {
-//    List<DocumentSnapshot> couponIDs = snapshot.data.documents;
-    return StreamBuilder<QuerySnapshot>(
-      stream:
-          usersReference.document(uid).collection('ownedCoupons').snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        return ListView.builder(
-            itemCount: snapshot.data.documents.length,
-            itemBuilder: (context, rowNumber) {
-              return Container(
-                  height: 200.0,
-                  padding: EdgeInsets.all(10.0),
-                  child: Container(
-                      child: Card(
-                          shape: RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8.0))),
-                          child: InkWell(
-                            onTap: () => {},
-                            child: StreamBuilder<DocumentSnapshot>(
-                              stream: this
-                                  .couponsReference
-                                  .document(snapshot
-                                      .data.documents[rowNumber].documentID)
-                                  .snapshots(),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<DocumentSnapshot> snap) {
-                                return ClipRRect(
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(8.0),
-                                    topRight: Radius.circular(8.0),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch, // add this
-                                    children: <Widget>[
-                                      Expanded(
-                                        child: ClipRRect(
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(8.0),
-                                            topRight: Radius.circular(8.0),
+  getCoupons(AsyncSnapshot<QuerySnapshot> snapshot) {
+    List<DocumentSnapshot> couponIDs = snapshot.data.documents;
+    return ListView.builder(
+        itemCount: couponIDs.length,
+        itemBuilder: (context, rowNumber) {
+          return Container(
+              height: 200.0,
+              padding: EdgeInsets.all(10.0),
+              child: Container(
+                  child: Card(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(8.0))),
+                      child: InkWell(
+                          onTap: () => {},
+                          child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(8.0),
+                                topRight: Radius.circular(8.0),
+                              ),
+                              child: StreamBuilder<DocumentSnapshot>(
+                                  stream: couponsReference
+                                      .document(couponIDs[rowNumber].documentID)
+                                      .snapshots(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<DocumentSnapshot>
+                                          couponData) {
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment
+                                          .stretch, // add this
+                                      children: <Widget>[
+                                        Expanded(
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(8.0),
+                                              topRight: Radius.circular(8.0),
+                                            ),
+                                            child: Image.network(
+                                                couponData
+                                                    .data.data['imageUrl'],
+                                                // width: 300,
+                                                fit: BoxFit.fill),
                                           ),
-                                          child: Image.network(
-                                              snap.data.data['imageUrl'],
-                                              // width: 300,
-                                              fit: BoxFit.fill),
+                                          flex: 8,
                                         ),
-                                        flex: 8,
-                                      ),
-                                      Expanded(
-                                        child: Center(
-                                            child: Text(
-                                                snap.data.data['description'])),
-                                        flex: 2,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ))));
-            });
-      },
-    );
+                                        Expanded(
+                                          child: Center(
+                                              child: Text(couponData
+                                                  .data.data['description'])),
+                                          flex: 2,
+                                        ),
+                                      ],
+                                    );
+                                  }))))));
+        });
   }
 
 //function return list of merchants
@@ -210,10 +199,9 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.all(Radius.circular(8.0))),
                       child: InkWell(
-                        onTap: () => setState(() {
+                        onTap: () => this.setState(() {
                               selectedWidgetMarker = WidgetMarker.listOfCoupons;
-                              chosenMerchantId =
-                                  merchants[rowNumber].documentID;
+                              merchantId = merchants[rowNumber].documentID;
                             }),
                         child: Column(
                           crossAxisAlignment:
@@ -292,7 +280,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
   }
 
 //widget return list of Coupons of any merchant
-  Widget getListOfCouponsWidget(String uid) {
+  Widget getListOfCouponsWidget() {
     print("getListOfCouponsWidget function ==>>");
     return Column(
       children: <Widget>[
@@ -308,29 +296,28 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
           flex: 1,
         ),
         Expanded(
-          child: getCoupons(uid),
+          child: StreamBuilder<QuerySnapshot>(
+            stream: usersReference
+                .document(this.merchantId)
+                .collection('ownedCoupons')
+                .snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (!snapshot.hasData) {
+                return Text("no documents");
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return Text('Loading..');
+              } else {
+                return SizedBox(
+                  child: getCoupons(snapshot),
+                );
+              }
+            },
+          ),
           flex: 9,
         ),
-//        Expanded(
-//          child: StreamBuilder<QuerySnapshot>(
-//            stream: this.snapshots,
-//            builder:
-//                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-//              if (snapshot.hasError) {
-//                return Text('Error: ${snapshot.error}');
-//              } else if (!snapshot.hasData) {
-//                return Text("no documents");
-//              } else if (snapshot.connectionState == ConnectionState.waiting) {
-//                return Text('Loading..');
-//              } else {
-//                return SizedBox(
-//                  child: getCoupons(snapshot),
-//                );
-//              }
-//            },
-//          ),
-//          flex: 9,
-//        ),
       ],
     );
   }
@@ -341,7 +328,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
       case WidgetMarker.listOfMerchants:
         return getListOfMerchantsWidget();
       case WidgetMarker.listOfCoupons:
-        return getListOfCouponsWidget(this.chosenMerchantId);
+        return getListOfCouponsWidget();
     }
 
     return getListOfMerchantsWidget();
