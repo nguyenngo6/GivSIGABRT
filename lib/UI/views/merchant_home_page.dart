@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:giver_app/UI/sign_in_page.dart';
-import 'package:giver_app/UI/add_coupon_page.dart';
+import 'package:giver_app/UI/views/sign_in_page.dart';
+import 'package:giver_app/UI/views/add_coupon_page.dart';
 
 class MerchantHomePage extends StatefulWidget {
   const MerchantHomePage({Key key, @required this.user}) : super(key: key);

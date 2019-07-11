@@ -7,16 +7,25 @@ import 'package:meta/meta.dart';
 
 class FirebaseService {
   final StreamController<List<Coupon>> _couponController = StreamController<List<Coupon>>();
-
+  
   FirebaseService() {
     Firestore.instance.
-        collection("coupons").
+        collection('coupons').
         snapshots().
         listen(_couponAdded);
   }
 
   Stream<List<Coupon>> get coupons => _couponController.stream;
   
+  void redeemCoupon({@required String couponID}) {
+    Firestore.instance
+        .collection("coupons")
+        .document(couponID)
+        .updateData({
+          'isUsed': true
+        });
+  }
+
   void _couponAdded(QuerySnapshot snapshot) {
     var coupon = _getCouponFromSnapshot(snapshot);
     _couponController.add(coupon);
@@ -33,7 +42,7 @@ class FirebaseService {
         var documentData = document.data;
         documentData['id'] = document.documentID;
         couponItems.add(Coupon.fromData(documentData));
-        _excludeUsedCoupons(couponItems);
+        
       }
     }
 

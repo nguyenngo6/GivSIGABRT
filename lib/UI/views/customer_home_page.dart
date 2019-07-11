@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:giver_app/UI/merchant_profile_page.dart';
-import 'package:giver_app/UI/sign_in_page.dart';
+import 'package:giver_app/UI/views/merchant_profile_view.dart';
+import 'package:giver_app/UI/views/sign_in_page.dart';
 
 class CustomerHomePage extends StatefulWidget {
   const CustomerHomePage({Key key, @required this.user}) : super(key: key);
@@ -192,7 +192,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
     return snapshot.data.documents.length;
   }
   navigateToMerchantProfile() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MerchantProfilePage()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MerchantProfileView()));
   }
 
   signOut() {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:giver_app/UI/customer_home_page.dart';
+import 'package:giver_app/UI/views/customer_home_page.dart';
 
 class RedCross extends StatefulWidget {
   const RedCross ({Key key, @required this.user}) : super(key: key);
