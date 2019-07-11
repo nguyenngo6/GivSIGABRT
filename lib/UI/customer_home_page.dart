@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/UI/sign_in_page.dart';
 
-enum WidgetMarker { listOfMerchants, listOfCoupons }
+enum WidgetMarker {
+  listOfMerchants,
+  listOfCoupons,
+  charityOrganizations,
+  history
+}
 
 class CustomerHomePage extends StatefulWidget {
   const CustomerHomePage({Key key, @required this.user}) : super(key: key);
@@ -26,11 +31,11 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
-      if (_selectedIndex == 0) {
-        setState(() {
-          selectedWidgetMarker = WidgetMarker.listOfMerchants;
-        });
-      }
+      _selectedIndex == 0
+          ? selectedWidgetMarker = WidgetMarker.listOfMerchants
+          : _selectedIndex == 1
+              ? selectedWidgetMarker = WidgetMarker.charityOrganizations
+              : selectedWidgetMarker = WidgetMarker.history;
     });
   }
 
@@ -125,6 +130,56 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
         selectedItemColor: Colors.amber[800],
         onTap: _onItemTapped,
       ),
+    );
+  }
+
+  getCharities() {
+    return StreamBuilder<QuerySnapshot>(
+      stream: Firestore.instance.collection('charities').snapshots(),
+      builder:
+          (BuildContext context, AsyncSnapshot<QuerySnapshot> charityData) {
+        return ListView.builder(
+            itemCount: charityData.data.documents.length,
+            itemBuilder: (context, rowNumber) {
+              return Container(
+                  height: 200.0,
+                  padding: EdgeInsets.all(10.0),
+                  child: Container(
+                      child: Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8.0))),
+                          child: InkWell(
+                            onTap: () => {},
+                            child: Column(
+                              crossAxisAlignment:
+                                  CrossAxisAlignment.stretch, // add this
+                              children: <Widget>[
+                                Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(8.0),
+                                      topRight: Radius.circular(8.0),
+                                    ),
+                                    child: Image.network(
+                                        charityData.data.documents[rowNumber]
+                                            .data['imageUrl'],
+                                        // width: 300,
+                                        fit: BoxFit.fill),
+                                  ),
+                                  flex: 8,
+                                ),
+                                Expanded(
+                                  child: Center(
+                                      child: Text(charityData.data
+                                          .documents[rowNumber].data['name'])),
+                                  flex: 2,
+                                ),
+                              ],
+                            ),
+                          ))));
+            });
+      },
     );
   }
 
@@ -279,6 +334,48 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
     );
   }
 
+  Widget getCharityOrganizations() {
+    print("getCharityOrganizations function ==>>");
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: TextField(
+            controller: editingController,
+            decoration: InputDecoration(
+              labelText: "Search",
+              hintText: "Search",
+              prefixIcon: Icon(Icons.search),
+            ),
+          ),
+          flex: 1,
+        ),
+        Expanded(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: usersReference
+                .document(this.merchantId)
+                .collection('ownedCoupons')
+                .snapshots(),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (!snapshot.hasData) {
+                return Text("no documents");
+              } else if (snapshot.connectionState == ConnectionState.waiting) {
+                return Text('Loading..');
+              } else {
+                return SizedBox(
+                  child: getCharities(),
+                );
+              }
+            },
+          ),
+          flex: 9,
+        ),
+      ],
+    );
+  }
+
 //widget return list of Coupons of any merchant
   Widget getListOfCouponsWidget() {
     print("getListOfCouponsWidget function ==>>");
@@ -329,9 +426,16 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
         return getListOfMerchantsWidget();
       case WidgetMarker.listOfCoupons:
         return getListOfCouponsWidget();
+      case WidgetMarker.charityOrganizations:
+        return getCharityOrganizations();
+      case WidgetMarker.history:
+        return getHistoryWidget();
     }
 
     return getListOfMerchantsWidget();
+  }
+  getHistoryWidget(){
+
   }
 
   signOut() {
