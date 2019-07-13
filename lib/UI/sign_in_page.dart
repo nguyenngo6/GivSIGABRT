@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:giver_app/UI/customer_home_page.dart';
+import 'package:giver_app/UI/customer_home_view.dart';
 import 'package:giver_app/UI/home_page.dart';
 import 'package:giver_app/UI/block_home_page.dart';
 import 'package:giver_app/UI/merchant_home_page.dart';

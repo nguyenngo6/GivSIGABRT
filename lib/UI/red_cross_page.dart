@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:giver_app/UI/customer_home_page.dart';
+import 'package:giver_app/UI/customer_home_view.dart';
 
 class RedCross extends StatefulWidget {
   const RedCross ({Key key, @required this.user}) : super(key: key);
@@ -96,7 +96,7 @@ class RedCrossState extends State<RedCross>{
         return IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CustomerHomePage(user: widget.user,)));
+            Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CustomerHomeView(user: widget.user,)));
           },
           tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
         );

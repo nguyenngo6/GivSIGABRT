@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:giver_app/service_locator.dart';
 
-import 'UI/merchant_profile_page.dart';
 import 'UI/sign_in_page.dart';
 
-void main() => runApp(MyApp());
+void main() {
+  setupLocator();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
