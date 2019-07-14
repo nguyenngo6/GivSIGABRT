@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:giver_app/UI/customer_home_page.dart';
-import 'package:giver_app/UI/home_page.dart';
-import 'package:giver_app/UI/block_home_page.dart';
-import 'package:giver_app/UI/merchant_home_page.dart';
-import 'package:giver_app/UI/sign_up_page.dart';
+import 'package:giver_app/UI/views/home_page.dart';
+import 'package:giver_app/UI/views/block_home_page.dart';
+
+import 'package:giver_app/UI/views/sign_up_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SignInPage extends StatefulWidget {
@@ -17,7 +16,7 @@ class _SignInPageState extends State<SignInPage> {
   String _email;
   String _password;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -107,13 +106,13 @@ class _SignInPageState extends State<SignInPage> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      HomePage(user: user, firebaseAuth: firebaseAuth)));
+                      HomePage(user: user)));
         }else{
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      BlockHomePage(user: user, firebaseAuth: firebaseAuth)));
+                      BlockHomePage(user: user)));
         }
 
       } catch (e) {
