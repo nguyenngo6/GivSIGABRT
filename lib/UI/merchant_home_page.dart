@@ -16,6 +16,18 @@ class MerchantHomePage extends StatefulWidget {
 class _MerchantHomePageState extends State<MerchantHomePage> {
   TextEditingController editingController = TextEditingController();
   int _selectedIndex = 0;
+  PageController _pageController;
+  @override
+  void initState(){
+    super.initState();
+    _pageController = new PageController();
+  }
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
+  }
+
   static const TextStyle optionStyle =
       TextStyle(fontSize: 10, fontWeight: FontWeight.bold);
   static const List<Widget> _widgetOptions = <Widget>[
@@ -32,7 +44,12 @@ class _MerchantHomePageState extends State<MerchantHomePage> {
       style: optionStyle,
     ),
   ];
-
+  void navigationTapped(int index) {
+    // Animating to the page.
+    // You can use whatever duration and curve you like
+    _pageController.animateToPage(index,
+        duration: const Duration(milliseconds: 300), curve: Curves.ease);
+  }
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
@@ -82,8 +99,12 @@ class _MerchantHomePageState extends State<MerchantHomePage> {
         child: new ListView(
           children: <Widget>[
             UserAccountsDrawerHeader(
-              accountName: new Text("Toan "),
-              accountEmail: new Text("toan.do2806@icloud."),
+              accountName: StreamBuilder<DocumentSnapshot>(
+                stream: Firestore.instance.collection('users').document(widget.user.uid).snapshots(),
+              builder: (BuildContext context, AsyncSnapshot userData){
+                  return Text(userData.data.data['username']);
+              },),
+              accountEmail: new Text(widget.user.email),
               currentAccountPicture: GestureDetector(
                 onTap: () => print("avatar tap"),
                 child: CircleAvatar(
@@ -116,44 +137,8 @@ class _MerchantHomePageState extends State<MerchantHomePage> {
           ],
         ),
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: TextField(
-              controller: editingController,
-              decoration: InputDecoration(
-                labelText: "Search",
-                hintText: "Search",
-                prefixIcon: Icon(Icons.search),
-              ),
-            ),
-            flex: 1,
-          ),
-          Expanded(
-            child: StreamBuilder<QuerySnapshot>(
-              stream: Firestore.instance
-                  .collection('users')
-                  .document(widget.user.uid)
-                  .collection("ownedCoupons")
-                  .snapshots(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<QuerySnapshot> snapshot) {
-                if (snapshot.hasError) {
-                  return Text('Error: ${snapshot.error}');
-                } else if (!snapshot.hasData) {
-                  return Text("no documents");
-                } else if (snapshot.connectionState ==
-                    ConnectionState.waiting) {
-                  return Text('Loading..');
-                } else {
-                    return new Coupon();
-                }
-              },
-            ),
-            flex: 9,
-          ),
-        ],
-      ),
+      body: customBodyWidget(),
+
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
@@ -188,10 +173,68 @@ class _MerchantHomePageState extends State<MerchantHomePage> {
         .toList();
   }
 
+  getMerchantsName(){
+
+  }
+
   getMerchantsSize(AsyncSnapshot<QuerySnapshot> snapshot) {
     print("count:");
     print(snapshot.data.documents.length);
     return snapshot.data.documents.length;
+  }
+
+  Widget customBodyWidget(){
+    switch (_selectedIndex){
+      case 0:
+        return getHomeView();
+      case 2:
+        return getHistoryView();
+    }
+  }
+
+  Widget getHomeView(){
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: TextField(
+            controller: editingController,
+            decoration: InputDecoration(
+              labelText: "Search",
+              hintText: "Search",
+              prefixIcon: Icon(Icons.search),
+            ),
+          ),
+          flex: 1,
+        ),
+        Expanded(
+          child: StreamBuilder<QuerySnapshot>(
+            stream: Firestore.instance
+                .collection('users')
+                .document(widget.user.uid)
+                .collection("ownedCoupons")
+                .snapshots(),
+            builder: (BuildContext context,
+                AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else if (!snapshot.hasData) {
+                return Text("no documents");
+              } else if (snapshot.connectionState ==
+                  ConnectionState.waiting) {
+                return Text('Loading..');
+              } else {
+                return new Coupon(user: widget.user);
+              }
+            },
+          ),
+          flex: 9,
+        ),
+      ],
+    );
+  }
+
+  Widget getHistoryView(){
+    return Text("this is history");
   }
 
   signOut() {
