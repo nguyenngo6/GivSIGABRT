@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/UI/sign_in_page.dart';
 import 'package:giver_app/enum/view_state.dart';
+import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/model/user.dart';
 import 'package:giver_app/scoped_model/customer_home_view_model.dart';
 import 'package:giver_app/services/firebase_service.dart';
@@ -109,7 +110,7 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
                     ListTile(
                       title: Text("Edit Profile"),
                       trailing:
-                          IconButton(icon: Icon(Icons.edit), onPressed: null),
+                          IconButton(icon: Icon(Icons.edit), onPressed: ()=>displayProfileEditor(widget.user.uid)),
                     ),
                     ListTile(
                       title: Text("Link2"),
@@ -271,6 +272,60 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
     );
   }
 
+  Widget getListOfCouponsWidget(String uid,CustomerHomeViewModel model) {
+    List<Coupon> couponList = model.getCouponsByMerchantId(model.coupons, merchantId);
+    print("getListOfMerchantsWidget function ==>>");
+    return Column(
+      children: <Widget>[
+        Expanded(
+          child: TextField(
+            controller: editingController,
+            decoration: InputDecoration(
+              labelText: "Search",
+              hintText: "Search",
+              prefixIcon: Icon(Icons.search),
+            ),
+          ),
+          flex: 1,
+        ),
+        Expanded(
+          child: ListView.builder(
+              itemCount: couponList.length,
+              itemBuilder: (context, rowNumber) {
+                var coupon = couponList[rowNumber];
+                return Container(
+                    height: 200.0,
+                    padding: EdgeInsets.all(10.0),
+                    child: Container(
+                        child: Card(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                BorderRadius.all(Radius.circular(8.0))),
+                            child: InkWell(
+                              onTap: () => null,
+                              child: Column(
+                                crossAxisAlignment:
+                                CrossAxisAlignment.stretch, // add this
+                                children: <Widget>[
+                                  Expanded(
+                                    child: Text(coupon.description),
+                                    flex: 8,
+                                  ),
+                                  Expanded(
+                                    child:
+                                    Center(child: Text(coupon.ownedBy)),
+                                    flex: 2,
+                                  ),
+                                ],
+                              ),
+                            ))));
+              }),
+          flex: 9,
+        ),
+      ],
+    );
+  }
+
   Widget getListOfCharitiesWidget(CustomerHomeViewModel model) {
     print("getCharityOrganizations function ==>>");
     return Column(
@@ -389,7 +444,8 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
         return selectedWidget == WidgetMarker.listOfMerchants
             ? getListOfMerchantsWidget(model)
             : selectedWidget == WidgetMarker.charityOrganizations
-                ? getListOfCharitiesWidget(model)
+                ? getListOfCharitiesWidget(model):selectedWidget == WidgetMarker.listOfCoupons
+            ? getListOfCouponsWidget(this.merchantId, model)
                 : getHistoryWidget(model);
       default:
         return getListOfMerchantsWidget(model);

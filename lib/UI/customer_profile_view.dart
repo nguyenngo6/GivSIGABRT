@@ -8,8 +8,9 @@ import 'base_view.dart';
 
 class CustomerProfileView extends StatelessWidget {
   final String uid;
+//  List<User> customers;
 
-  const CustomerProfileView({@required this.uid});
+  CustomerProfileView({@required this.uid});
 
   @override
   Widget build(BuildContext context) {
@@ -45,45 +46,89 @@ class CustomerProfileView extends StatelessWidget {
   }
 
   Widget _getCustomerProfile(CustomerProfileViewModel model) {
-//
-    return StreamBuilder<DocumentSnapshot>(
-      stream: Firestore.instance
-          .collection('users')
-          .document(this.uid)
-          .snapshots(),
-      builder:
-          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
-        if (snapshot.hasError) {
-          return Text('Error: ${snapshot.error}');
-        }
-        if (snapshot.hasData) {
-          return Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              Container(
-                height: 4.0,
-              ),
-              ListTile(
-                leading: Text("1"),
-                title: Text(snapshot.data.data['username']),
-                trailing: Icon(Icons.edit),
+//    customers = model.customers;
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          height: 4.0,
+        ),
+        ListTile(
+          leading: Text("UID:"),
+          title: Text(model.getCustomerByUid(model.customers, uid).id
+          ),
+          trailing: Icon(Icons.edit),
 
-              ),
-              ListTile(
-                leading: Text("2"),
-                title: Text(snapshot.data.data['email']),
-                trailing: Icon(Icons.edit),
+        ),
+        ListTile(
+          leading: Text("1"),
+          title: Image.network(model.getCustomerByUid(model.customers, uid).imageUrl),
+          trailing: Icon(Icons.edit),
 
-              ),
+        ),
+        ListTile(
+          leading: Text("2"),
+          title: Text(model.getCustomerByUid(model.customers, uid).username),
+          trailing: Icon(Icons.edit),
+
+        ),
+        ListTile(
+          leading: Text("3"),
+          title: Text(model.getCustomerByUid(model.customers, uid).email),
+          trailing: Icon(Icons.edit),
+
+        ),
+        ListTile(
+          leading: Text("4"),
+          title: Text(model.getCustomerByUid(model.customers, uid).phone),
+          trailing: Icon(Icons.edit),
+
+        ),
 
 
 
-            ],
-          );
-        }
-      },
+      ],
     );
+//
+//    return StreamBuilder<DocumentSnapshot>(
+//      stream: Firestore.instance
+//          .collection('users')
+//          .document(this.uid)
+//          .snapshots(),
+//      builder:
+//          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+//        if (snapshot.hasError) {
+//          return Text('Error: ${snapshot.error}');
+//        }
+//        if (snapshot.hasData) {
+//          return Column(
+//            mainAxisAlignment: MainAxisAlignment.center,
+//            crossAxisAlignment: CrossAxisAlignment.center,
+//            children: <Widget>[
+//              Container(
+//                height: 4.0,
+//              ),
+//              ListTile(
+//                leading: Text("1"),
+//                title: Text(snapshot.data.data['username']),
+//                trailing: Icon(Icons.edit),
+//
+//              ),
+//              ListTile(
+//                leading: Text("2"),
+//                title: Text(snapshot.data.data['email']),
+//                trailing: Icon(Icons.edit),
+//
+//              ),
+//
+//
+//
+//            ],
+//          );
+//        }
+//      },
+//    );
   }
   Widget _getLoadingUi(BuildContext context) {
     return Center(

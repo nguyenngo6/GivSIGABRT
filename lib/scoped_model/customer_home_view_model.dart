@@ -1,6 +1,7 @@
 
 import 'package:flutter/cupertino.dart';
 import 'package:giver_app/model/charity.dart';
+import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/services/firebase_service.dart';
 import 'package:giver_app/scoped_model/base_model.dart';
 import 'package:giver_app/model/user.dart';
@@ -12,6 +13,7 @@ class CustomerHomeViewModel extends BaseModel {
 
   FirebaseService _firebaseService = getit<FirebaseService>();
 
+  List<Coupon> coupons;
   List<User> merchants;
   List<Charity> charities;
 
@@ -20,6 +22,7 @@ class CustomerHomeViewModel extends BaseModel {
   CustomerHomeViewModel() {
     _firebaseService.merchants.listen(_onMerchantUpdated);
     _firebaseService.charities.listen(_onCharityUpdated);
+    _firebaseService.coupons.listen(_onCouponUpdated);
 
   }
 
@@ -43,6 +46,25 @@ class CustomerHomeViewModel extends BaseModel {
           ? ViewState.NoDataAvailable
           : ViewState.DataFetched);
     }
+  }
+
+  void _onCouponUpdated(List<Coupon> coupon) {
+    coupons = coupon;
+    if (coupons == null) {
+      setState(ViewState.Busy);
+    } else {
+      setState(ViewState.DataFetched);
+    }
+  }
+
+  List<Coupon> getCouponsByMerchantId(List<Coupon> coupons,String merchantId){
+    var couponList = List<Coupon>();
+    for(Coupon coupon in coupons){
+      if(coupon.ownedBy == merchantId){
+        couponList.add(coupon);
+      }
+    }
+    return couponList;
   }
 
 }

@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:giver_app/UI/coupon.dart';
+import 'package:giver_app/model/coupon.dart';
 
 class MerchantProfilePage extends StatefulWidget {
   @override
@@ -17,9 +17,9 @@ class _MerchantProfilePageState extends State<MerchantProfilePage> {
     return qn.documents;        
   }
 
-  navigateToCoupon(DocumentSnapshot coupon) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Coupon()));
-  } 
+//  navigateToCoupon(DocumentSnapshot coupon) {
+//    Navigator.push(context, MaterialPageRoute(builder: (context) => Coupon()));
+//  }
   
   
   @override
@@ -98,7 +98,7 @@ class _MerchantProfilePageState extends State<MerchantProfilePage> {
                          itemBuilder: (_, index){
                            return ListTile(
                              title: Text(snapshot.data[index].data['email']),
-                             onTap: () => navigateToCoupon(snapshot.data[index]),
+//                             onTap: () => navigateToCoupon(snapshot.data[index]),
                            );
                          },
                        );

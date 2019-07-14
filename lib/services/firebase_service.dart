@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/model/charity.dart';
 import 'package:giver_app/model/user.dart';
 
@@ -13,12 +14,19 @@ class FirebaseService {
   final StreamController<List<User>> _customerController =
   StreamController<List<User>>();
 
+  final StreamController<List<Coupon>> _couponController =
+  StreamController<List<Coupon>>();
+
   FirebaseService() {
     Firestore.instance
         .collection('users')
-        .where("level", isEqualTo: 2)
         .snapshots()
-        .listen(_merchantAdded);
+        .listen(_userAdded);
+
+    Firestore.instance
+        .collection('coupons')
+        .snapshots()
+        .listen(_couponAdded);
 
     Firestore.instance
         .collection('charities')
@@ -26,8 +34,9 @@ class FirebaseService {
         .listen(_charityAdded);
   }
 
-  Stream<List<User>> get customers => _customerController.stream;
+  Stream<List<Coupon>> get coupons => _couponController.stream;
 
+  Stream<List<User>> get customers => _customerController.stream;
 
   Stream<List<User>> get merchants => _merchantController.stream;
 
@@ -37,9 +46,32 @@ class FirebaseService {
 //    Firestore.instance.collection('users').document(uid).snapshots().listen(_customerInfoAdded);
 //  }
 
-  void _customerAdded(QuerySnapshot snapshot) {
+  void _couponAdded(QuerySnapshot snapshot){
+    var coupon = _getCouponFromSnapshot(snapshot);
+    _couponController.add(coupon);
+  }
+
+  List<Coupon> _getCouponFromSnapshot(QuerySnapshot snapshot){
+    var couponList = List<Coupon>();
+    var documents = snapshot.documents;
+    if(documents.length > 0){
+      for(var document in documents){
+        var documentData = document.data;
+        documentData['id'] = document.documentID;
+        couponList.add(Coupon.fromData(documentData));
+
+      }
+    }
+
+    return couponList;
+  }
+
+
+  void _userAdded(QuerySnapshot snapshot) {
+    var merchant = _getMerchantFromSnapshot(snapshot);
     var customer = _getCustomerFromSnapshot(snapshot);
-    _merchantController.add(customer);
+    _merchantController.add(merchant);
+    _customerController.add(customer);
   }
 
   List<User> _getCustomerFromSnapshot(QuerySnapshot snapshot) {
@@ -48,16 +80,13 @@ class FirebaseService {
     if (documents.length > 0) {
       for (var document in documents) {
         var documentData = document.data;
-        documentData['id'] = document.documentID;
-        customerList.add(User.fromData(documentData));
+        if(documentData['level'] == 1){
+          documentData['id'] = document.documentID;
+          customerList.add(User.fromData(documentData));
+        }
       }
     }
     return customerList;
-  }
-
-  void _merchantAdded(QuerySnapshot snapshot) {
-    var merchant = _getMerchantFromSnapshot(snapshot);
-    _merchantController.add(merchant);
   }
 
   List<User> _getMerchantFromSnapshot(QuerySnapshot snapshot) {
@@ -66,8 +95,10 @@ class FirebaseService {
     if (documents.length > 0) {
       for (var document in documents) {
         var documentData = document.data;
-        documentData['id'] = document.documentID;
-        merchantList.add(User.fromData(documentData));
+        if(documentData['level'] == 2){
+          documentData['id'] = document.documentID;
+          merchantList.add(User.fromData(documentData));
+        }
       }
     }
     return merchantList;
@@ -77,7 +108,6 @@ class FirebaseService {
     var charity = _getCharityFromSnapshot(snapshot);
     _charityController.add(charity);
   }
-
   List<Charity> _getCharityFromSnapshot(QuerySnapshot snapshot) {
     var charityList = List<Charity>();
     var documents = snapshot.documents;
