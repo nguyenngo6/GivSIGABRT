@@ -8,7 +8,6 @@ import 'package:giver_app/UI/widgets/coupon_list.dart';
 import 'package:giver_app/UI/widgets/merchant_image.dart';
 import 'package:giver_app/UI/widgets/merchant_info.dart';
 
-
 import 'package:giver_app/UI/widgets/simple_toolbar.dart';
 import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/model/user.dart';
@@ -24,25 +23,24 @@ import 'add_coupon_page.dart';
 import 'merchant_edit_info_view.dart';
 
 class MerchantHomeView extends StatefulWidget {
-
   const MerchantHomeView({@required this.user});
 
-  final FirebaseUser user;
+  final User user;
 
   @override
   _MerchantHomeViewState createState() => _MerchantHomeViewState();
 }
 
 class _MerchantHomeViewState extends State<MerchantHomeView> {
-
   TextEditingController editingController = TextEditingController();
   int _selectedIndex = 0;
   PageController _pageController;
   @override
-  void initState(){
+  void initState() {
     super.initState();
     _pageController = new PageController();
   }
+
   @override
   void dispose() {
     super.dispose();
@@ -72,23 +70,26 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
     _pageController.animateToPage(index,
         duration: const Duration(milliseconds: 300), curve: Curves.ease);
   }
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedIndex = index;
     });
   }
+
   signOut() {
     FirebaseAuth.instance.signOut();
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => SignInPage()));
   }
 
-  addCoupons(){
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> AddCoupon(user: widget.user)));
+  addCoupons() {
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) => AddCoupon(user: widget.user)));
   }
 
-  Widget customBodyWidget(UserHomeViewModel model){
-    switch (_selectedIndex){
+  Widget customBodyWidget(UserHomeViewModel model) {
+    switch (_selectedIndex) {
       case 0:
         return getHomeView(model);
       case 2:
@@ -96,8 +97,9 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
     }
   }
 
-  Widget getHomeView(UserHomeViewModel model){
-    List<Coupon> couponList = model.getCouponsByMerchantId(model.coupons, widget.user.uid);
+  Widget getHomeView(UserHomeViewModel model) {
+    List<Coupon> couponList =
+        model.getCouponsByMerchantId(model.coupons, widget.user.id);
     return Column(
       children: <Widget>[
         Expanded(
@@ -112,97 +114,135 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
           flex: 1,
         ),
         Expanded(
-          child: CouponList(couponList: couponList),
-          flex: 9,
-        ),
+          child: ListView.builder(
+            itemCount: couponList.length,
+            itemBuilder: (context, rowNumber){
+              var coupon = couponList[rowNumber];
+              return Container(
+                  height: 200.0,
+                  padding: EdgeInsets.all(10.0),
+                  child: Container(
+                      child: Card(
+                          shape: RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.all(Radius.circular(8.0))),
+                          child: InkWell(
+                            onTap: ()=> null,
+                            child: Column(
+                              crossAxisAlignment:
+                              CrossAxisAlignment.stretch, // add this
+                              children: <Widget>[
+                                Expanded(
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                      topLeft: Radius.circular(8.0),
+                                      topRight: Radius.circular(8.0),
+                                    ),
+                                    child: Text(coupon.description),
+                                  ),
+                                  flex: 8,
+                                ),
+                                Expanded(
+                                  child:
+                                  Center(child: Text(coupon.id)),
+                                  flex: 2,
+                                ),
+                              ],
+                            ),
+                          ))));
+            }
+
+        ), flex: 9,
+        )
       ],
     );
   }
 
-  Widget getHistoryView(){
+  Widget getHistoryView() {
     return Text("this is history");
   }
-
 
   @override
   Widget build(BuildContext context) {
     return BaseView<UserHomeViewModel>(
         builder: (context, child, model) => Scaffold(
-        appBar: AppBar(
-          title: Center(child: Text('Home'),),
-          actions: <Widget>[
-            IconButton(
-              icon: Icon(Icons.add),
-              onPressed: addCoupons,)
-          ],
-        ),
-        drawer: new Drawer(
-        child: new ListView(
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: StreamBuilder<DocumentSnapshot>(
-                stream: Firestore.instance.collection('users').document(widget.user.uid).snapshots(),
-              builder: (BuildContext context, AsyncSnapshot userData){
-                  return Text(userData.data.data['username']);
-              },),
-              accountEmail: new Text(widget.user.email),
-              currentAccountPicture: GestureDetector(
-                onTap: () => print("avatar tap"),
-                child: CircleAvatar(
-                  backgroundImage: new NetworkImage(
-                      "https://profilepicturesdp.com/wp-content/uploads/2018/06/cute-baby-wallpaper-for-whatsapp-dp-11.jpg"),
+              appBar: AppBar(
+                title: Center(
+                  child: Text('Home'),
+                ),
+                actions: <Widget>[
+                  IconButton(
+                    icon: Icon(Icons.add),
+                    onPressed: addCoupons,
+                  )
+                ],
+              ),
+              drawer: new Drawer(
+                child: new ListView(
+                  children: <Widget>[
+                    UserAccountsDrawerHeader(
+                      accountName: Text(widget.user.username),
+                      accountEmail: new Text(widget.user.email),
+                      currentAccountPicture: GestureDetector(
+                        onTap: () => print("avatar tap"),
+                        child: CircleAvatar(
+                          backgroundImage: new NetworkImage(
+                              "https://profilepicturesdp.com/wp-content/uploads/2018/06/cute-baby-wallpaper-for-whatsapp-dp-11.jpg"),
+                        ),
+                      ),
+                      decoration: BoxDecoration(
+                          image: DecorationImage(
+                              fit: BoxFit.fill,
+                              image: NetworkImage(
+                                  "https://previews.123rf.com/images/wmitrmatr/wmitrmatr1408/wmitrmatr140800310/30747109-beautiful-paddy-with-nice-background.jpg"))),
+                    ),
+                    ListTile(
+                        title: Text("Edit"),
+                        trailing: IconButton(
+                            icon: Icon(Icons.edit),
+                            onPressed: () => Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        MerchantUpdateInfoView(
+                                          merchant: model.getCurrentUser(
+                                              model.merchants, widget.user.id),
+                                        ))))),
+                    ListTile(
+                      title: Text("Link2"),
+                      trailing: IconButton(
+                          icon: Icon(Icons.arrow_left), onPressed: null),
+                    ),
+                    ListTile(
+                      title: Text("Sign Out"),
+                      trailing: IconButton(
+                          tooltip: "Log out",
+                          icon: Icon(Icons.exit_to_app),
+                          onPressed: signOut),
+                    ),
+                  ],
                 ),
               ),
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      fit: BoxFit.fill,
-                      image: NetworkImage(
-                          "https://previews.123rf.com/images/wmitrmatr/wmitrmatr1408/wmitrmatr140800310/30747109-beautiful-paddy-with-nice-background.jpg"))),
-            ),
-            ListTile(
-              title: Text("Edit"),
-              trailing: IconButton(
-                icon: Icon(Icons.edit), 
-                onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> MerchantUpdateInfoView(merchant: model.getCurrentUser(model.merchants,widget.user),))))
-            ),
-            ListTile(
-              title: Text("Link2"),
-              trailing:
-                  IconButton(icon: Icon(Icons.arrow_left), onPressed: null),
-            ),
-            ListTile(
-              title: Text("Sign Out"),
-              trailing: IconButton(
-                  tooltip: "Log out",
-                  icon: Icon(Icons.exit_to_app),
-                  onPressed: signOut),
-            ),
-          ],
-        ),
-      ),
-      body: customBodyWidget(model),
-
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.camera),
-            title: Text('Camera'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.history),
-            title: Text('History'),
-          ),
-        ],
-        currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
-        onTap: _onItemTapped,
-      ),
-
-      ));
-    
+              body: customBodyWidget(model),
+              bottomNavigationBar: BottomNavigationBar(
+                items: const <BottomNavigationBarItem>[
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.home),
+                    title: Text('Home'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.camera),
+                    title: Text('Camera'),
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Icon(Icons.history),
+                    title: Text('History'),
+                  ),
+                ],
+                currentIndex: _selectedIndex,
+                selectedItemColor: Colors.amber[800],
+                onTap: _onItemTapped,
+              ),
+            ));
   }
 }

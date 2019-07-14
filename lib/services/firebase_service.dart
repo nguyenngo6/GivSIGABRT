@@ -6,6 +6,9 @@ import 'package:giver_app/model/user.dart';
 import 'package:meta/meta.dart';
 
 class FirebaseService {
+  final StreamController<List<User>> _userController =
+  StreamController<List<User>>.broadcast();
+
   final StreamController<List<User>> _merchantController =
       StreamController<List<User>>.broadcast();
 
@@ -36,6 +39,8 @@ class FirebaseService {
   }
 
   Stream<List<Coupon>> get coupons => _couponController.stream;
+
+  Stream<List<User>> get users => _userController.stream;
 
   Stream<List<User>> get customers => _customerController.stream;
 
@@ -80,8 +85,23 @@ class FirebaseService {
   void _userAdded(QuerySnapshot snapshot) {
     var merchant = _getMerchantFromSnapshot(snapshot);
     var customer = _getCustomerFromSnapshot(snapshot);
+    var user = _getUserFromSnapshot(snapshot);
     _merchantController.add(merchant);
     _customerController.add(customer);
+    _userController.add(user);
+  }
+
+  List<User> _getUserFromSnapshot(QuerySnapshot snapshot) {
+    var userList = List<User>();
+    var documents = snapshot.documents;
+    if (documents.length > 0) {
+      for (var document in documents) {
+        var documentData = document.data;
+          documentData['id'] = document.documentID;
+          userList.add(User.fromData(documentData));
+      }
+    }
+    return userList;
   }
 
   List<User> _getCustomerFromSnapshot(QuerySnapshot snapshot) {

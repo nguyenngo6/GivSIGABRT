@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/UI/views/merchant_home_view.dart';
+import 'package:giver_app/model/user.dart';
 
 
 class AddCoupon extends StatefulWidget {
 
-  AddCoupon({Key key, @required this.user,}): super(key: key);
-  final FirebaseUser user;
+  AddCoupon({@required this.user,});
+  final User user;
   @override
   _AddCouponsState createState() => _AddCouponsState();
 }
@@ -18,21 +19,21 @@ class _AddCouponsState extends State<AddCoupon> {
   int point;
 //  bool isUse;
 
-  void _addData() {
+  void _addData(User user) {
     Firestore.instance.runTransaction((Transaction transaction) async {
       DocumentReference addDataCoupon = await Firestore.instance.collection("coupons").add({
 //        "user": widget.user,
         "description": description,
         "point": point,
-        "ownedBy" : widget.user.uid,
+        "ownedBy" : user.id,
         "isUsed" : false,
 //        "isUse": isUse,
       });
       print(addDataCoupon.documentID.toString());
-      CollectionReference addUidMerchant = Firestore.instance.collection("users").document(widget.user.uid).collection("ownedCoupons");
-      await addUidMerchant.document(addDataCoupon.documentID).setData({"merchantId": Firestore.instance.collection("users").document(widget.user.uid).documentID});
+      CollectionReference addUidMerchant = Firestore.instance.collection("users").document(user.id).collection("ownedCoupons");
+      await addUidMerchant.document(addDataCoupon.documentID).setData({"merchantId": Firestore.instance.collection("users").document(user.id).documentID});
     });
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => new MerchantHomeView(user: widget.user)));
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => new MerchantHomeView(user: user)));
   }
 
   @override
@@ -107,8 +108,7 @@ class _AddCouponsState extends State<AddCoupon> {
             child: IconButton(
               icon: Icon(Icons.check),
               onPressed: (){
-                _addData();
-
+                _addData(widget.user);
               },
             ),
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:giver_app/UI/views/home_page.dart';
+import 'package:giver_app/UI/views/home_view.dart';
 import 'package:giver_app/UI/views/block_home_page.dart';
 
 import 'package:giver_app/UI/views/sign_up_page.dart';
@@ -106,7 +106,7 @@ class _SignInPageState extends State<SignInPage> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      HomePage(user: user)));
+                      HomeView(user: user)));
         }else{
           Navigator.pushReplacement(
               context,

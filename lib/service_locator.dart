@@ -13,7 +13,9 @@ GetIt locator = new GetIt();
 void setupLocator() {
   // Register services
   locator.registerLazySingleton(() => FirebaseService());
-  locator.registerFactory<HomeViewModel>(() => new HomeViewModel());
+
+
+  locator.registerSingleton(HomeViewModel());
   locator.registerSingleton(UserHomeViewModel());
   locator.registerSingleton(MerchantProfileViewModel());
   locator.registerSingleton(CustomerProfileViewModel());

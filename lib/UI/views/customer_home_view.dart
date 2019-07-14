@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/UI/Views/sign_in_page.dart';
 import 'package:giver_app/UI/views/merchant_profile_view.dart';
+import 'package:giver_app/UI/views/red_cross_page.dart';
 import 'package:giver_app/enum/view_state.dart';
 import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/model/user.dart';
@@ -13,16 +14,11 @@ import 'package:giver_app/enum/view_state.dart';
 import 'base_view.dart';
 import 'customer_profile_view.dart';
 
-enum WidgetMarker {
-  listOfMerchants,
-  listOfCoupons,
-  charityOrganizations,
-  history
-}
+enum WidgetMarker { listOfMerchants, charityOrganizations, history }
 
 class CustomerHomeView extends StatefulWidget {
-  const CustomerHomeView({Key key, @required this.user}) : super(key: key);
-  final FirebaseUser user;
+  const CustomerHomeView({@required this.user});
+  final User user;
   @override
   _CustomerHomeViewState createState() => _CustomerHomeViewState();
 }
@@ -68,23 +64,7 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
                       style: optionStyle,
                     ),
                   ),
-                  StreamBuilder<DocumentSnapshot>(
-                    stream:
-                        usersReference.document(widget.user.uid).snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<DocumentSnapshot> snapshot) {
-                      if (snapshot.hasError) {
-                        return Text('Error: ${snapshot.error}');
-                      }
-                      if (snapshot.hasData) {
-                        return Center(
-                            child: Text(
-                                snapshot.data.data['credits'].toString(),
-                                style: TextStyle(
-                                    color: Colors.red[800], fontSize: 30)));
-                      }
-                    },
-                  ),
+                  Center(child: Text(widget.user.points.toString())),
                   IconButton(icon: Icon(Icons.credit_card)),
                 ],
               ),
@@ -109,8 +89,10 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
                     ),
                     ListTile(
                       title: Text("Edit Profile"),
-                      trailing:
-                          IconButton(icon: Icon(Icons.edit), onPressed: ()=>displayProfileEditor(widget.user.uid)),
+                      trailing: IconButton(
+                          icon: Icon(Icons.edit),
+                          onPressed: () =>
+                              displayProfileEditor(widget.user)),
                     ),
                     ListTile(
                       title: Text("Link2"),
@@ -238,7 +220,11 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
                                     BorderRadius.all(Radius.circular(8.0))),
                             child: InkWell(
                               onTap: () => Navigator.pushReplacement(
-        context, MaterialPageRoute(builder: (context) => MerchantProfileView(merchant: merchant,))),
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => MerchantProfileView(
+                                          merchant: merchant,
+                                          customer: widget.user))),
                               child: Column(
                                 crossAxisAlignment:
                                     CrossAxisAlignment.stretch, // add this
@@ -270,62 +256,61 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
     );
   }
 
-  Widget getListOfCouponsWidget(String uid,UserHomeViewModel model) {
-    List<Coupon> couponList = model.getCouponsByMerchantId(model.coupons, merchantId);
-    print("getListOfMerchantsWidget function ==>>");
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: TextField(
-            controller: editingController,
-            decoration: InputDecoration(
-              labelText: "Search",
-              hintText: "Search",
-              prefixIcon: Icon(Icons.search),
-            ),
-          ),
-          flex: 1,
-        ),
-        Expanded(
-          child: ListView.builder(
-              itemCount: couponList.length,
-              itemBuilder: (context, rowNumber) {
-                var coupon = couponList[rowNumber];
-                return Container(
-                    height: 200.0,
-                    padding: EdgeInsets.all(10.0),
-                    child: Container(
-                        child: Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(8.0))),
-                            child: InkWell(
-                              onTap: () => null,
-                              child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.stretch, // add this
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Text(coupon.description),
-                                    flex: 8,
-                                  ),
-                                  Expanded(
-                                    child:
-                                    Center(child: Text(coupon.ownedBy)),
-                                    flex: 2,
-                                  ),
-                                ],
-                              ),
-                            ))));
-              }),
-          flex: 9,
-        ),
-      ],
-    );
-  }
+//  Widget getListOfCouponsWidget(String uid,UserHomeViewModel model) {
+//    List<Coupon> couponList = model.getCouponsByMerchantId(model.coupons, merchantId);
+//    print("getListOfMerchantsWidget function ==>>");
+//    return Column(
+//      children: <Widget>[
+//        Expanded(
+//          child: TextField(
+//            controller: editingController,
+//            decoration: InputDecoration(
+//              labelText: "Search",
+//              hintText: "Search",
+//              prefixIcon: Icon(Icons.search),
+//            ),
+//          ),
+//          flex: 1,
+//        ),
+//        Expanded(
+//          child: ListView.builder(
+//              itemCount: couponList.length,
+//              itemBuilder: (context, rowNumber) {
+//                var coupon = couponList[rowNumber];
+//                return Container(
+//                    height: 200.0,
+//                    padding: EdgeInsets.all(10.0),
+//                    child: Container(
+//                        child: Card(
+//                            shape: RoundedRectangleBorder(
+//                                borderRadius:
+//                                BorderRadius.all(Radius.circular(8.0))),
+//                            child: InkWell(
+//                              onTap: () => null,
+//                              child: Column(
+//                                crossAxisAlignment:
+//                                CrossAxisAlignment.stretch, // add this
+//                                children: <Widget>[
+//                                  Expanded(
+//                                    child: Text(coupon.description),
+//                                    flex: 8,
+//                                  ),
+//                                  Expanded(
+//                                    child:
+//                                    Center(child: Text(coupon.ownedBy)),
+//                                    flex: 2,
+//                                  ),
+//                                ],
+//                              ),
+//                            ))));
+//              }),
+//          flex: 9,
+//        ),
+//      ],
+//    );
+//  }
 
-  Widget getListOfCharitiesWidget(UserHomeViewModel model) {
-    print("getCharityOrganizations function ==>>");
+  Widget getCharityListWidget(User user) {
     return Column(
       children: <Widget>[
         Expanded(
@@ -340,46 +325,7 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
           flex: 1,
         ),
         Expanded(
-          child: ListView.builder(
-              itemCount: model.charities.length,
-              itemBuilder: (context, rowNumber) {
-                var charity = model.charities[rowNumber];
-                return Container(
-                    height: 200.0,
-                    padding: EdgeInsets.all(10.0),
-                    child: Container(
-                        child: Card(
-                            shape: RoundedRectangleBorder(
-                                borderRadius:
-                                BorderRadius.all(Radius.circular(8.0))),
-                            child: InkWell(
-                              onTap: () => {},
-                              child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.stretch, // add this
-                                children: <Widget>[
-                                  Expanded(
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.only(
-                                        topLeft: Radius.circular(8.0),
-                                        topRight: Radius.circular(8.0),
-                                      ),
-                                      child: Image.network(
-                                          charity.imageUrl,
-                                          // width: 300,
-                                          fit: BoxFit.fill),
-                                    ),
-                                    flex: 8,
-                                  ),
-                                  Expanded(
-                                    child: Center(
-                                        child: Text(charity.name)),
-                                    flex: 2,
-                                  ),
-                                ],
-                              ),
-                            ))));
-              }),
+          child: Text("this is list of charities"),
           flex: 9,
         ),
       ],
@@ -442,8 +388,7 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
         return selectedWidget == WidgetMarker.listOfMerchants
             ? getListOfMerchantsWidget(model)
             : selectedWidget == WidgetMarker.charityOrganizations
-                ? getListOfCharitiesWidget(model):selectedWidget == WidgetMarker.listOfCoupons
-            ? getListOfCouponsWidget(this.merchantId, model)
+                ? getCharityListWidget(widget.user)
                 : getHistoryWidget(model);
       default:
         return getListOfMerchantsWidget(model);
@@ -510,7 +455,8 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
             )));
   }
 
-  displayProfileEditor(String uid){
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> CustomerProfileView(uid: uid)));
+  displayProfileEditor(User user) {
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (context) => CustomerProfileView(user: user)));
   }
 }

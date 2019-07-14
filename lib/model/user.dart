@@ -7,6 +7,7 @@ class User {
   String imageUrl;
   int level;
   String phone;
+  int points;
   String id;
 
   User({
@@ -16,6 +17,7 @@ class User {
     this.level,
     this.phone,
     this.id,
+    this.points,
   });
 
   User.fromData(Map<String, dynamic> data)
@@ -24,7 +26,9 @@ class User {
         imageUrl = data['imageUrl'],
         level = data['level'],
         phone = data['phone'],
-        email = data['email'];
+        email = data['email'],
+        points = data['points'];
+
 
   User.fromSnapshot(DocumentSnapshot snapShot) :
         username = snapShot['username'],
@@ -32,7 +36,8 @@ class User {
         imageUrl = snapShot['imageUrl'],
         level = snapShot['level'],
         phone = snapShot['phone'],
-        email = snapShot['email'];
+        email = snapShot['email'],
+        points = snapShot['points'];
 
 
 }

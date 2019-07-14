@@ -28,15 +28,13 @@ class UserHomeViewModel extends BaseModel {
 
   }
 
-  User getCurrentUser(List<User> merchants,FirebaseUser currentUser) {
-      String id = currentUser.uid;
+  User getCurrentUser(List<User> merchants,String id) {
       for (User user in merchants){
         if (user.id == id ){
           return user;
         }
       }
       return null;
-
   }
 
   void _onMerchantUpdated(List<User> merchant) {

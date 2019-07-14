@@ -5,18 +5,20 @@ import 'package:giver_app/scoped_model/customer_profile_view_model.dart';
 import 'package:giver_app/enum/view_state.dart';
 
 import 'base_view.dart';
+import 'customer_home_view.dart';
 
 class CustomerProfileView extends StatelessWidget {
-  final String uid;
+  final User user;
 //  List<User> customers;
 
-  CustomerProfileView({@required this.uid});
+  CustomerProfileView({@required this.user});
 
   @override
   Widget build(BuildContext context) {
     return BaseView<CustomerProfileViewModel>(
         builder: (context, child, model) => Scaffold(
           appBar: AppBar(
+            leading: FlatButton(onPressed: ()=> Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>CustomerHomeView(user: user))), child: Icon(Icons.backspace)),
             title: Text("title"),
             actions: <Widget>[
               Center(
@@ -56,32 +58,32 @@ class CustomerProfileView extends StatelessWidget {
         ),
         ListTile(
           leading: Text("UID:"),
-          title: Text(model.getCustomerByUid(model.customers, uid).id
+          title: Text(user.id
           ),
           trailing: Icon(Icons.edit),
 
         ),
         ListTile(
           leading: Text("1"),
-          title: Image.network(model.getCustomerByUid(model.customers, uid).imageUrl),
+          title: Image.network(user.imageUrl),
           trailing: Icon(Icons.edit),
 
         ),
         ListTile(
           leading: Text("2"),
-          title: Text(model.getCustomerByUid(model.customers, uid).username),
+          title: Text(user.username),
           trailing: Icon(Icons.edit),
 
         ),
         ListTile(
           leading: Text("3"),
-          title: Text(model.getCustomerByUid(model.customers, uid).email),
+          title: Text(user.email),
           trailing: Icon(Icons.edit),
 
         ),
         ListTile(
           leading: Text("4"),
-          title: Text(model.getCustomerByUid(model.customers, uid).phone),
+          title: Text(user.phone),
           trailing: Icon(Icons.edit),
 
         ),
