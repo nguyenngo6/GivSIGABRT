@@ -1,15 +1,16 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:giver_app/model/user.dart';
 import 'package:meta/meta.dart';
 
 class MerchantInfo extends StatefulWidget {
 
   const MerchantInfo({
-    @required this.merchantSnapshot
+    @required this.merchant
   });
 
-  final DocumentSnapshot merchantSnapshot;
+  final User merchant;
     
   @override
   _MerchantInfoState createState() => _MerchantInfoState();
@@ -22,7 +23,7 @@ class _MerchantInfoState extends State<MerchantInfo> {
     return Container(
       child: ListTile(
         
-        title: Text(widget.merchantSnapshot.data['username']),
+        title: Text(widget.merchant.username),
         
         subtitle: Row(
           
@@ -30,7 +31,7 @@ class _MerchantInfoState extends State<MerchantInfo> {
             Icon(
               Icons.gps_fixed
             ),
-            Text(widget.merchantSnapshot.data['address'])
+            Text(widget.merchant.phone)
             
           ],
         ),

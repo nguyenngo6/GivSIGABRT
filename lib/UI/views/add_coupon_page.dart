@@ -17,17 +17,15 @@ class _AddCouponsState extends State<AddCoupon> {
   String description;
   int point;
 //  bool isUse;
-  String ownedBy;
-  String usedBy;
 
   void _addData() {
     Firestore.instance.runTransaction((Transaction transaction) async {
       DocumentReference addDataCoupon = await Firestore.instance.collection("coupons").add({
 //        "user": widget.user,
         "description": description,
-        "ownedBy": ownedBy,
         "point": point,
-        "usedBy": usedBy,
+        "ownedBy" : widget.user.uid,
+        "isUsed" : false,
 //        "isUse": isUse,
       });
       print(addDataCoupon.documentID.toString());
@@ -73,36 +71,36 @@ class _AddCouponsState extends State<AddCoupon> {
             ),
           ),
 
-          new Padding(
-            padding: const EdgeInsets.all(16.0),
-            child:TextField(
-              onChanged: (String str){
-                setState(() {
-                  ownedBy = str;
-                });
-              },
-              decoration: InputDecoration(
-                  icon: Icon(Icons.account_circle),
-                  hintText: "Owned by"
-              ),
-            ),
-          ),
+          // new Padding(
+          //   padding: const EdgeInsets.all(16.0),
+          //   child:TextField(
+          //     onChanged: (String str){
+          //       setState(() {
+          //         ownedBy = str;
+          //       });
+          //     },
+          //     decoration: InputDecoration(
+          //         icon: Icon(Icons.account_circle),
+          //         hintText: "Owned by"
+          //     ),
+          //   ),
+          // ),
 
-          new Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              onChanged: (String str){
-                setState(() {
-                  usedBy = str;
-                });
-              },
-              decoration: InputDecoration(
-                  icon: Icon(Icons.account_circle),
-                  hintText: "Used by"
-              ),
-            ),
+          // new Padding(
+          //   padding: const EdgeInsets.all(16.0),
+          //   child: TextField(
+          //     onChanged: (String str){
+          //       setState(() {
+          //         usedBy = str;
+          //       });
+          //     },
+          //     decoration: InputDecoration(
+          //         icon: Icon(Icons.account_circle),
+          //         hintText: "Used by"
+          //     ),
+          //   ),
 
-          ),
+          // ),
 
           new Padding(
             padding: const EdgeInsets.all(20.0),

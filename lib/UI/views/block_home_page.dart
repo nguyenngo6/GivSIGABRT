@@ -1,8 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:giver_app/UI/views/customer_home_page.dart';
-
 import 'package:giver_app/UI/views/sign_in_page.dart';
 
 class BlockHomePage extends StatefulWidget {

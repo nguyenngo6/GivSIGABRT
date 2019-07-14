@@ -1,12 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:giver_app/model/user.dart';
 
 class MerchantUpdateInfoView extends StatefulWidget {
+  
+  const MerchantUpdateInfoView({@required this.merchant});
 
-  // const MerchantUpdateInfoView({@required this.user});
-
-  // final FirebaseUser user;
+  final User merchant;
 
   @override
   _MerchantUpdateInfoViewState createState() => _MerchantUpdateInfoViewState();
@@ -14,7 +15,7 @@ class MerchantUpdateInfoView extends StatefulWidget {
 
 class _MerchantUpdateInfoViewState extends State<MerchantUpdateInfoView> {
 
-  Future<DocumentSnapshot> merchantSnapshot = Firestore.instance.collection('users').document('T35fOeiYBDgymMIlhqBdb6RRzgB3').snapshots().first;
+  
   GlobalKey<FormState> _key = new GlobalKey();
   bool _validate = false;
   String username, address, phone;
@@ -63,7 +64,7 @@ class _MerchantUpdateInfoViewState extends State<MerchantUpdateInfoView> {
     return new Column(
       children: <Widget>[
         new TextFormField( 
-          initialValue: 'Abc',
+          initialValue: widget.merchant.username,
           decoration: new InputDecoration(hintText: 'Username'),
           maxLength: 32,
           validator: validate,
@@ -72,7 +73,7 @@ class _MerchantUpdateInfoViewState extends State<MerchantUpdateInfoView> {
           },
         ),
         new TextFormField(
-          // initialValue: merchantSnapshot.data['phone'],
+          initialValue: widget.merchant.phone,
           decoration: new InputDecoration(hintText: 'Phone Number'),
           keyboardType: TextInputType.phone,
           maxLength: 10,
@@ -81,7 +82,7 @@ class _MerchantUpdateInfoViewState extends State<MerchantUpdateInfoView> {
             phone = val;
           }),
         new TextFormField(
-          // initialValue: merchantSnapshot.data['address'],
+          initialValue: widget.merchant.username,
           decoration: new InputDecoration(hintText: 'Address'),
           maxLength: 32,
           validator: validate,

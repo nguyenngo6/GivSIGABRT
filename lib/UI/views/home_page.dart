@@ -1,9 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:giver_app/UI/views/customer_home_page.dart';
 
 import 'package:giver_app/UI/views/merchant_home_view.dart';
+
+import 'customer_home_view.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key key, @required this.user})
       : super(key: key);
@@ -32,7 +33,7 @@ class _HomePageState extends State<HomePage> {
             print(snapshot.data.data['level']);
             switch (snapshot.data.data['level']) {
               case 1:
-                return CustomerHomePage(user: widget.user);
+                return CustomerHomeView(user: widget.user);
               case 2:
                 return MerchantHomeView(user: widget.user);
             }

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/UI/Views/sign_in_page.dart';
 import 'package:giver_app/UI/shared/ui_reducers.dart';
+import 'package:giver_app/UI/views/merchant_profile_view.dart';
 import 'package:giver_app/UI/widgets/coupon_list.dart';
 import 'package:giver_app/UI/widgets/merchant_image.dart';
 import 'package:giver_app/UI/widgets/merchant_info.dart';
@@ -10,7 +11,9 @@ import 'package:giver_app/UI/widgets/merchant_info.dart';
 
 import 'package:giver_app/UI/widgets/simple_toolbar.dart';
 import 'package:giver_app/model/coupon.dart';
-import 'package:giver_app/scoped_model/merchant_home_view_model.dart';
+import 'package:giver_app/model/user.dart';
+import 'package:giver_app/scoped_model/user_home_view_model.dart';
+
 import 'package:giver_app/services/firebase_service.dart';
 import 'package:giver_app/scoped_model/merchant_profile_view_model.dart';
 import 'package:giver_app/UI/views/base_view.dart';
@@ -18,6 +21,7 @@ import 'package:giver_app/enum/view_state.dart';
 import 'package:giver_app/UI/widgets/coupon_item.dart';
 
 import 'add_coupon_page.dart';
+import 'merchant_edit_info_view.dart';
 
 class MerchantHomeView extends StatefulWidget {
 
@@ -83,16 +87,17 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
     Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> AddCoupon(user: widget.user)));
   }
 
-  Widget customBodyWidget(){
+  Widget customBodyWidget(UserHomeViewModel model){
     switch (_selectedIndex){
       case 0:
-        return getHomeView();
+        return getHomeView(model);
       case 2:
         return getHistoryView();
     }
   }
 
-  Widget getHomeView(){
+  Widget getHomeView(UserHomeViewModel model){
+    List<Coupon> couponList = model.getCouponsByMerchantId(model.coupons, widget.user.uid);
     return Column(
       children: <Widget>[
         Expanded(
@@ -107,26 +112,7 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
           flex: 1,
         ),
         Expanded(
-          child: StreamBuilder<QuerySnapshot>(
-            stream: Firestore.instance
-                .collection('users')
-                .document(widget.user.uid)
-                .collection("ownedCoupons")
-                .snapshots(),
-            builder: (BuildContext context,
-                AsyncSnapshot<QuerySnapshot> snapshot) {
-              if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else if (!snapshot.hasData) {
-                return Text("no documents");
-              } else if (snapshot.connectionState ==
-                  ConnectionState.waiting) {
-                return Text('Loading..');
-              } else {
-                return new CouponList(user: widget.user);
-              }
-            },
-          ),
+          child: CouponList(couponList: couponList),
           flex: 9,
         ),
       ],
@@ -140,7 +126,8 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BaseView<UserHomeViewModel>(
+        builder: (context, child, model) => Scaffold(
         appBar: AppBar(
           title: Center(child: Text('Home'),),
           actions: <Widget>[
@@ -173,8 +160,10 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
                           "https://previews.123rf.com/images/wmitrmatr/wmitrmatr1408/wmitrmatr140800310/30747109-beautiful-paddy-with-nice-background.jpg"))),
             ),
             ListTile(
-              title: Text("Link1"),
-              trailing: IconButton(icon: Icon(Icons.cancel), onPressed: null),
+              title: Text("Edit"),
+              trailing: IconButton(
+                icon: Icon(Icons.edit), 
+                onPressed: () => Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> MerchantUpdateInfoView(merchant: model.getCurrentUser(model.merchants,widget.user),))))
             ),
             ListTile(
               title: Text("Link2"),
@@ -191,7 +180,7 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
           ],
         ),
       ),
-      body: customBodyWidget(),
+      body: customBodyWidget(model),
 
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
@@ -213,7 +202,7 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
         onTap: _onItemTapped,
       ),
 
-      );
+      ));
     
   }
 }

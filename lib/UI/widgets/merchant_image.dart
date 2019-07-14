@@ -6,14 +6,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
+import 'package:giver_app/model/user.dart';
 
 class MerchantImage extends StatefulWidget {
 
   const MerchantImage({
-    @required this.merchantSnapshot
+    @required this.merchant
   });
 
-  final DocumentSnapshot merchantSnapshot;
+  final User merchant;
 
   @override
   _MerchantImageState createState() => _MerchantImageState();

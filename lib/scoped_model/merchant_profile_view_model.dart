@@ -18,7 +18,7 @@ class MerchantProfileViewModel extends BaseModel {
   List<Coupon> coupons;
  
   MerchantProfileViewModel() {
-    _firebaseService.coupons.listen(_onCouponUpdated);  
+    _firebaseService.coupons.asBroadcastStream().listen(_onCouponUpdated);  
   }
 
   void redeemCoupon({@required String couponID}){

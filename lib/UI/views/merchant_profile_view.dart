@@ -8,6 +8,7 @@ import 'package:giver_app/UI/widgets/merchant_info.dart';
 
 import 'package:giver_app/UI/widgets/simple_toolbar.dart';
 import 'package:giver_app/model/coupon.dart';
+import 'package:giver_app/model/user.dart';
 
 
 import 'package:giver_app/scoped_model/merchant_profile_view_model.dart';
@@ -17,9 +18,9 @@ import 'package:giver_app/UI/widgets/coupon_item.dart';
 
 class MerchantProfileView extends StatelessWidget {
 
-  const MerchantProfileView({@required this.merchantSnapshot});
+  const MerchantProfileView({@required this.merchant});
 
-  final DocumentSnapshot merchantSnapshot;
+  final User merchant;
 
   
   
@@ -34,11 +35,11 @@ class MerchantProfileView extends StatelessWidget {
             SimpleToolbar(title: "Profile", showBackButton: true,),
             Container(
               height: 140,
-              child: MerchantImage(merchantSnapshot: merchantSnapshot,),
+              child: MerchantImage(merchant: merchant,),
             ),
             Container(
               height: 100,
-              child: MerchantInfo(merchantSnapshot: merchantSnapshot,),
+              child: MerchantInfo(merchant: merchant,),
             ),
             Container(
               height: screenHeight(context, decreasedBy: 240 + toolbarHeight),
@@ -70,9 +71,9 @@ class MerchantProfileView extends StatelessWidget {
    Widget _getListUi(MerchantProfileViewModel model) {
   
     return ListView.builder(
-        itemCount:  model.getCouponsByMerchantID(merchantSnapshot.documentID).length,
+        itemCount:  model.getCouponsByMerchantID(merchant.id).length,
         itemBuilder: (context, itemIndex) {
-          var couponItem = model.getCouponsByMerchantID(merchantSnapshot.documentID)[itemIndex];
+          var couponItem = model.getCouponsByMerchantID(merchant.id)[itemIndex];
           String couponID = couponItem.id;
           return CouponItem(
             couponItem: couponItem,
