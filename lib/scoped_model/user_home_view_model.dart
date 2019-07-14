@@ -19,8 +19,6 @@ class UserHomeViewModel extends BaseModel {
   List<Charity> charities;
   User currentUser;
 
-
-
   UserHomeViewModel() {
     _firebaseService.merchants.asBroadcastStream().listen(_onMerchantUpdated);
     _firebaseService.charities.asBroadcastStream().listen(_onCharityUpdated);

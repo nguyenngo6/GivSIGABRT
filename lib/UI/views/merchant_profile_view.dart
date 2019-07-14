@@ -21,9 +21,7 @@ class MerchantProfileView extends StatelessWidget {
   const MerchantProfileView({@required this.merchant});
 
   final User merchant;
-
-  
-  
+ 
   @override
   Widget build(BuildContext context) {
     
