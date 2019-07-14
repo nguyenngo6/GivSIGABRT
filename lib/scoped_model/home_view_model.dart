@@ -10,7 +10,7 @@ import 'package:giver_app/scoped_model/home_view_model.dart';
 import 'base_model.dart';
 
 class HomeViewModel extends BaseModel {
-  FirebaseService _firebaseService = getit<FirebaseService>();
+  FirebaseService _firebaseService = locator<FirebaseService>();
   
   HomeViewModel() {
     

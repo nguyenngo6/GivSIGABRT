@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/UI/shared/ui_reducers.dart';
@@ -8,7 +8,8 @@ import 'package:giver_app/UI/widgets/merchant_info.dart';
 
 import 'package:giver_app/UI/widgets/simple_toolbar.dart';
 import 'package:giver_app/model/coupon.dart';
-import 'package:giver_app/services/firebase_service.dart';
+
+
 import 'package:giver_app/scoped_model/merchant_profile_view_model.dart';
 import 'package:giver_app/UI/views/base_view.dart';
 import 'package:giver_app/enum/view_state.dart';
@@ -20,8 +21,11 @@ class MerchantProfileView extends StatelessWidget {
 
   final DocumentSnapshot merchantSnapshot;
 
+  
+  
   @override
   Widget build(BuildContext context) {
+    
     return BaseView<MerchantProfileViewModel>(
       builder: (context, child, model) => Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
@@ -55,16 +59,20 @@ class MerchantProfileView extends StatelessWidget {
       case ViewState.Error:
         return _errorUi(context, model);
       case ViewState.DataFetched:
+        return _getListUi(model);
       default:
         return _getListUi(model);
     }
   }
 
+
+
    Widget _getListUi(MerchantProfileViewModel model) {
+  
     return ListView.builder(
-        itemCount: model.coupons.length,
+        itemCount:  model.getCouponsByMerchantID(merchantSnapshot.documentID).length,
         itemBuilder: (context, itemIndex) {
-          var couponItem = model.coupons[itemIndex];
+          var couponItem = model.getCouponsByMerchantID(merchantSnapshot.documentID)[itemIndex];
           String couponID = couponItem.id;
           return CouponItem(
             couponItem: couponItem,

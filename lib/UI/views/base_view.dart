@@ -21,7 +21,7 @@ class BaseView<T extends Model> extends StatefulWidget {
 }
 
 class _BaseViewState<T extends Model> extends State<BaseView<T>> {
-  T _model = getit<T>();
+  T _model = locator<T>();
 
   @override
   void initState() {

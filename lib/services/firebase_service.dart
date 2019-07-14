@@ -1,6 +1,7 @@
   import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:giver_app/model/coupon.dart';
 import 'package:meta/meta.dart';
 
@@ -26,29 +27,31 @@ class FirebaseService {
         });
   }
 
+  
+
   void _couponAdded(QuerySnapshot snapshot) {
     var coupon = _getCouponFromSnapshot(snapshot);
-    _couponController.add(coupon);
-    
+    _couponController.add(coupon);    
   }
+
 
   List<Coupon> _getCouponFromSnapshot(QuerySnapshot snapshot) {
     var couponItems = List<Coupon>();
     var documents = snapshot.documents;
     var hasDocuments = documents.length > 0;
-
+  
     if(hasDocuments) {
       for (var document in documents) {
         var documentData = document.data;
         documentData['id'] = document.documentID;
         couponItems.add(Coupon.fromData(documentData));
-        
       }
     }
-
+    
     return couponItems;
    }
-
+     
+   
    void _excludeUsedCoupons(List<Coupon> couponItems){
      for (Coupon coupon in couponItems) {
        if (coupon.isUsed) {

@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:giver_app/UI/views/home_view.dart';
-import 'package:giver_app/UI/views/merchant_edit_info_view.dart';
 import 'package:giver_app/service_locator.dart';
-
-import 'UI/views/merchant_profile_view.dart';
 import 'UI/views/sign_in_page.dart';
 
 void main(){
@@ -29,7 +25,8 @@ class MyApp extends StatelessWidget {
         // is not restarted. 
         primarySwatch: Colors.blue,
       ),
-      home: MerchantUpdateInfoView(),
+      home: SignInPage(),
     );
+
   }
 }

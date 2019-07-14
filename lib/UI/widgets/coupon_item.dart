@@ -83,7 +83,7 @@ class _CouponItemState extends State<CouponItem> {
                   mainAxisSize: MainAxisSize.max,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(widget.couponItem.ownedBy,
+                    Text(widget.couponItem.description,
                       maxLines: 1, style: TextStyle(fontWeight: FontWeight.bold),),
                       _showDetails 
                         ? Padding(
