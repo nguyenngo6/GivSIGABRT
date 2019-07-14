@@ -86,7 +86,7 @@ class MerchantProfileView extends StatelessWidget {
               });
         });
   }
-
+  //du ma met fvai lon
   Widget _getLoadingUi(BuildContext context) {
     return Center(
         child: Column(
