@@ -2,6 +2,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/UI/shared/ui_reducers.dart';
+import 'package:giver_app/UI/widgets/merchant_image.dart';
+import 'package:giver_app/UI/widgets/merchant_info.dart';
+
+
 import 'package:giver_app/UI/widgets/simple_toolbar.dart';
 import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/services/firebase_service.dart';
@@ -11,6 +15,11 @@ import 'package:giver_app/enum/view_state.dart';
 import 'package:giver_app/UI/widgets/coupon_item.dart';
 
 class MerchantProfileView extends StatelessWidget {
+
+  const MerchantProfileView({@required this.merchantSnapshot});
+
+  final DocumentSnapshot merchantSnapshot;
+
   @override
   Widget build(BuildContext context) {
     return BaseView<MerchantProfileViewModel>(
@@ -18,13 +27,24 @@ class MerchantProfileView extends StatelessWidget {
         backgroundColor: Theme.of(context).backgroundColor,
         body: Column(
           children: <Widget>[
-            SimpleToolbar(title: 'COUPONS', showBackButton: true),
+            SimpleToolbar(title: "Profile", showBackButton: true,),
             Container(
-              height: screenHeight(context, decreasedBy: toolbarHeight),
+              height: 140,
+              child: MerchantImage(merchantSnapshot: merchantSnapshot,),
+            ),
+            Container(
+              height: 100,
+              child: MerchantInfo(merchantSnapshot: merchantSnapshot,),
+            ),
+            Container(
+              height: screenHeight(context, decreasedBy: 240 + toolbarHeight),
               child: _getBodyUi(context, model)),
+            
           ],
         )));
   }
+
+  
 
   Widget _getBodyUi(BuildContext context, MerchantProfileViewModel model){
     switch (model.state) {

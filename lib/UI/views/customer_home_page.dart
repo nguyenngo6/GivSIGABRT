@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/UI/views/merchant_profile_view.dart';
 import 'package:giver_app/UI/views/sign_in_page.dart';
 
+import 'home_view.dart';
+
 class CustomerHomePage extends StatefulWidget {
   const CustomerHomePage({Key key, @required this.user}) : super(key: key);
   final FirebaseUser user;
@@ -182,7 +184,7 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
     return snapshot.data.documents
         .map((doc) => new ListTile(
             title: new Text(doc["username"]),
-            onTap: () => navigateToMerchantProfile(),
+            onTap: () => navigateToMerchantProfile(doc),
             subtitle: new Text(doc["email"].toString())))
         .toList();
   }
@@ -191,8 +193,8 @@ class _CustomerHomePageState extends State<CustomerHomePage> {
     print(snapshot.data.documents.length);
     return snapshot.data.documents.length;
   }
-  navigateToMerchantProfile() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => MerchantProfileView()));
+  navigateToMerchantProfile(DocumentSnapshot snapshot) {
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MerchantProfileView(merchantSnapshot: snapshot,)));
   }
 
   signOut() {

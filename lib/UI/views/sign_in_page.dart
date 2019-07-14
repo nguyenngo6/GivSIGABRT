@@ -17,7 +17,7 @@ class _SignInPageState extends State<SignInPage> {
   String _email;
   String _password;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
+  
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
@@ -107,13 +107,13 @@ class _SignInPageState extends State<SignInPage> {
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      HomePage(user: user, firebaseAuth: firebaseAuth)));
+                      HomePage(user: user)));
         }else{
           Navigator.pushReplacement(
               context,
               MaterialPageRoute(
                   builder: (context) =>
-                      BlockHomePage(user: user, firebaseAuth: firebaseAuth)));
+                      BlockHomePage(user: user)));
         }
 
       } catch (e) {

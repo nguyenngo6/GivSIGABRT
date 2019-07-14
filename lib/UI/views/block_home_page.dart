@@ -6,9 +6,8 @@ import 'package:giver_app/UI/views/merchant_home_page.dart';
 import 'package:giver_app/UI/views/sign_in_page.dart';
 
 class BlockHomePage extends StatefulWidget {
-  const BlockHomePage ({Key key, @required this.user, this.firebaseAuth}) : super(key: key);
+  const BlockHomePage ({Key key, @required this.user}) : super(key: key);
   final FirebaseUser user;
-  final FirebaseAuth firebaseAuth;
   @override
   _BlockHomePageState createState() => _BlockHomePageState();
 }

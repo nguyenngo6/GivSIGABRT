@@ -4,10 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/UI/views/customer_home_page.dart';
 import 'package:giver_app/UI/views/merchant_home_page.dart';
 class HomePage extends StatefulWidget {
-  const HomePage({Key key, @required this.user, this.firebaseAuth})
+  const HomePage({Key key, @required this.user})
       : super(key: key);
   final FirebaseUser user;
-  final FirebaseAuth firebaseAuth;
+
   @override
   _HomePageState createState() => _HomePageState();
 }

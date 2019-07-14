@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giver_app/UI/views/home_view.dart';
+import 'package:giver_app/UI/views/merchant_edit_info_view.dart';
 import 'package:giver_app/service_locator.dart';
 
 import 'UI/views/merchant_profile_view.dart';
@@ -28,7 +29,7 @@ class MyApp extends StatelessWidget {
         // is not restarted. 
         primarySwatch: Colors.blue,
       ),
-      home: HomeView(),
+      home: MerchantUpdateInfoView(),
     );
   }
 }
