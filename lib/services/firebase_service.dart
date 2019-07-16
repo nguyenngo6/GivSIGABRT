@@ -7,7 +7,7 @@ import 'package:meta/meta.dart';
 
 class FirebaseService {
   final StreamController<List<User>> _userController =
-  StreamController<List<User>>.broadcast();
+      StreamController<List<User>>.broadcast();
 
   final StreamController<List<User>> _merchantController =
       StreamController<List<User>>.broadcast();
@@ -16,21 +16,15 @@ class FirebaseService {
       StreamController<List<Charity>>.broadcast();
 
   final StreamController<List<User>> _customerController =
-  StreamController<List<User>>.broadcast();
+      StreamController<List<User>>.broadcast();
 
   final StreamController<List<Coupon>> _couponController =
-  StreamController<List<Coupon>>.broadcast();
+      StreamController<List<Coupon>>.broadcast();
 
   FirebaseService() {
-    Firestore.instance
-        .collection('users')
-        .snapshots()
-        .listen(_userAdded);
+    Firestore.instance.collection('users').snapshots().listen(_userAdded);
 
-    Firestore.instance
-        .collection('coupons')
-        .snapshots()
-        .listen(_couponAdded);
+    Firestore.instance.collection('coupons').snapshots().listen(_couponAdded);
 
     Firestore.instance
         .collection('charities')
@@ -52,35 +46,31 @@ class FirebaseService {
 //    Firestore.instance.collection('users').document(uid).snapshots().listen(_customerInfoAdded);
 //  }
 
-
   void redeemCoupon({@required String couponID}) {
     Firestore.instance
         .collection("coupons")
         .document(couponID)
-        .updateData({
-          'isUsed': true
-        });
+        .updateData({'isUsed': true});
   }
-  void _couponAdded(QuerySnapshot snapshot){
+
+  void _couponAdded(QuerySnapshot snapshot) {
     var coupon = _getCouponFromSnapshot(snapshot);
     _couponController.add(coupon);
   }
 
-  List<Coupon> _getCouponFromSnapshot(QuerySnapshot snapshot){
+  List<Coupon> _getCouponFromSnapshot(QuerySnapshot snapshot) {
     var couponList = List<Coupon>();
     var documents = snapshot.documents;
-    if(documents.length > 0){
-      for(var document in documents){
+    if (documents.length > 0) {
+      for (var document in documents) {
         var documentData = document.data;
         documentData['id'] = document.documentID;
         couponList.add(Coupon.fromData(documentData));
-
       }
     }
 
     return couponList;
   }
-
 
   void _userAdded(QuerySnapshot snapshot) {
     var merchant = _getMerchantFromSnapshot(snapshot);
@@ -97,8 +87,8 @@ class FirebaseService {
     if (documents.length > 0) {
       for (var document in documents) {
         var documentData = document.data;
-          documentData['id'] = document.documentID;
-          userList.add(User.fromData(documentData));
+        documentData['id'] = document.documentID;
+        userList.add(User.fromData(documentData));
       }
     }
     return userList;
@@ -110,7 +100,7 @@ class FirebaseService {
     if (documents.length > 0) {
       for (var document in documents) {
         var documentData = document.data;
-        if(documentData['level'] == 1){
+        if (documentData['level'] == 1) {
           documentData['id'] = document.documentID;
           customerList.add(User.fromData(documentData));
         }
@@ -125,7 +115,7 @@ class FirebaseService {
     if (documents.length > 0) {
       for (var document in documents) {
         var documentData = document.data;
-        if(documentData['level'] == 2){
+        if (documentData['level'] == 2) {
           documentData['id'] = document.documentID;
           merchantList.add(User.fromData(documentData));
         }
@@ -138,6 +128,7 @@ class FirebaseService {
     var charity = _getCharityFromSnapshot(snapshot);
     _charityController.add(charity);
   }
+
   List<Charity> _getCharityFromSnapshot(QuerySnapshot snapshot) {
     var charityList = List<Charity>();
     var documents = snapshot.documents;
@@ -149,5 +140,17 @@ class FirebaseService {
       }
     }
     return charityList;
+  }
+
+  Future<bool> editUsername(String newUsername, String uid) async {
+    DocumentReference reference =
+        await Firestore.instance.collection('users').document(uid);
+    Firestore.instance.runTransaction((Transaction transaction) async {
+      DocumentSnapshot snapshot = await transaction.get(reference);
+
+      await transaction
+          .update(snapshot.reference, {"username": newUsername});
+    });
+    return true;
   }
 }

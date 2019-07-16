@@ -47,14 +47,15 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
   @override
   Widget build(BuildContext context) {
     return BaseView<UserHomeViewModel>(
-        builder: (context, child, model) => Scaffold(
-              appBar: _getAppBar(_selectedTittle, widget.user.points),
-              drawer: _getDrawer(),
-              body: BusyOverlay(
-                  show: model.state == ViewState.Busy,
-                  child: _getBodyUi(context, model)),
-              bottomNavigationBar: _getBottomBar(),
-            ));
+        builder: (context, child, model) => BusyOverlay(
+          show: model.state == ViewState.Busy,
+          child: Scaffold(
+                appBar: _getAppBar(_selectedTittle, widget.user.points),
+                drawer: _getDrawer(),
+                body: _getBodyUi(context, model),
+                bottomNavigationBar: _getBottomBar(),
+              ),
+        ));
   }
 
   Widget _getAppBar(String title, int points) {
@@ -79,12 +80,12 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
       child: ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: new Text("Toan "),
-            accountEmail: new Text("toan.do2806@icloud."),
+            accountName: Text("Toan "),
+            accountEmail: Text("toan.do2806@icloud."),
             currentAccountPicture: GestureDetector(
               onTap: () => print("avatar tap"),
               child: CircleAvatar(
-                backgroundImage: new NetworkImage(
+                backgroundImage: NetworkImage(
                     "https://profilepicturesdp.com/wp-content/uploads/2018/06/cute-baby-wallpaper-for-whatsapp-dp-11.jpg"),
               ),
             ),

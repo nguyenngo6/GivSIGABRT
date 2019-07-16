@@ -19,5 +19,5 @@ void setupLocator() {
   locator.registerSingleton(UserHomeViewModel());
   locator.registerSingleton(MerchantProfileViewModel());
   locator.registerSingleton(CustomerProfileViewModel());
- 
+
 }

@@ -53,8 +53,9 @@ class UserHomeViewModel extends BaseModel {
     }
   }
 
-  void _onMerchantUpdated(List<User> merchant) {
+  Future<bool> _onMerchantUpdated(List<User> merchant) async{
     setState(ViewState.Busy);
+    await Future.delayed(Duration(seconds: 5));
     merchants = merchant;
     if (merchants == null) {
       setState(ViewState.Busy);
@@ -63,6 +64,7 @@ class UserHomeViewModel extends BaseModel {
           ? ViewState.NoDataAvailable
           : ViewState.DataFetched);
     }
+    return true;
   }
 
   void _onCharityUpdated(List<Charity> charity) {
