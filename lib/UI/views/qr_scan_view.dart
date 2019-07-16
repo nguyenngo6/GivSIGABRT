@@ -1,8 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
+import 'package:giver_app/enum/view_state.dart';
+import 'package:giver_app/model/user.dart';
+import 'package:giver_app/scoped_model/qr_scan_view_model.dart';
+
+import 'base_view.dart';
 
 class QrScanView extends StatefulWidget {
+  const QrScanView({@required this.customer});
+
+  final User customer;
+
   @override
   State<StatefulWidget> createState() {
     return QrScanViewState();
@@ -13,17 +22,43 @@ class QrScanViewState extends State<QrScanView> {
   String _barcode = "";
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return BaseView<QrScanViewModel>(
+      builder: (context, child, model) => Scaffold(
         appBar: AppBar(
-          title: Text('Lector QR flutter'),
+          title: Text('QR Code Scan'),
         ),
-        body: Container(
+        body: _getBodyUi(context, model)
+        )
+    );
+  }
+
+  Widget _getBodyUi(BuildContext context, QrScanViewModel model) {
+    switch(model.state){
+      case ViewState.InvalidCoupon:
+        return _getErrorWidget();
+      case ViewState.Confirmation:
+        return _getConfirmationWidget();
+      default:
+        return _getDefaultUi(model);
+    }
+  }
+
+  Widget _getConfirmationWidget(){
+    return Container();
+  }
+
+  Widget _getErrorWidget(){
+    return Container();
+  }
+
+  Widget _getDefaultUi(QrScanViewModel model){
+    return Container(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
               Image.asset(
-                'assets/barcode.png',
+                'assets/logo.png',
                 height: 150,
               ),
               SizedBox(
@@ -36,8 +71,8 @@ class QrScanViewState extends State<QrScanView> {
                         color: Colors.amber,
                         textColor: Colors.black,
                         splashColor: Colors.blueGrey,
-                        onPressed: scan,
-                        child: const Text('Scanear el código QR.'),
+                        onPressed: () => scan(model),
+                        child: const Text('Press to start scanning'),
                       ),
                     ),
                   Padding(
@@ -51,26 +86,23 @@ class QrScanViewState extends State<QrScanView> {
                     ),
             ],
           ),
-        ));
+        );
   }
 
-  Future scan() async {
+  Future scan(QrScanViewModel model) async {
     try {
       String barcode = await BarcodeScanner.scan();
-      setState(() => this._barcode = barcode);
+      model.onDataReceived(barcode);
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
-        setState(() {
-          this._barcode = 'El usuario no dio permiso para el uso de la cámara!';
-        });
+          model.setState(ViewState.Error);
       } else {
-        setState(() => this._barcode = 'Error desconocido $e');
+        model.setState(ViewState.Error);
       }
     } on FormatException {
-      setState(() => this._barcode =
-          'nulo, el usuario presionó el botón de volver antes de escanear algo)');
+      model.setState(ViewState.WrongQrFormat);
     } catch (e) {
-      setState(() => this._barcode = 'Error desconocido : $e');
+      model.setState(ViewState.Error);
     }
   }
 }
