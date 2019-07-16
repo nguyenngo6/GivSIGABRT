@@ -252,7 +252,9 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
     }
   }
 
-  getHistoryWidget(UserHomeViewModel model) {}
+  getHistoryWidget(UserHomeViewModel model) {
+    return Text('history');
+  }
 
   signOut() {
     FirebaseAuth.instance.signOut();

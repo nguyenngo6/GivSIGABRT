@@ -21,7 +21,7 @@ dependencies:
   scoped_model: ^1.0.1
   get_it: ^1.0.3 #get it
   cloud_firestore: #firebase firestore
-  firebase_auth: 0.10.0
+  firebase_auth: ^0.11.0
   flutter:
     sdk: flutter
   firebase_core: ^0.4.0  # add dependency for Firebase Core
