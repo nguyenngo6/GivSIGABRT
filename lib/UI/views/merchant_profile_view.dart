@@ -20,7 +20,6 @@ class MerchantProfileView extends StatelessWidget {
 
   final User customer;
   final User merchant;
-
   @override
   Widget build(BuildContext context) {
     return BaseView<MerchantProfileViewModel>(
@@ -86,7 +85,6 @@ class MerchantProfileView extends StatelessWidget {
               });
         });
   }
-
   //du ma met fvai lon
   Widget _getLoadingUi(BuildContext context) {
     return Center(
