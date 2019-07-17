@@ -24,8 +24,10 @@ dependencies:
   firebase_auth: ^0.11.0
   flutter:
     sdk: flutter
+  firebase_storage:
   firebase_core: ^0.4.0  # add dependency for Firebase Core
   firebase_analytics: ^1.0.4  # add dependency for Google Analytics for Firebase
+  image_picker:
 
 
 

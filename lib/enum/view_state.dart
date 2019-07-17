@@ -7,5 +7,6 @@ enum ViewState {
   Success, // Successful action occurred
   WaitingForInput, // The starting state that a form view is in
   EditUsername,
-  EditPhone
+  EditPhone,
+  EditImageUrl
 }

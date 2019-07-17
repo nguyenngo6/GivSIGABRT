@@ -21,11 +21,24 @@ class CustomerProfileViewModel extends BaseModel {
     _firebaseService.customers.asBroadcastStream().listen(_onCustomerUpdated);
   }
 
-  Future<bool> onUsernameEdited(String newUsername, String uid)async{
-    setState(ViewState.Busy);
-    await _firebaseService.editUsername(newUsername, uid);
-    await Future.delayed(Duration(seconds: 2));
-    setState(ViewState.DataFetched);
+  Future<bool> onInfoEdited(String data, String uid)async{
+    if(state == ViewState.EditUsername){
+      setState(ViewState.Busy);
+      await _firebaseService.editUsername(data, uid);
+      await Future.delayed(Duration(seconds: 2));
+      setState(ViewState.DataFetched);
+    }else if(state == ViewState.EditPhone){
+      setState(ViewState.Busy);
+      await _firebaseService.editPhone(data, uid);
+      await Future.delayed(Duration(seconds: 2));
+      setState(ViewState.DataFetched);
+    }else if(state == ViewState.EditImageUrl){
+      setState(ViewState.Busy);
+      await _firebaseService.editImageUrl(data, uid);
+      await Future.delayed(Duration(seconds: 2));
+      setState(ViewState.DataFetched);
+    }
+
 
     return true;
   }
