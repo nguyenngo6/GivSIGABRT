@@ -1,4 +1,7 @@
 PODS:
+  - barcode_scan (0.0.1):
+    - Flutter
+    - MTBBarcodeScanner
   - BoringSSL-GRPC (0.0.3):
     - BoringSSL-GRPC/Implementation (= 0.0.3)
     - BoringSSL-GRPC/Interface (= 0.0.3)
@@ -20,6 +23,9 @@ PODS:
   - Firebase/Firestore (6.4.0):
     - Firebase/CoreOnly
     - FirebaseFirestore (~> 1.4.1)
+  - Firebase/Storage (6.4.0):
+    - Firebase/CoreOnly
+    - FirebaseStorage (~> 3.3.0)
   - firebase_analytics (0.0.1):
     - Firebase/Core
     - Flutter
@@ -29,6 +35,9 @@ PODS:
     - Flutter
   - firebase_core (0.0.1):
     - Firebase/Core
+    - Flutter
+  - firebase_storage (0.0.1):
+    - Firebase/Storage
     - Flutter
   - FirebaseAnalytics (6.0.3):
     - FirebaseCore (~> 6.0)
@@ -68,6 +77,10 @@ PODS:
     - FirebaseCore (~> 6.0)
     - GoogleUtilities/Environment (~> 6.0)
     - GoogleUtilities/UserDefaults (~> 6.0)
+  - FirebaseStorage (3.3.0):
+    - FirebaseAuthInterop (~> 1.0)
+    - FirebaseCore (~> 6.0)
+    - GTMSessionFetcher/Core (~> 1.1)
   - Flutter (1.0.0)
   - google_sign_in (0.0.1):
     - Flutter
@@ -125,7 +138,10 @@ PODS:
     - nanopb (~> 0.3)
   - gRPC-Core/Interface (1.21.0)
   - GTMSessionFetcher/Core (1.2.2)
+  - image_picker (0.0.1):
+    - Flutter
   - leveldb-library (1.20)
+  - MTBBarcodeScanner (5.0.11)
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
     - nanopb/encode (= 0.3.901)
@@ -134,12 +150,15 @@ PODS:
   - Protobuf (3.9.0)
 
 DEPENDENCIES:
+  - barcode_scan (from `.symlinks/plugins/barcode_scan/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - firebase_analytics (from `.symlinks/plugins/firebase_analytics/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
+  - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `.symlinks/flutter/ios`)
   - google_sign_in (from `.symlinks/plugins/google_sign_in/ios`)
+  - image_picker (from `.symlinks/plugins/image_picker/ios`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -151,6 +170,7 @@ SPEC REPOS:
     - FirebaseCore
     - FirebaseFirestore
     - FirebaseInstanceID
+    - FirebaseStorage
     - GoogleAppMeasurement
     - GoogleSignIn
     - GoogleToolboxForMac
@@ -159,10 +179,13 @@ SPEC REPOS:
     - gRPC-Core
     - GTMSessionFetcher
     - leveldb-library
+    - MTBBarcodeScanner
     - nanopb
     - Protobuf
 
 EXTERNAL SOURCES:
+  barcode_scan:
+    :path: ".symlinks/plugins/barcode_scan/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   firebase_analytics:
@@ -171,24 +194,31 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
     :path: ".symlinks/plugins/firebase_core/ios"
+  firebase_storage:
+    :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: ".symlinks/flutter/ios"
   google_sign_in:
     :path: ".symlinks/plugins/google_sign_in/ios"
+  image_picker:
+    :path: ".symlinks/plugins/image_picker/ios"
 
 SPEC CHECKSUMS:
+  barcode_scan: 33f586d02270046fc6559135038b34b5754eaa4f
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
   cloud_firestore: 5698a9bd01b94fd31e7b7b56d8fe1665f4fb43cb
   Firebase: 9445469655a98e9010737f4bc4720e5bda465873
   firebase_analytics: bd50d8f5d3f42dcab6da67944a849062470b0a19
   firebase_auth: b5657b3e35c8af36d74c8b67b068bc77d056b474
   firebase_core: 44f31f51532812598f0f9f4af0caa705b9edfc19
+  firebase_storage: ad2e96fb734b0254a42adba43f9aafb77de84d0a
   FirebaseAnalytics: 69fe25866d2ec87c6f02d72c3c9a82bce9c065a0
   FirebaseAuth: 68cfa47997f53d29ce978e7a615fb78d7925fcbe
   FirebaseAuthInterop: 0ffa57668be100582bb7643d4fcb7615496c41fc
   FirebaseCore: 7ea99e200f0024262650be56623fbe6a7bef1707
   FirebaseFirestore: f9d8dbe06cb1e50b5025d0d9ece41e173d0c7e00
   FirebaseInstanceID: 9782fcfb89e4d7da76cc28eac4b8543dc7be4a4b
+  FirebaseStorage: fdf753138620fbb9257679357daec4f266627c37
   Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
   google_sign_in: 27e70a98b529f0b076d4b19f231b81da28b1750b
   GoogleAppMeasurement: 1e45fa601e6280c180880d57010390f6679cd971
@@ -198,7 +228,9 @@ SPEC CHECKSUMS:
   "gRPC-C++": 9dfe7b44821e7b3e44aacad2af29d2c21f7cde83
   gRPC-Core: c9aef9a261a1247e881b18059b84d597293c9947
   GTMSessionFetcher: 61bb0f61a4cb560030f1222021178008a5727a23
+  image_picker: 16e5fec1fbc87fd3b297c53e4048521eaf17cd06
   leveldb-library: 08cba283675b7ed2d99629a4bc5fd052cd2bb6a5
+  MTBBarcodeScanner: f453b33c4b7dfe545d8c6484ed744d55671788cb
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
   Protobuf: 1097ca58584c8d9be81bfbf2c5ff5975648dd87a
 
