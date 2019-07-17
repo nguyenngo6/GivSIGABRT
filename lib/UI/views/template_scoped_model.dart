@@ -13,12 +13,12 @@ import 'package:giver_app/enum/view_state.dart';
 import 'base_view.dart';
 import 'customer_profile_view.dart';
 
-class CustomerHomeView extends StatefulWidget {
+class TemplateView extends StatefulWidget {
   @override
-  _CustomerHomeViewState createState() => _CustomerHomeViewState();
+  _TemplateViewState createState() => _TemplateViewState();
 }
 
-class _CustomerHomeViewState extends State<CustomerHomeView> {
+class _TemplateViewState extends State<TemplateView> {
   @override
   Widget build(BuildContext context) {
     return BaseView<UserHomeViewModel>(
