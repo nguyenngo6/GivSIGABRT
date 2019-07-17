@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:giver_app/UI/views/qr_scan_view.dart';
+import 'package:giver_app/UI/widgets/qr_image.dart';
 import 'package:giver_app/service_locator.dart';
 import 'UI/views/sign_in_page.dart';
 
@@ -26,6 +28,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: SignInPage(),
+      // QrWidget(couponID: "-LjoOTKKlabjuoZ14Yhj"),
     );
 
   }
