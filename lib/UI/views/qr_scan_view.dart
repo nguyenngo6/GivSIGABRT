@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
-import 'package:giver_app/UI/views/template_scoped_model.dart';
+import 'package:giver_app/UI/views/customer_home_view.dart';
 import 'package:giver_app/UI/widgets/coupon_item.dart';
 import 'package:giver_app/enum/view_state.dart';
 import 'package:giver_app/model/coupon.dart';
@@ -10,6 +10,7 @@ import 'package:giver_app/model/user.dart';
 import 'package:giver_app/scoped_model/qr_scan_view_model.dart';
 
 import 'base_view.dart';
+
 enum ConfirmAction { CANCEL, ACCEPT }
 
 class QrScanView extends StatefulWidget {
@@ -153,7 +154,9 @@ class _QrScanViewState extends State<QrScanView> {
               FlatButton(
                   onPressed: () {
                     model.onCouponRedeemed(_barcode, widget.customer.id);
-                    _navigateToCustomerHomeView();
+                    Navigator.pushReplacement(
+                      context, MaterialPageRoute(
+                        builder: (context) => CustomerHomeView(user: widget.customer,)));
                   },
                   child: Text('Ok')),
               FlatButton(
@@ -164,12 +167,13 @@ class _QrScanViewState extends State<QrScanView> {
               )
             ],
           );
-        });
+        }); 
+
   }
 
-  _navigateToCustomerHomeView(){
-    Navigator.pop(context);
-  }
+
+  
+  
 
 
   

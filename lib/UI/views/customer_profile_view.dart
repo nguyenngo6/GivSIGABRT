@@ -9,7 +9,6 @@ import 'package:giver_app/enum/view_state.dart';
 import 'package:image_picker/image_picker.dart';
 import 'base_view.dart';
 import 'customer_home_view.dart';
-import 'package:path/path.dart';
 
 class CustomerProfileView extends StatefulWidget {
   final User user;
