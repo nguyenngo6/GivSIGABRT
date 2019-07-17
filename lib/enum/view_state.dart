@@ -5,8 +5,12 @@ enum ViewState {
   NoDataAvailable, // Indicates that data was fetched successfully but nothing is available
   Error, // Indicates there's an error on the view
   Success, // Successful action occurred
-  WaitingForInput, // The starting state that a form view is in
+  WrongQrFormat,
+  InvalidCoupon,
+  Confirmation,
+  CouponDataReceived,
+  WaitingForInput,
   EditUsername,
   EditPhone,
-  EditImageUrl
+  EditImageUrl // The starting state that a form view is in
 }

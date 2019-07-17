@@ -9,6 +9,7 @@ class User {
   String phone;
   int points;
   String id;
+  String address;
 
   User({
     this.username,
@@ -18,6 +19,7 @@ class User {
     this.phone,
     this.id,
     this.points,
+    this.address
   });
 
   User.fromData(Map<String, dynamic> data)
@@ -27,7 +29,6 @@ class User {
         level = data['level'],
         phone = data['phone'],
         email = data['email'],
-        points = data['points'];
-
-
+        points = data['points'],
+        address = data['address'];
 }
