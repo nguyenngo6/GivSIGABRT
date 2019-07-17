@@ -24,11 +24,12 @@ dependencies:
   firebase_auth: ^0.11.0
   flutter:
     sdk: flutter
-  firebase_storage:
   firebase_core: ^0.4.0  # add dependency for Firebase Core
   firebase_analytics: ^1.0.4  # add dependency for Google Analytics for Firebase
+  barcode_scan: ^0.0.8
+  qr_flutter: ^2.0.0
+  firebase_storage:
   image_picker:
-
 
 
   # The following adds the Cupertino Icons font to your application.

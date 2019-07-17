@@ -16,6 +16,7 @@ class CustomerProfileViewModel extends BaseModel {
 
   List<User> customers;
 
+   
 
   CustomerProfileViewModel() {
     _firebaseService.customers.asBroadcastStream().listen(_onCustomerUpdated);
