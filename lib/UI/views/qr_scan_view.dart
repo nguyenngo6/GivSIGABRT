@@ -52,12 +52,20 @@ class _QrScanViewState extends State<QrScanView> {
     }
   }
   
-
-  Widget _getCouponInfoWidget(QrScanViewModel model, Coupon coupon){   
-    return CouponItem(
-      couponItem:  coupon,
-      customer: widget.customer,
-      onRedeemed: () => _showConfirmationDialog(model, coupon),     
+  Widget _getCouponInfoWidget(QrScanViewModel model, Coupon coupon){
+    String name = coupon.description;   
+    return Container(
+      height: 400,
+      width: 300,
+      child: Column(
+        children: <Widget>[
+          Text('$name'),
+          FlatButton(
+            child: Text('Use this coupn'),
+            onPressed: () => _showConfirmationDialog(model, coupon),
+          )
+        ],
+      ),
     );
   }
 
@@ -160,7 +168,7 @@ class _QrScanViewState extends State<QrScanView> {
   }
 
   _navigateToCustomerHomeView(){
-    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CustomerHomeView()));
+    Navigator.pop(context);
   }
 
 

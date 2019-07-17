@@ -79,10 +79,11 @@ class MerchantProfileView extends StatelessWidget {
           var couponItem = model.getCouponsByMerchantID(merchant.id)[itemIndex];
           String couponID = couponItem.id;
           return CouponItem(
+              customer: customer,
               couponItem: couponItem,
-              onRedeemed: (id) {
-                model.redeemCoupon(couponID: couponID);
-              });
+              onRedeemed: () => 
+                model.redeemCoupon(couponID: couponID)
+              );
         });
   }
   //du ma met fvai lon

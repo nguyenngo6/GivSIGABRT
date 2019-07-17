@@ -8,5 +8,8 @@ enum ViewState {
   WrongQrFormat,
   InvalidCoupon,
   Confirmation,
-  WaitingForInput // The starting state that a form view is in
+  WaitingForInput,
+  EditUsername,
+  EditPhone,
+  EditImageUrl // The starting state that a form view is in
 }

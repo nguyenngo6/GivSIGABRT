@@ -7,7 +7,7 @@ import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/model/user.dart';
 
 class CouponItem extends StatefulWidget {
-  final Function (String) onRedeemed;
+  final Function () onRedeemed;
 
   const CouponItem({
     @required this.couponItem,
@@ -51,11 +51,7 @@ class _CouponItemState extends State<CouponItem> {
         !widget.couponItem.isUsed
         ? FlatButton(
             child: Text('Use Coupon'),
-            onPressed: () => {
-              Navigator.pushReplacement(
-                context, MaterialPageRoute(
-                  builder: (context) => QrScanView(customer: widget.customer,)))         
-            },
+            onPressed: () => widget.onRedeemed
         )
         : Container (),
       Expanded(
