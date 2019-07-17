@@ -21,11 +21,10 @@ class CustomerProfileView extends StatefulWidget {
 
 class _CustomerProfileViewState extends State<CustomerProfileView> {
   //save the result of gallery file
-  File galleryFile;
   var isEditProfileImage = false;
 
 //save the result of camera file
-  File cameraFile;
+  File uploadFile;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +34,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
       print('start add new image');
       print('firename:');
       print(uid);
-      StorageUploadTask uploadTask = ref.putFile(galleryFile);
+      StorageUploadTask uploadTask = ref.putFile(uploadFile);
 
       var dowurl = await (await uploadTask.onComplete).ref.getDownloadURL();
       String url = dowurl.toString();
@@ -62,7 +61,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
           print('this error occur when delete file in Firebase Storage:'+ error);
           setState(() {
             isEditProfileImage = false;
-            galleryFile = null;
+            uploadFile = null;
           });
         }).whenComplete((){
           print('comleted deleting old image');
@@ -74,12 +73,24 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
     }
 
     imageSelectorGallery() async {
-      galleryFile = await ImagePicker.pickImage(
+      uploadFile = await ImagePicker.pickImage(
         source: ImageSource.gallery,
         // maxHeight: 50.0,
         // maxWidth: 50.0,
       );
-      print("You selected gallery image : " + galleryFile.path);
+      print("You selected gallery image : " + uploadFile.path);
+      setState(() {
+        isEditProfileImage = true;
+      });
+    }
+
+    imageSelectorCamera() async {
+      uploadFile = await ImagePicker.pickImage(
+        source: ImageSource.camera,
+        // maxHeight: 50.0,
+        // maxWidth: 50.0,
+      );
+      print("You took camera image : " + uploadFile.path);
       setState(() {
         isEditProfileImage = true;
       });
@@ -88,13 +99,28 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
       return Row(
         children: <Widget>[
           Expanded(
-            child: Text(''),
-            flex: 2,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                FlatButton(
+                  child: Icon(Icons.camera_alt),
+                  onPressed: () => imageSelectorCamera(),
+                ),
+                SizedBox(
+                  height: 30.0,
+                ),
+                FlatButton(
+                  child: Icon(Icons.photo_library),
+                  onPressed: () => imageSelectorGallery(),
+                )
+              ],
+            ),
+            flex: 3,
           ),
           Expanded(
             flex: 6,
             child: Align(
-              alignment: Alignment.center,
+              alignment: Alignment.centerLeft,
               child: GestureDetector(
                 child: CircleAvatar(
                   radius: 100,
@@ -103,13 +129,13 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
                     child: new SizedBox(
                       width: 190.0,
                       height: 190.0,
-                      child: galleryFile == null
+                      child: uploadFile == null
                           ? Image.network(
                               url,
                               fit: BoxFit.fill,
                             )
-                          : Image.file(
-                              galleryFile,
+                          :Image.file(
+                              uploadFile,
                               fit: BoxFit.fill,
                             ),
                     ),
@@ -128,7 +154,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
                         child: Icon(Icons.cancel),
                         onPressed: () {
                           setState(() {
-                            galleryFile = null;
+                            uploadFile = null;
                           });
                         },
                       ),
@@ -141,7 +167,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
                       )
                     ],
                   ),
-            flex: 2,
+            flex: 1,
           ),
         ],
       );
@@ -263,7 +289,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
                         builder: (context) =>
                             CustomerHomeView(user: widget.user))),
                 child: Icon(Icons.backspace)),
-            title: Text("title"),
+            title: Text("Edit Profile Page"),
             actions: <Widget>[
               Center(
                 child: Text(
