@@ -1,16 +1,18 @@
 class Coupon {
   String description;
   String ownedBy;
-   String usedBy;
-   int points;
+  String usedBy;
+  bool isPending;
+  int points;
   bool isUsed;
   String id;
 
   Coupon({
     this.description,
     this.ownedBy,
-     this.usedBy,
-     this.points,
+    this.usedBy,
+    this.isPending,
+    this.points,
     this.isUsed,
     this.id,
   });
@@ -19,9 +21,11 @@ class Coupon {
         : description = data['description'],
           id = data['id'],
           ownedBy = data['ownedBy'],
-           usedBy = data['usedBy'],
-           points = data['points'],
-          isUsed = data['isUsed'];
+          usedBy = data['usedBy'],
+          points = data['points'],
+          isUsed = data['isUsed'],
+          isPending = data['isPending'];
+
 
         
 }

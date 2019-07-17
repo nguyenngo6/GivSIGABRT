@@ -6,6 +6,7 @@ import 'package:giver_app/model/user.dart';
 import 'package:giver_app/scoped_model/qr_scan_view_model.dart';
 
 import 'base_view.dart';
+enum ConfirmAction { CANCEL, ACCEPT }
 
 class QrScanView extends StatefulWidget {
   const QrScanView({@required this.customer});
@@ -13,12 +14,11 @@ class QrScanView extends StatefulWidget {
   final User customer;
 
   @override
-  State<StatefulWidget> createState() {
-    return QrScanViewState();
-  }
+  State<StatefulWidget> createState() =>  _QrScanViewState();
+  
 }
 
-class QrScanViewState extends State<QrScanView> {
+class _QrScanViewState extends State<QrScanView> {
   String _barcode = "";
   @override
   Widget build(BuildContext context) {
@@ -37,18 +37,28 @@ class QrScanViewState extends State<QrScanView> {
       case ViewState.InvalidCoupon:
         return _getErrorWidget();
       case ViewState.Confirmation:
-        return _getConfirmationWidget();
+        return _getConfirmationWidget(model);
+      case ViewState.Error:
+        return _getErrorWidget();
+      case ViewState.WrongQrFormat:
+        return _getErrorWidget();
       default:
         return _getDefaultUi(model);
     }
   }
+  
 
-  Widget _getConfirmationWidget(){
-    return Container();
+  Widget _getConfirmationWidget(QrScanViewModel model){
+    _asyncConfirmDialog(context, model, _barcode);
+    return Container(
+      child: Text("Success!"),
+    );
   }
 
   Widget _getErrorWidget(){
-    return Container();
+    return Container(
+      child: Text("Error"),
+    );
   }
 
   Widget _getDefaultUi(QrScanViewModel model){
@@ -92,6 +102,9 @@ class QrScanViewState extends State<QrScanView> {
   Future scan(QrScanViewModel model) async {
     try {
       String barcode = await BarcodeScanner.scan();
+      setState(() {
+        this._barcode = barcode;
+      });
       model.onDataReceived(barcode);
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
@@ -105,4 +118,35 @@ class QrScanViewState extends State<QrScanView> {
       model.setState(ViewState.Error);
     }
   }
+  
+Future<ConfirmAction> _asyncConfirmDialog(BuildContext context, QrScanViewModel model, String couponID) async {
+  return showDialog<ConfirmAction>(
+    context: context,
+    barrierDismissible: false, // user must tap button for close dialog!
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text('Use this coupon?'),
+        content: const Text(
+            'This will move the coupon to your pending list'),
+        actions: <Widget>[
+          FlatButton(
+            child: const Text('CANCEL'),
+            onPressed: () {
+              Navigator.of(context).pop(ConfirmAction.CANCEL);
+            },
+          ),
+          FlatButton(
+            child: const Text('ACCEPT'),
+            onPressed: () {
+              model.onCouponRedeemed(couponID, widget.customer.id);
+              Navigator.of(context).pop(ConfirmAction.ACCEPT);
+            },
+          )
+        ],
+      );
+    },
+  );
+}
+
+
 }

@@ -1,8 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:giver_app/UI/views/qr_scan_view.dart';
 import 'package:giver_app/UI/widgets/coupon_status.dart';
 import 'package:giver_app/model/coupon.dart';
+import 'package:giver_app/model/user.dart';
 
 class CouponItem extends StatefulWidget {
   final Function (String) onRedeemed;
@@ -10,9 +12,11 @@ class CouponItem extends StatefulWidget {
   const CouponItem({
     @required this.couponItem,
     @required this.onRedeemed,
+    @required this.customer,
   });
 
   final Coupon couponItem;
+  final User customer;
 
   @override
   _CouponItemState createState() => _CouponItemState();
@@ -48,7 +52,9 @@ class _CouponItemState extends State<CouponItem> {
         ? FlatButton(
             child: Text('Use Coupon'),
             onPressed: () => {
-              widget.onRedeemed(widget.couponItem.id)           
+              Navigator.pushReplacement(
+                context, MaterialPageRoute(
+                  builder: (context) => QrScanView(customer: widget.customer,)))         
             },
         )
         : Container (),

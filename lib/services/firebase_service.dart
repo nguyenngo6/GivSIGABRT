@@ -53,6 +53,17 @@ class FirebaseService {
 //  }
 
 
+  void moveCouponToPending(String couponID, String customerID){
+    Firestore.instance
+        .collection("coupons")
+        .document(couponID)
+        .updateData({
+          'isPending': true,
+          'usedBy': customerID,
+        });
+  }
+
+
   void redeemCoupon({@required String couponID}) {
     Firestore.instance
         .collection("coupons")

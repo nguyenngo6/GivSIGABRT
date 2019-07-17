@@ -12,13 +12,13 @@ class QrWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Código QR"),
+        title: Text("QR Image"),
       ),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text("Código gerado com o texto:\n $couponID",
+            Text("Coupon ID:\n $couponID",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24,
