@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         // is not restarted. 
         primarySwatch: Colors.blue,
       ),
-      home: SignInPage(),
+      home: QrWidget(couponID: "-LjoOTKKlabjuoZ14Yhj",),
     );
 
   }

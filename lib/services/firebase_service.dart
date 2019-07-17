@@ -161,4 +161,41 @@ class FirebaseService {
     }
     return charityList;
   }
+  
+  Future<bool> editPhone(String newPhone, String uid) async {
+    DocumentReference reference =
+    await Firestore.instance.collection('users').document(uid);
+    Firestore.instance.runTransaction((Transaction transaction) async {
+      DocumentSnapshot snapshot = await transaction.get(reference);
+
+      await transaction
+          .update(snapshot.reference, {"phone": newPhone});
+    });
+    return true;
+  }
+
+  Future<bool> editImageUrl(String newImageUrl, String uid) async {
+    DocumentReference reference =
+    await Firestore.instance.collection('users').document(uid);
+    Firestore.instance.runTransaction((Transaction transaction) async {
+      DocumentSnapshot snapshot = await transaction.get(reference);
+
+      await transaction
+          .update(snapshot.reference, {"imageUrl": newImageUrl});
+    });
+    return true;
+  }
+
+
+  Future<bool> editUsername(String newUsername, String uid) async {
+    DocumentReference reference =
+        await Firestore.instance.collection('users').document(uid);
+    Firestore.instance.runTransaction((Transaction transaction) async {
+      DocumentSnapshot snapshot = await transaction.get(reference);
+
+      await transaction
+          .update(snapshot.reference, {"username": newUsername});
+    });
+    return true;
+  }
 }

@@ -17,17 +17,39 @@ class CustomerProfileViewModel extends BaseModel {
   List<User> customers;
   User customer;
 
+   Future<bool> onInfoEdited(String data, String uid)async{
+    if(state == ViewState.EditUsername){
+      setState(ViewState.Busy);
+      await _firebaseService.editUsername(data, uid);
+      await Future.delayed(Duration(seconds: 2));
+      setState(ViewState.DataFetched);
+    }else if(state == ViewState.EditPhone){
+      setState(ViewState.Busy);
+      await _firebaseService.editPhone(data, uid);
+      await Future.delayed(Duration(seconds: 2));
+      setState(ViewState.DataFetched);
+    }else if(state == ViewState.EditImageUrl){
+      setState(ViewState.Busy);
+      await _firebaseService.editImageUrl(data, uid);
+      await Future.delayed(Duration(seconds: 2));
+      setState(ViewState.DataFetched);
+    }
+
+    return true;
+  }
 
   CustomerProfileViewModel() {
     _firebaseService.customers.asBroadcastStream().listen(_onCustomerUpdated);
   }
 
-  User getCustomerByUid(List<User> customers ,String uid){
-    for(User customer in customers){
-      if(customer.id == uid){
-        return customer;
+   User getCurrentUser(List<User> userList, String id) {
+    User currentUser;
+    for (User user in userList){
+      if (user.id == id ){
+        currentUser = user;
       }
     }
+    return currentUser;
   }
 
   void _onCustomerUpdated(List<User> customer) {

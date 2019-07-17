@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/UI/Views/sign_in_page.dart';
 import 'package:giver_app/UI/views/merchant_profile_view.dart';
+import 'package:giver_app/UI/views/qr_scan_view.dart';
 import 'package:giver_app/UI/widgets/busy_overlay.dart';
 import 'package:giver_app/enum/view_state.dart';
 import 'package:giver_app/model/user.dart';
@@ -47,14 +48,15 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
   @override
   Widget build(BuildContext context) {
     return BaseView<UserHomeViewModel>(
-        builder: (context, child, model) => Scaffold(
-              appBar: _getAppBar(_selectedTittle, widget.user.points),
-              drawer: _getDrawer(),
-              body: BusyOverlay(
-                  show: model.state == ViewState.Busy,
-                  child: _getBodyUi(context, model)),
-              bottomNavigationBar: _getBottomBar(),
-            ));
+        builder: (context, child, model) => BusyOverlay(
+          show: model.state == ViewState.Busy,
+          child: Scaffold(
+                appBar: _getAppBar(_selectedTittle, widget.user.points),
+                drawer: _getDrawer(),
+                body: _getBodyUi(context, model),
+                bottomNavigationBar: _getBottomBar(),
+              ),
+        ));
   }
 
   Widget _getAppBar(String title, int points) {
@@ -68,7 +70,8 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
           style: TextStyle(color: Colors.red, fontSize: 25),
         )),
         FlatButton(
-          child: Icon(Icons.credit_card),
+          onPressed: ()=> print('clmm thang Nguyen Ngo'),
+          child: Icon(Icons.camera_alt),
         )
       ],
     );
@@ -79,12 +82,12 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
       child: ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: new Text("Toan "),
-            accountEmail: new Text("toan.do2806@icloud."),
+            accountName: Text("Toan "),
+            accountEmail: Text("toan.do2806@icloud."),
             currentAccountPicture: GestureDetector(
               onTap: () => print("avatar tap"),
               child: CircleAvatar(
-                backgroundImage: new NetworkImage(
+                backgroundImage: NetworkImage(
                     "https://profilepicturesdp.com/wp-content/uploads/2018/06/cute-baby-wallpaper-for-whatsapp-dp-11.jpg"),
               ),
             ),
@@ -246,7 +249,9 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
             ? getListOfMerchantsWidget(model)
             : selectedWidget == WidgetMarker.charityOrganizations
                 ? getCharityListWidget(widget.user, model)
-                : getHistoryWidget(model);
+                : Navigator.pushReplacement(
+                    context, MaterialPageRoute(
+                      builder: (context) => QrScanView(customer: widget.user,)));
       default:
         return getListOfMerchantsWidget(model);
     }

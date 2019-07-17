@@ -1,7 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
+import 'package:giver_app/UI/views/template_scoped_model.dart';
+import 'package:giver_app/UI/widgets/coupon_item.dart';
 import 'package:giver_app/enum/view_state.dart';
+import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/model/user.dart';
 import 'package:giver_app/scoped_model/qr_scan_view_model.dart';
 
@@ -20,6 +24,7 @@ class QrScanView extends StatefulWidget {
 
 class _QrScanViewState extends State<QrScanView> {
   String _barcode = "";
+  Coupon scannedCoupon;
   @override
   Widget build(BuildContext context) {
     return BaseView<QrScanViewModel>(
@@ -36,8 +41,8 @@ class _QrScanViewState extends State<QrScanView> {
     switch(model.state){
       case ViewState.InvalidCoupon:
         return _getErrorWidget();
-      case ViewState.Confirmation:
-        return _getConfirmationWidget(model);
+      case ViewState.DataFetched:
+        return _getCouponInfoWidget(model, scannedCoupon);
       case ViewState.Error:
         return _getErrorWidget();
       case ViewState.WrongQrFormat:
@@ -48,16 +53,24 @@ class _QrScanViewState extends State<QrScanView> {
   }
   
 
-  Widget _getConfirmationWidget(QrScanViewModel model){
-    _asyncConfirmDialog(context, model, _barcode);
-    return Container(
-      child: Text("Success!"),
+  Widget _getCouponInfoWidget(QrScanViewModel model, Coupon coupon){   
+    return CouponItem(
+      couponItem:  coupon,
+      customer: widget.customer,
+      onRedeemed: () => _showConfirmationDialog(model, coupon),     
     );
   }
 
   Widget _getErrorWidget(){
-    return Container(
-      child: Text("Error"),
+    return AlertDialog(
+      title: Text('Error'),
+      content: Text('Something went wrong'),
+      actions: <Widget>[
+        FlatButton(
+          child: Text('Close'),
+          onPressed: () => Navigator.pop(context),
+        )
+      ],
     );
   }
 
@@ -104,8 +117,9 @@ class _QrScanViewState extends State<QrScanView> {
       String barcode = await BarcodeScanner.scan();
       setState(() {
         this._barcode = barcode;
+        scannedCoupon = model.onDataReceived(barcode);
       });
-      model.onDataReceived(barcode);
+      
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
           model.setState(ViewState.Error);
@@ -118,35 +132,43 @@ class _QrScanViewState extends State<QrScanView> {
       model.setState(ViewState.Error);
     }
   }
+
+  _showConfirmationDialog(QrScanViewModel model, Coupon coupon) {
+    String name = coupon.description;
+    showDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text('Confirmation'),
+            content: Text('Are you sure to use $name'),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () {
+                    model.onCouponRedeemed(_barcode, widget.customer.id);
+                    _navigateToCustomerHomeView();
+                  },
+                  child: Text('Ok')),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancel'),
+              )
+            ],
+          );
+        });
+  }
+
+  _navigateToCustomerHomeView(){
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CustomerHomeView()));
+  }
+
+
   
-Future<ConfirmAction> _asyncConfirmDialog(BuildContext context, QrScanViewModel model, String couponID) async {
-  return showDialog<ConfirmAction>(
-    context: context,
-    barrierDismissible: false, // user must tap button for close dialog!
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Use this coupon?'),
-        content: const Text(
-            'This will move the coupon to your pending list'),
-        actions: <Widget>[
-          FlatButton(
-            child: const Text('CANCEL'),
-            onPressed: () {
-              Navigator.of(context).pop(ConfirmAction.CANCEL);
-            },
-          ),
-          FlatButton(
-            child: const Text('ACCEPT'),
-            onPressed: () {
-              model.onCouponRedeemed(couponID, widget.customer.id);
-              Navigator.of(context).pop(ConfirmAction.ACCEPT);
-            },
-          )
-        ],
-      );
-    },
-  );
+  
+
+    
+  
 }
 
 
-}
