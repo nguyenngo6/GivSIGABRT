@@ -8,6 +8,7 @@ enum ViewState {
   WrongQrFormat,
   InvalidCoupon,
   Confirmation,
+  CouponDataReceived,
   WaitingForInput,
   EditUsername,
   EditPhone,

@@ -7,7 +7,6 @@ class BaseModel extends Model {
 
   void setState(ViewState newState) {
     _state = newState;
-
     notifyListeners();
   }
 }

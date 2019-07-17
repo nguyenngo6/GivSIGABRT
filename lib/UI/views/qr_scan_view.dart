@@ -42,7 +42,7 @@ class _QrScanViewState extends State<QrScanView> {
     switch(model.state){
       case ViewState.InvalidCoupon:
         return _getErrorWidget();
-      case ViewState.DataFetched:
+      case ViewState.CouponDataReceived:
         return _getCouponInfoWidget(model, scannedCoupon);
       case ViewState.Error:
         return _getErrorWidget();
@@ -54,7 +54,13 @@ class _QrScanViewState extends State<QrScanView> {
   }
   
   Widget _getCouponInfoWidget(QrScanViewModel model, Coupon coupon){
-    String name = coupon.description;   
+    String name;
+    try {
+      name = coupon.description;
+    }
+    catch (e) {
+      name = "error";
+    }  
     return Container(
       height: 400,
       width: 300,
@@ -124,10 +130,17 @@ class _QrScanViewState extends State<QrScanView> {
   Future scan(QrScanViewModel model) async {
     try {
       String barcode = await BarcodeScanner.scan();
-      setState(() {
+      
         this._barcode = barcode;
-        scannedCoupon = model.onDataReceived(barcode);
-      });
+        try {
+          scannedCoupon = model.onDataReceived(_barcode);
+          model.setState(ViewState.CouponDataReceived);
+        }
+        catch (e) {
+          model.setState(ViewState.Error);
+        }
+        
+    
       
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {

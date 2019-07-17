@@ -70,7 +70,9 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
           style: TextStyle(color: Colors.red, fontSize: 25),
         )),
         FlatButton(
-          onPressed: ()=> print('clmm thang Nguyen Ngo'),
+          onPressed: ()=> Navigator.pushReplacement(
+              context, MaterialPageRoute(
+                builder: (context) => QrScanView(customer: widget.user,))),
           child: Icon(Icons.camera_alt),
         )
       ],

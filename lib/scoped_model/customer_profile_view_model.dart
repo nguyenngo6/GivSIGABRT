@@ -15,9 +15,14 @@ class CustomerProfileViewModel extends BaseModel {
   FirebaseService _firebaseService = locator<FirebaseService>();
 
   List<User> customers;
-  User customer;
 
-   Future<bool> onInfoEdited(String data, String uid)async{
+   
+
+  CustomerProfileViewModel() {
+    _firebaseService.customers.asBroadcastStream().listen(_onCustomerUpdated);
+  }
+
+  Future<bool> onInfoEdited(String data, String uid)async{
     if(state == ViewState.EditUsername){
       setState(ViewState.Busy);
       await _firebaseService.editUsername(data, uid);
@@ -35,14 +40,11 @@ class CustomerProfileViewModel extends BaseModel {
       setState(ViewState.DataFetched);
     }
 
+
     return true;
   }
 
-  CustomerProfileViewModel() {
-    _firebaseService.customers.asBroadcastStream().listen(_onCustomerUpdated);
-  }
-
-   User getCurrentUser(List<User> userList, String id) {
+  User getCurrentUser(List<User> userList, String id) {
     User currentUser;
     for (User user in userList){
       if (user.id == id ){

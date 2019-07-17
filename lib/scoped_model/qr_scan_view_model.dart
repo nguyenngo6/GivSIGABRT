@@ -20,18 +20,21 @@ class QrScanViewModel extends BaseModel {
     _firebaseService.moveCouponToPending(couponID, customerID);
   }
 
-  void onDataReceived(String scannedData){
-    for (Coupon coupon in coupons) {
+  Coupon onDataReceived(String scannedData){
+    for (Coupon coupon in this.coupons) {
       if (coupon.id == scannedData){
         if(coupon.isUsed || coupon.isPending || coupon.usedBy != null){
         setState(ViewState.InvalidCoupon);
         } else {
-          setState(ViewState.Confirmation);
+          setState(ViewState.CouponDataReceived);
+          return coupon;
         }
       } else {
         setState(ViewState.WrongQrFormat);
+        return null;
       }
     }
+    return null;
   }
 
   void _onCouponUpdated(List<Coupon> coupon) {
