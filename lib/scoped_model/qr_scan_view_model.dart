@@ -1,4 +1,5 @@
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/model/user.dart';
 import 'package:giver_app/services/firebase_service.dart';
@@ -20,21 +21,21 @@ class QrScanViewModel extends BaseModel {
     _firebaseService.moveCouponToPending(couponID, customerID);
   }
 
-  Coupon onDataReceived(String scannedData){
-    for (Coupon coupon in this.coupons) {
-      if (coupon.id == scannedData){
-        if(coupon.isUsed || coupon.isPending || coupon.usedBy != null){
-        setState(ViewState.InvalidCoupon);
-        } else {
-          setState(ViewState.CouponDataReceived);
-          return coupon;
+  Future<bool> onDataReceived(String scannedData) async {
+    Coupon scannedCoupon;
+    for(Coupon c in coupons){
+      if (c.id == scannedData){
+        scannedCoupon = c;
+        if (scannedCoupon.isPending){
+          return false;
         }
-      } else {
-        setState(ViewState.WrongQrFormat);
-        return null;
+        else {
+          return true;
+        }
       }
     }
-    return null;
+    return false;
+
   }
 
   void _onCouponUpdated(List<Coupon> coupon) {
@@ -44,7 +45,7 @@ class QrScanViewModel extends BaseModel {
     } else {
       setState(coupons.length == 0 
           ? ViewState.NoDataAvailable
-          : ViewState.DataFetched);
+          : ViewState.WaitingForInput);
     }
   }
 

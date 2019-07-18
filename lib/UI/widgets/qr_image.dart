@@ -18,18 +18,17 @@ class QrWidget extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text("Coupon ID:\n $couponID",
+            Text("Coupon ID:\n ",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24,
               ),
             ),
-            SizedBox(height: 16,),
-
+            SizedBox(height: 30,),
             QrImage(
               data: couponID,
               gapless: true,
-              size: 250,
+              size: 500,
               errorCorrectionLevel: QrErrorCorrectLevel.H,
             )
           ],

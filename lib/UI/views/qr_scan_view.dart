@@ -11,8 +11,6 @@ import 'package:giver_app/scoped_model/qr_scan_view_model.dart';
 
 import 'base_view.dart';
 
-enum ConfirmAction { CANCEL, ACCEPT }
-
 class QrScanView extends StatefulWidget {
   const QrScanView({@required this.customer});
 
@@ -24,14 +22,26 @@ class QrScanView extends StatefulWidget {
 }
 
 class _QrScanViewState extends State<QrScanView> {
-  String _barcode = "";
-  Coupon scannedCoupon;
+  String barcode = "";
+  bool isValid = false;
   @override
   Widget build(BuildContext context) {
     return BaseView<QrScanViewModel>(
       builder: (context, child, model) => Scaffold(
         appBar: AppBar(
           title: Text('QR Code Scan'),
+          leading: FlatButton(
+            child: Icon(Icons.arrow_back),
+            onPressed: () {  
+              barcode = "";
+              isValid = false;
+              model.setState(ViewState.DataFetched);
+              Navigator.
+              pushReplacement(context, MaterialPageRoute(
+                builder: (context) => CustomerHomeView(user: widget.customer,)
+              ));
+              },
+          ),
         ),
         body: _getBodyUi(context, model)
         )
@@ -41,42 +51,43 @@ class _QrScanViewState extends State<QrScanView> {
   Widget _getBodyUi(BuildContext context, QrScanViewModel model) {
     switch(model.state){
       case ViewState.InvalidCoupon:
-        return _getErrorWidget();
+        return _getInvalidCouponUi();
       case ViewState.CouponDataReceived:
-        return _getCouponInfoWidget(model, scannedCoupon);
-      case ViewState.Error:
-        return _getErrorWidget();
+        return _getCouponInfoWidget(model);
       case ViewState.WrongQrFormat:
-        return _getErrorWidget();
+        return _getWrongQrFormatUi();
+      case ViewState.WaitingForInput:
+        return _getDefaultUi(model);
       default:
         return _getDefaultUi(model);
     }
   }
-  
-  Widget _getCouponInfoWidget(QrScanViewModel model, Coupon coupon){
-    String name;
-    try {
-      name = coupon.description;
-    }
-    catch (e) {
-      name = "error";
-    }  
-    return Container(
-      height: 400,
-      width: 300,
-      child: Column(
-        children: <Widget>[
-          Text('$name'),
-          FlatButton(
-            child: Text('Use this coupn'),
-            onPressed: () => _showConfirmationDialog(model, coupon),
-          )
-        ],
-      ),
-    );
+
+  Widget _getWrongQrFormatUi(){
+    return Container(child: Text('Wrong Qr Format'),);
   }
 
-  Widget _getErrorWidget(){
+  Widget _getInvalidCouponUi(){
+    return Container(child: Text("invalid coupon"),);
+  }
+  
+  Widget _getCouponInfoWidget(QrScanViewModel model){   
+      return Container(
+        height: 400,
+        width: 300,
+        child: Column(
+          children: <Widget>[
+            Text('$barcode'),
+            FlatButton(
+              child: Text('Use this coupon'),
+              onPressed: () => _showConfirmationDialog(model),
+            )
+          ],
+        ),
+      );
+  }
+
+  Widget _getErrorWidget(BuildContext context, QrScanViewModel model){
     return AlertDialog(
       title: Text('Error'),
       content: Text('Something went wrong'),
@@ -84,7 +95,10 @@ class _QrScanViewState extends State<QrScanView> {
         FlatButton(
           child: Text('Close'),
           onPressed: () => Navigator.pop(context),
-        )
+            
+            )
+
+          
       ],
     );
   }
@@ -117,7 +131,7 @@ class _QrScanViewState extends State<QrScanView> {
                       padding:
                           EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                       child: Text(
-                        _barcode,
+                        barcode,
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.red),
                       ),
@@ -129,44 +143,42 @@ class _QrScanViewState extends State<QrScanView> {
 
   Future scan(QrScanViewModel model) async {
     try {
-      String barcode = await BarcodeScanner.scan();
-      
-        this._barcode = barcode;
-        try {
-          scannedCoupon = model.onDataReceived(_barcode);
-          model.setState(ViewState.CouponDataReceived);
-        }
-        catch (e) {
-          model.setState(ViewState.Error);
-        }
-        
-    
-      
+      this.barcode = await BarcodeScanner.scan();      
+      this.isValid = await model.onDataReceived(barcode);
+      if(isValid){
+        model.setState(ViewState.CouponDataReceived);
+      }
+        else{
+      model.setState(ViewState.InvalidCoupon);
+      }
     } on PlatformException catch (e) {
       if (e.code == BarcodeScanner.CameraAccessDenied) {
           model.setState(ViewState.Error);
       } else {
-        model.setState(ViewState.Error);
+        //do nothing
       }
     } on FormatException {
       model.setState(ViewState.WrongQrFormat);
     } catch (e) {
-      model.setState(ViewState.Error);
+      //do nothing
     }
   }
 
-  _showConfirmationDialog(QrScanViewModel model, Coupon coupon) {
-    String name = coupon.description;
+  _showConfirmationDialog(QrScanViewModel model) {
+
     showDialog(
         context: context,
         builder: (context) {
           return CupertinoAlertDialog(
             title: Text('Confirmation'),
-            content: Text('Are you sure to use $name'),
+            content: Text('Are you sure to use this coupon'),
             actions: <Widget>[
               FlatButton(
                   onPressed: () {
-                    model.onCouponRedeemed(_barcode, widget.customer.id);
+                    model.onCouponRedeemed(barcode, widget.customer.id);
+                    barcode = "";
+                    isValid = false;
+                    model.setState(ViewState.DataFetched);
                     Navigator.pushReplacement(
                       context, MaterialPageRoute(
                         builder: (context) => CustomerHomeView(user: widget.customer,)));

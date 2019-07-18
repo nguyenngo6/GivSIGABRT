@@ -13,6 +13,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    String couponID = "jaP4rhk0ta7eJutdhC3v";
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -27,8 +28,7 @@ class MyApp extends StatelessWidget {
         // is not restarted. 
         primarySwatch: Colors.blue,
       ),
-      home: SignInPage(),
-      // QrWidget(couponID: "-LjoOTKKlabjuoZ14Yhj"),
+      home: SignInPage()
     );
 
   }
