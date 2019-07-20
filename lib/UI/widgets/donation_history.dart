@@ -7,7 +7,6 @@ class DonationHistory extends StatelessWidget {
 
   DonationHistory({@required this.model, @required this.uid});
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

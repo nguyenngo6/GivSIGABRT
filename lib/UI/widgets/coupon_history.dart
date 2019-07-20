@@ -17,7 +17,8 @@ class _CouponHistoryState extends State<CouponHistory> {
 
   @override
   Widget build(BuildContext context) {
-    List<Coupon> coupons = widget.model.getUsedCoupons(widget.model.couponList, widget.uid);
+    List<Coupon> coupons =
+        widget.model.getUsedCoupons(widget.model.couponList, widget.uid);
     return Scaffold(
       body: ListView.builder(
         itemCount: coupons.length,
@@ -30,7 +31,8 @@ class _CouponHistoryState extends State<CouponHistory> {
             margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             padding: EdgeInsets.all(10.0),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0), color: Colors.lightBlueAccent),
+                borderRadius: BorderRadius.circular(5.0),
+                color: Colors.lightBlueAccent),
             child: Row(
               children: <Widget>[_detailSection(coupon)],
             ),
@@ -44,7 +46,7 @@ class _CouponHistoryState extends State<CouponHistory> {
     return Expanded(
       child: GestureDetector(
         onTap: () {
-          print('tap'+ _showDetails.toString());
+          print('tap' + _showDetails.toString());
           setState(() {
             _showDetails = !_showDetails;
             if (_showDetails) {
@@ -65,9 +67,7 @@ class _CouponHistoryState extends State<CouponHistory> {
                 maxLines: 1,
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
-              _showDetails
-                  ? Text('details')
-                  : Container(),
+              _showDetails ? Text('details') : Container(),
             ],
           ),
         ),
@@ -75,5 +75,3 @@ class _CouponHistoryState extends State<CouponHistory> {
     );
   }
 }
-
-

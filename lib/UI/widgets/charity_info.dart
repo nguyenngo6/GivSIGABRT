@@ -74,32 +74,36 @@ class CharityInfo extends StatelessWidget {
       ],
     );
 
-    final bottomContentText = Column(children: <Widget>[
-      Text(
-        charity.name,
-        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-      ),
-      SizedBox(height: 5.0),
-      RichText(
-        text: TextSpan(
-          text: charity.name,
-          style: TextStyle(fontSize: 15, color: Colors.black),
-          children: <TextSpan>[
-            TextSpan(text: ' helps a lot of', style: TextStyle(fontStyle: FontStyle.italic)),
-            TextSpan(text: ' people around .....', style: TextStyle(fontWeight: FontWeight.bold)),
-          ],
+    final bottomContentText = Column(
+      children: <Widget>[
+        Text(
+          charity.name,
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
-      )
-
-    ],);
+        SizedBox(height: 5.0),
+        RichText(
+          text: TextSpan(
+            text: charity.name,
+            style: TextStyle(fontSize: 15, color: Colors.black),
+            children: <TextSpan>[
+              TextSpan(
+                  text: ' helps a lot of',
+                  style: TextStyle(fontStyle: FontStyle.italic)),
+              TextSpan(
+                  text: ' people around .....',
+                  style: TextStyle(fontWeight: FontWeight.bold)),
+            ],
+          ),
+        )
+      ],
+    );
     final donateButton = Container(
         padding: EdgeInsets.symmetric(vertical: 16.0),
         width: MediaQuery.of(context).size.width,
         child: RaisedButton(
           onPressed: () => print('donate tap tap'),
           color: Color.fromRGBO(58, 66, 86, 1.0),
-          child:
-              Text("DONATE THEM", style: TextStyle(color: Colors.white)),
+          child: Text("DONATE THEM", style: TextStyle(color: Colors.white)),
         ));
     final bottomContent = Container(
       width: MediaQuery.of(context).size.width,
@@ -113,7 +117,13 @@ class CharityInfo extends StatelessWidget {
 
     return Scaffold(
       body: Column(
-        children: <Widget>[topContent,Divider(color: Colors.blue,), bottomContent],
+        children: <Widget>[
+          topContent,
+          Divider(
+            color: Colors.blue,
+          ),
+          bottomContent
+        ],
       ),
     );
   }

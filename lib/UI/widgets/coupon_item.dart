@@ -7,7 +7,7 @@ import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/model/user.dart';
 
 class CouponItem extends StatefulWidget {
-  final Function () onRedeemed;
+  final Function() onRedeemed;
 
   const CouponItem({
     @required this.couponItem,
@@ -45,65 +45,59 @@ class _CouponItemState extends State<CouponItem> {
   }
 
   Widget get _redeemButton => Container(
-    width: 200,
-    child: Column(
-      children: <Widget>[
+      width: 200,
+      child: Column(children: <Widget>[
         !widget.couponItem.isUsed
-        ? FlatButton(
-            child: Text('Use Coupon'),
-            onPressed: () => widget.onRedeemed
-        )
-        : Container (),
-      Expanded(
-        child: Align(
-          alignment: Alignment.bottomCenter,
-          child: Text('Today',
-              style: TextStyle(
-                color: Colors.green,
-                fontWeight: FontWeight.bold,
-                fontSize: 9
-              ))
-        ))
-      ]
-    )
-  );
+            ? FlatButton(
+                child: Text('Use Coupon'), onPressed: () => widget.onRedeemed)
+            : Container(),
+        Expanded(
+            child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Text('Today',
+                    style: TextStyle(
+                        color: Colors.green,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 9))))
+      ]));
 
   Widget get _detailSection => Expanded(
-            child: GestureDetector(
-              onTap: () {
-                print('taptap');
-                setState(() {
-                if (!_showDetails) {
-                  _height = 190;
-                 } else {
-                  _height = 70.0;
-                }
-                });
-              },
-              child: Container(
-                color: Colors.grey,
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(widget.couponItem.description,
-                      maxLines: 1, style: TextStyle(fontWeight: FontWeight.bold),),
-                      _showDetails 
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: descriptionPadding),
-                                child: Text(widget.couponItem.description),
-                                )
-                        : Container(),
-                      Expanded(
-                        child: Align(
-                            child: CouponStatus(status: widget.couponItem.isUsed),
-                            alignment: Alignment.bottomLeft))      
-                  ],
+        child: GestureDetector(
+          onTap: () {
+            print('taptap');
+            setState(() {
+              if (!_showDetails) {
+                _height = 190;
+              } else {
+                _height = 70.0;
+              }
+            });
+          },
+          child: Container(
+            color: Colors.grey,
+            child: Column(
+              mainAxisSize: MainAxisSize.max,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  widget.couponItem.description,
+                  maxLines: 1,
+                  style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-              ),
+                _showDetails
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: descriptionPadding),
+                        child: Text(widget.couponItem.description),
+                      )
+                    : Container(),
+                Expanded(
+                    child: Align(
+                        child: CouponStatus(status: widget.couponItem.isUsed),
+                        alignment: Alignment.bottomLeft))
+              ],
             ),
-  );
-
-
+          ),
+        ),
+      );
 }

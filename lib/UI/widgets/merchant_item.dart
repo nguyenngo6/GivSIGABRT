@@ -14,18 +14,15 @@ class MerchantItem extends StatelessWidget {
         child: Container(
             child: Card(
                 shape: RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(8.0))),
+                    borderRadius: BorderRadius.all(Radius.circular(8.0))),
                 child: InkWell(
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
                           builder: (context) => MerchantProfileView(
-                              merchant: merchant,
-                              customer: customer))),
+                              merchant: merchant, customer: customer))),
                   child: Column(
-                    crossAxisAlignment:
-                    CrossAxisAlignment.stretch, // add this
+                    crossAxisAlignment: CrossAxisAlignment.stretch, // add this
                     children: <Widget>[
                       Expanded(
                         child: ClipRRect(
@@ -40,8 +37,7 @@ class MerchantItem extends StatelessWidget {
                         flex: 8,
                       ),
                       Expanded(
-                        child:
-                        Center(child: Text(merchant.username)),
+                        child: Center(child: Text(merchant.username)),
                         flex: 2,
                       ),
                     ],

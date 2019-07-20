@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:giver_app/model/charity.dart';
 import 'package:giver_app/model/user.dart';
-
 import 'charity_info.dart';
 
 class CharityItem extends StatelessWidget {
@@ -17,16 +16,15 @@ class CharityItem extends StatelessWidget {
         child: Container(
             child: Card(
                 shape: RoundedRectangleBorder(
-                    borderRadius:
-                    BorderRadius.all(Radius.circular(8.0))),
+                    borderRadius: BorderRadius.all(Radius.circular(8.0))),
                 child: InkWell(
-                  onTap: ()=> Navigator.push(context, MaterialPageRoute(builder: (context)=>CharityInfo(customer: customer, charity: charity))),
-//                    print('infor tap tap');
-//                    return CharityInfo(customer: customer, charity: charity);
-//                  },
+                  onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => CharityInfo(
+                              customer: customer, charity: charity))),
                   child: Column(
-                    crossAxisAlignment:
-                    CrossAxisAlignment.stretch, // add this
+                    crossAxisAlignment: CrossAxisAlignment.stretch, // add this
                     children: <Widget>[
                       Expanded(
                         child: ClipRRect(
@@ -41,8 +39,7 @@ class CharityItem extends StatelessWidget {
                         flex: 8,
                       ),
                       Expanded(
-                        child:
-                        Center(child: Text(charity.name)),
+                        child: Center(child: Text(charity.name)),
                         flex: 2,
                       ),
                     ],

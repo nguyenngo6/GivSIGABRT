@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 enum ConfirmAction { CANCEL, ACCEPT }
- 
+
 Future<ConfirmAction> _asyncConfirmDialog(BuildContext context) async {
   return showDialog<ConfirmAction>(
     context: context,
