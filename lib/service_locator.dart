@@ -1,5 +1,6 @@
-    
+
 import 'package:get_it/get_it.dart';
+import 'package:giver_app/scoped_model/customer_history_view_model.dart';
 import 'package:giver_app/scoped_model/user_home_view_model.dart';
 import 'package:giver_app/scoped_model/customer_profile_view_model.dart';
 import 'package:giver_app/scoped_model/merchant_profile_view_model.dart';
@@ -20,7 +21,11 @@ void setupLocator() {
 
   locator.registerSingleton(HomeViewModel());
   locator.registerSingleton(UserHomeViewModel());
+
   locator.registerSingleton(MerchantProfileViewModel());
+
   locator.registerSingleton(CustomerProfileViewModel());
+  locator.registerSingleton(CustomerHistoryViewModel());
+
   locator.registerSingleton(QrScanViewModel());
 }

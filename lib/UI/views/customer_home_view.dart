@@ -48,12 +48,17 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
     return BaseView<UserHomeViewModel>(
         builder: (context, child, model) => BusyOverlay(
           show: model.state == ViewState.Busy,
-          child: Scaffold(
-                appBar: _getAppBar(_selectedTittle, widget.user.points),
-                drawer: CustomerDrawer(customer: widget.user),
-                body: _getBodyUi(context, model),
-                bottomNavigationBar: _getBottomBar(),
-              ),
+          child: MaterialApp(
+            home: DefaultTabController(
+              length: 2,
+              child: Scaffold(
+                    appBar: _getAppBar(_selectedTittle, widget.user.points),
+                    drawer: CustomerDrawer(customer: widget.user),
+                    body: _getBodyUi(context, model),
+                    bottomNavigationBar: _getBottomBar(),
+                  ),
+            ),
+          ),
         ));
   }
 
@@ -61,19 +66,30 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
     return AppBar(
       title: Center(child: Text(title)),
       actions: <Widget>[
-        Center(child: Text('CREDIT')),
-        Center(
-            child: Text(
-          points.toString(),
-          style: TextStyle(color: Colors.red, fontSize: 25),
-        )),
+            Center(
+              child: RichText(
+                text: TextSpan(
+                  text: 'Credit ',
+                  style: TextStyle(fontSize: 10),
+                  children: <TextSpan>[
+                    TextSpan(text: points.toString(), style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold, color: Colors.red)),
+                  ],
+                ),
+              ),
+            ),
         FlatButton(
           onPressed: ()=> Navigator.pushReplacement(
               context, MaterialPageRoute(
                 builder: (context) => QrScanView(customer: widget.user,))),
           child: Icon(Icons.camera_alt),
         )
+      ],bottom: selectedWidget == WidgetMarker.history?TabBar(
+      tabs: [
+        Tab(icon: FlatButton.icon(onPressed: null, icon: Icon(Icons.web), label: Text('Coupons'))),
+        Tab(icon: FlatButton.icon(onPressed: null, icon: Icon(Icons.favorite), label: Text('Donate')))
       ],
+    ): null,
+      
     );
   }
 
@@ -109,12 +125,20 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
         return _errorUi(context, model);
       case ViewState.DataFetched:
         return selectedWidget == WidgetMarker.listOfMerchants
-            ? MerchantList(model: model, customer: widget.user)
-            : selectedWidget == WidgetMarker.charityOrganizations
-                ? CharityList(model: model,customer: widget.user,):CustomerHistoryView(customer: widget.user);
+            ? MerchantList(model: model, customer: widget.user):
+            selectedWidget == WidgetMarker.charityOrganizations?
+            CharityList(model: model,customer: widget.user,): CustomerHistoryView(user: widget.user,);
       default:
         return MerchantList(model: model, customer: widget.user,);
     }
+  }
+
+  Widget _getHistoryWidget(UserHomeViewModel model){
+    return TabBarView(
+        children: [
+        Text('1'),
+    Text('2'),
+    ]);
   }
 
 

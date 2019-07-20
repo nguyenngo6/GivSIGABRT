@@ -35,20 +35,21 @@ class _MerChanrDrawerState extends State<CustomerDrawer> {
       child: ListView(
         children: <Widget>[
           UserAccountsDrawerHeader(
-            accountName: Text("Toan "),
-            accountEmail: Text("toan.do2806@icloud."),
+            accountName: Text(widget.customer.username, style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 20.0,)),
+            accountEmail: Text(widget.customer.email, style: TextStyle(color: Colors.black, fontStyle: FontStyle.italic)),
             currentAccountPicture: GestureDetector(
               onTap: () => print("avatar tap"),
               child: CircleAvatar(
                 backgroundImage: NetworkImage(
-                    "https://profilepicturesdp.com/wp-content/uploads/2018/06/cute-baby-wallpaper-for-whatsapp-dp-11.jpg"),
+                    widget.customer.imageUrl),
               ),
             ),
             decoration: BoxDecoration(
                 image: DecorationImage(
                     fit: BoxFit.fill,
                     image: NetworkImage(
-                        "https://previews.123rf.com/images/wmitrmatr/wmitrmatr1408/wmitrmatr140800310/30747109-beautiful-paddy-with-nice-background.jpg"))),
+                        "https://images-na.ssl-images-amazon.com/images/I/81X4TID9IML._SL1500_.jpg"),
+                    colorFilter: ColorFilter.mode(Colors.black.withOpacity(1.0), BlendMode.dstATop))),
           ),
           ListTile(
             title: Text("Edit Profile"),
