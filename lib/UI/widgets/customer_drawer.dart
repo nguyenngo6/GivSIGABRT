@@ -17,13 +17,6 @@ class _MerChanrDrawerState extends State<CustomerDrawer> {
   @override
   Widget build(BuildContext context) {
 
-    displayProfileEditor(User user) {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) => CustomerProfileView(user: user)));
-    }
-
     signOut() {
       FirebaseAuth.instance.signOut();
       Navigator.pushReplacement(
@@ -55,7 +48,10 @@ class _MerChanrDrawerState extends State<CustomerDrawer> {
             title: Text("Edit Profile"),
             trailing: IconButton(
                 icon: Icon(Icons.edit),
-                onPressed: () => displayProfileEditor(widget.customer)),
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CustomerProfileView(user: widget.customer)))),
           ),
           ListTile(
             title: Text("Link2"),

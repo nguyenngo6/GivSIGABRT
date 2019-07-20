@@ -30,7 +30,7 @@ class _CouponHistoryState extends State<CouponHistory> {
             margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
             padding: EdgeInsets.all(10.0),
             decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5.0), color: Colors.grey),
+                borderRadius: BorderRadius.circular(5.0), color: Colors.lightBlueAccent),
             child: Row(
               children: <Widget>[_detailSection(coupon)],
             ),
@@ -55,7 +55,7 @@ class _CouponHistoryState extends State<CouponHistory> {
           });
         },
         child: Container(
-          color: Colors.grey,
+          color: Colors.lightBlueAccent,
           child: Column(
             mainAxisSize: MainAxisSize.max,
             crossAxisAlignment: CrossAxisAlignment.start,
