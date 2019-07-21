@@ -159,8 +159,7 @@ class FirebaseService {
     await Firestore.instance.collection('users').document(uid);
     Firestore.instance.runTransaction((Transaction transaction) async {
       DocumentSnapshot snapshot = await transaction.get(reference);
-
-      await transaction
+    var result =  await transaction
           .update(snapshot.reference, {"phone": newPhone});
     });
     return true;
@@ -180,8 +179,7 @@ class FirebaseService {
 
 
   Future<bool> editUsername(String newUsername, String uid) async {
-    DocumentReference reference =
-        await Firestore.instance.collection('users').document(uid);
+    DocumentReference reference = await Firestore.instance.collection('users').document(uid);
     Firestore.instance.runTransaction((Transaction transaction) async {
       DocumentSnapshot snapshot = await transaction.get(reference);
 
