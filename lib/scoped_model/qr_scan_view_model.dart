@@ -11,14 +11,34 @@ import '../service_locator.dart';
 class QrScanViewModel extends BaseModel {
   FirebaseService _firebaseService = locator<FirebaseService>();
   List<Coupon> coupons;
+  List<User> merchants;
 
   QrScanViewModel() {
     _firebaseService.coupons.asBroadcastStream().listen(_onCouponUpdated);   
+    _firebaseService.merchants.asBroadcastStream().listen(_onUsersUpdated); 
   }
 
 
   void onCouponRedeemed(String couponID, String customerID){
     _firebaseService.moveCouponToPending(couponID, customerID);
+  }
+
+  Future<User> getMerchantFromCoupon(Coupon coupon) async {
+    for (User user in merchants){
+      if(coupon.ownedBy == user.id){
+        return user;
+      }
+    }
+    return null;
+  }
+  
+  Future<Coupon> getCouponFromBarcode(String barcode) async{
+    for (Coupon coupon in coupons) {
+      if (coupon.id == barcode){
+        return coupon;
+      }
+    }
+    return null;
   }
 
   Future<bool> onDataReceived(String scannedData) async {
@@ -36,6 +56,16 @@ class QrScanViewModel extends BaseModel {
     }
     return false;
 
+  }
+  void _onUsersUpdated(List<User> user) {
+    merchants = user;
+    if (merchants == null) {
+      setState(ViewState.Busy);
+    } else {
+      setState(merchants.length == 0
+          ? ViewState.NoDataAvailable
+          : ViewState.WaitingForInput);
+    }
   }
 
   void _onCouponUpdated(List<Coupon> coupon) {

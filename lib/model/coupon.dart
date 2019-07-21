@@ -1,4 +1,5 @@
 class Coupon {
+  String code;
   String description;
   String ownedBy;
   String usedBy;
@@ -8,6 +9,7 @@ class Coupon {
   String id;
 
   Coupon({
+    this.code,
     this.description,
     this.ownedBy,
     this.usedBy,
@@ -24,7 +26,8 @@ class Coupon {
           usedBy = data['usedBy'],
           points = data['points'],
           isUsed = data['isUsed'],
-          isPending = data['isPending'];
+          isPending = data['isPending'],
+          code = data['code'];
 
 
         

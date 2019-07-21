@@ -78,7 +78,7 @@ class MerchantProfileView extends StatelessWidget {
               customer: customer,
               couponItem: couponItem,
               onRedeemed: () => 
-                model.redeemCoupon(couponID: couponID)
+                model.redeemCoupon(couponID, customer.id)
               );
         });
   }

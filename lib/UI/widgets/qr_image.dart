@@ -10,13 +10,13 @@ class QrWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("QR Image"),
+        title: Text("Coupon QR code"),
       ),
       body: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text("Coupon ID:\n ",
+            Text("Scan this to redeem ",
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 24,

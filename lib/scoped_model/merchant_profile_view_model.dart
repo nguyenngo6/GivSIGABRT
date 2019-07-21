@@ -21,8 +21,8 @@ class MerchantProfileViewModel extends BaseModel {
     _firebaseService.coupons.asBroadcastStream().listen(_onCouponUpdated);  
   }
 
-  void redeemCoupon({@required String couponID}){
-    _firebaseService.redeemCoupon(couponID: couponID);
+  void redeemCoupon(String couponID, String customerID){
+    _firebaseService.moveCouponToPending(couponID, customerID);
   }
   
   List<Coupon> getCouponsByMerchantID(String merchantID) {
