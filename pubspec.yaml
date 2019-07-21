@@ -26,7 +26,7 @@ dependencies:
     sdk: flutter
   firebase_core: ^0.4.0  # add dependency for Firebase Core
   firebase_analytics: ^1.0.4  # add dependency for Google Analytics for Firebase
-  barcode_scan: ^0.0.8
+  barcode_scan:
   qr_flutter: ^2.0.0
   firebase_storage:
   image_picker:

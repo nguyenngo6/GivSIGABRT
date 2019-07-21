@@ -37,140 +37,150 @@ class _SignUpPageState extends State<SignUpPage> {
         show: this._state == ViewState.Busy,
         child: Scaffold(
           appBar: new AppBar(),
-          body: new Container(
-              padding: new EdgeInsets.all(10.0),
-              child: Form(
-                  key: _formKey,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: <Widget>[
-                      RadioListTile(
-                        value: 1,
-                        title: new Text('Level 1'),
-                        groupValue: _selected,
-                        onChanged: (int value) {
-                          onChanged(value);
-                        },
-                        activeColor: Colors.red,
-                        subtitle: new Text('Customer'),
-                      ),
-                      RadioListTile(
-                        value: 2,
-                        title: new Text('Level 2'),
-                        groupValue: _selected,
-                        onChanged: (int value) {
-                          onChanged(value);
-                        },
-                        activeColor: Colors.red,
-                        subtitle: new Text('Merchant'),
-                      ),
-                      Container(
-                        height: 4.0,
-                      ),
-                      TextFormField(
-                        controller: _emailController,
-                        validator: (input) {
-                          if (input.isEmpty) {
-                            return 'Provide an email';
-                          }
-                        },
-                        autofocus: true,
-//                style: style,
-                        decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 15.0),
-                            hintText: "Email",
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(32.0))),
-                        onSaved: (input) => _email = input,
-                      ),
-                      Container(
-                        height: 4.0,
-                      ),
-                      TextFormField(
-                        controller: _usernameController,
-                        validator: (input) {
-                          if (input.isEmpty) {
-                            return 'Provide a username';
-                          }
-                        },
-                        autofocus: true,
-//                style: style,
-                        decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 15.0),
-                            hintText: "Username",
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(32.0))),
-                        onSaved: (input) => _username = input,
-                      ),
-                      Container(
-                        height: 4.0,
-                      ),
-                      TextFormField(
-                        controller: _passwordController,
-                        validator: (input) {
-                          if (input.isEmpty) {
-                            return 'Provide a password';
-                          } else if (input.length < 6) {
-                            return 'Password must have at least 6 characters';
-                          }
-                        },
-                        autofocus: true,
-                        decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 15.0),
-                            hintText: "Password",
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(32.0))),
-                        onSaved: (input) => _password = input,
-                        obscureText: true,
-                      ),
-                      Container(
-                        height: 4.0,
-                      ),
-                      TextFormField(
-                        controller: _confirmController,
-                        validator: (input) {
-                          if (input.isEmpty) {
-                            return 'Provide a confirm password';
-                          } else if (input.length < 6) {
-                            return 'Password must have at least 6 characters';
-                          } else if (input != _passwordController.text) {
-                            return 'Confirm password did not match!';
-                          }
-                        },
-                        decoration: InputDecoration(
-                            contentPadding:
-                                EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 15.0),
-                            hintText: "confirm password",
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(32.0))),
-                        obscureText: true,
-                      ),
-                      Container(
-                        height: 5.0,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          RaisedButton(
-                            onPressed: signUp,
-                            child: Text('Sign up'),
-                          ),
-                          FlatButton(
-                            child: Text(
-                              'Have an account? Login !',
-                              style: TextStyle(color: Colors.black54),
+          body: SingleChildScrollView(
+            child: Stack(
+              children: <Widget>[
+                Container(
+                    padding: new EdgeInsets.all(10.0),
+                    child: Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            RadioListTile(
+                              value: 1,
+                              title: new Text('Level 1'),
+                              groupValue: _selected,
+                              onChanged: (int value) {
+                                onChanged(value);
+                              },
+                              activeColor: Colors.red,
+                              subtitle: new Text('Customer'),
                             ),
-                            onPressed: backLogin,
-                          ),
-                        ],
-                      ),
-                    ],
-                  ))),
+                            RadioListTile(
+                              value: 2,
+                              title: new Text('Level 2'),
+                              groupValue: _selected,
+                              onChanged: (int value) {
+                                onChanged(value);
+                              },
+                              activeColor: Colors.red,
+                              subtitle: new Text('Merchant'),
+                            ),
+                            Container(
+                              height: 4.0,
+                            ),
+                            TextFormField(
+                              controller: _emailController,
+                              validator: (input) {
+                                if (input.isEmpty) {
+                                  return 'Provide an email';
+                                }
+                              },
+                              autofocus: true,
+//                style: style,
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.fromLTRB(
+                                      20.0, 10.0, 20.0, 15.0),
+                                  hintText: "Email",
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(32.0))),
+                              onSaved: (input) => _email = input,
+                            ),
+                            Container(
+                              height: 4.0,
+                            ),
+                            TextFormField(
+                              controller: _usernameController,
+                              validator: (input) {
+                                if (input.isEmpty) {
+                                  return 'Provide a username';
+                                }
+                              },
+                              autofocus: true,
+//                style: style,
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.fromLTRB(
+                                      20.0, 10.0, 20.0, 15.0),
+                                  hintText: "Username",
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(32.0))),
+                              onSaved: (input) => _username = input,
+                            ),
+                            Container(
+                              height: 4.0,
+                            ),
+                            TextFormField(
+                              controller: _passwordController,
+                              validator: (input) {
+                                if (input.isEmpty) {
+                                  return 'Provide a password';
+                                } else if (input.length < 6) {
+                                  return 'Password must have at least 6 characters';
+                                }
+                              },
+                              autofocus: true,
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.fromLTRB(
+                                      20.0, 10.0, 20.0, 15.0),
+                                  hintText: "Password",
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(32.0))),
+                              onSaved: (input) => _password = input,
+                              obscureText: true,
+                            ),
+                            Container(
+                              height: 4.0,
+                            ),
+                            TextFormField(
+                              controller: _confirmController,
+                              validator: (input) {
+                                if (input.isEmpty) {
+                                  return 'Provide a confirm password';
+                                } else if (input.length < 6) {
+                                  return 'Password must have at least 6 characters';
+                                } else if (input != _passwordController.text) {
+                                  return 'Confirm password did not match!';
+                                }
+                              },
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.fromLTRB(
+                                      20.0, 10.0, 20.0, 15.0),
+                                  hintText: "confirm password",
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(32.0))),
+                              obscureText: true,
+                            ),
+                            Container(
+                              height: 5.0,
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                RaisedButton(
+                                  onPressed: signUp,
+                                  child: Text('Sign up'),
+                                ),
+                                FlatButton(
+                                  child: Text(
+                                    'Have an account? Login !',
+                                    style: TextStyle(color: Colors.black54),
+                                  ),
+                                  onPressed: backLogin,
+                                ),
+                              ],
+                            ),
+                          ],
+                        )))
+              ],
+            ),
+          ),
         ));
   }
 

@@ -1,11 +1,6 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:giver_app/UI/Views/add_coupon_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:giver_app/UI/views/edit_coupon_page.dart';
 import 'package:giver_app/model/coupon.dart';
-
-
 
 class CouponList extends StatefulWidget {
   CouponList({@required this.couponList});
@@ -27,7 +22,6 @@ class _CouponListState extends State<CouponList> {
           )
         ],
       ),
-
     );
   }
 }

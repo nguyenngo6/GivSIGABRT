@@ -283,11 +283,12 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
         child: Scaffold(
           appBar: AppBar(
             leading: FlatButton(
-                onPressed: () => Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) =>
-                            CustomerHomeView(user: widget.user))),
+              onPressed: ()=> Navigator.pop(context),
+//                onPressed: () => Navigator.pushReplacement(
+//                    context,
+//                    MaterialPageRoute(
+//                        builder: (context) =>
+//                            CustomerHomeView(user: widget.user))),
                 child: Icon(Icons.backspace)),
             title: Text("Edit Profile Page"),
             actions: <Widget>[

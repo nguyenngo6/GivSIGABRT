@@ -1,7 +1,5 @@
 
-import 'package:flutter/cupertino.dart';
-import 'package:giver_app/model/coupon.dart';
-import 'package:giver_app/model/charity.dart';
+
 import 'package:giver_app/services/firebase_service.dart';
 import 'package:giver_app/scoped_model/base_model.dart';
 import 'package:giver_app/model/user.dart';

@@ -26,11 +26,7 @@ class MerchantProfileView extends StatelessWidget {
         builder: (context, child, model) => Scaffold(
             appBar: AppBar(
               leading: FlatButton(
-                  onPressed: () => Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              CustomerHomeView(user: customer))),
+                  onPressed: () => Navigator.pop(context),
                   child: Icon(Icons.backspace)),
             ),
             backgroundColor: Theme.of(context).backgroundColor,
