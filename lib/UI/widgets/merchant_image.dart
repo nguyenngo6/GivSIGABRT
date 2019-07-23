@@ -13,19 +13,20 @@ class MerchantImage extends StatefulWidget {
 }
 
 class _MerchantImageState extends State<MerchantImage> {
-  double _height = 100;
+  double _height = 150;
 
   @override
   Widget build(BuildContext context) {
+    Image image = Image.network(widget.merchant.imageUrl);
     return Container(
       width: double.infinity,
       height: _height,
       decoration: BoxDecoration(
-          image: DecorationImage(
-        image: new AssetImage("assets/logo.png"),
-        fit: BoxFit.cover,
-      )),
-      child: null,
+        image: DecorationImage(
+          image: image.image,
+          fit: BoxFit.cover
+        )
+      ),
     );
   }
 }

@@ -41,12 +41,12 @@ class QrScanViewModel extends BaseModel {
     return null;
   }
 
-  Future<bool> onDataReceived(String scannedData) async {
+  Future<bool> onDataReceived(List<Coupon> currentCoupons, String scannedData) async {
     Coupon scannedCoupon;
-    for(Coupon c in coupons){
+    for(Coupon c in currentCoupons){
       if (c.id == scannedData){
         scannedCoupon = c;
-        if (scannedCoupon.isPending){
+        if (scannedCoupon.isPending || scannedCoupon.isUsed){
           return false;
         }
         else {

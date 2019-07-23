@@ -112,7 +112,7 @@ class _CouponInfoItemState extends State<CouponInfoItem> {
                 "Redeem Now",
                 style: Style.infoTextStyle,
               ),
-              onPressed: () => widget.onRedeemed,
+              onPressed: widget.onRedeemed,
               color: Colors.white,
             ),
           ),

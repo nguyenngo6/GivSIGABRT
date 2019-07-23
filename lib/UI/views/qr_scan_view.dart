@@ -6,9 +6,6 @@ import 'package:giver_app/UI/shared/draw_horizontal_line.dart';
 import 'package:giver_app/UI/shared/text_style.dart';
 import 'package:giver_app/UI/shared/ui_reducers.dart';
 import 'package:giver_app/UI/views/customer_home_view.dart';
-import 'package:giver_app/UI/widgets/coupon_info_item.dart';
-import 'package:giver_app/UI/widgets/coupon_item.dart';
-import 'package:giver_app/UI/widgets/merchant_item.dart';
 import 'package:giver_app/UI/widgets/simple_toolbar.dart';
 import 'package:giver_app/enum/view_state.dart';
 import 'package:giver_app/model/coupon.dart';
@@ -35,8 +32,10 @@ class _QrScanViewState extends State<QrScanView> {
   Widget build(BuildContext context) {
     return BaseView<QrScanViewModel>(
         builder: (context, child, model) => Scaffold(
+              backgroundColor: Colors.white,
               appBar: AppBar(
-                title: Text('QR Code Scan'),
+                elevation: 0,
+                backgroundColor: Colors.white,
                 leading: FlatButton(
                   child: Icon(Icons.arrow_back),
                   onPressed: () {
@@ -75,7 +74,7 @@ class _QrScanViewState extends State<QrScanView> {
   }
 
   Widget _getWrongQrFormatUi(QrScanViewModel model) {
-    return AlertDialog(
+    return CupertinoAlertDialog(
       title: Text('Format Error'),
       content: Text('This format is not supported'),
       actions: <Widget>[
@@ -95,7 +94,8 @@ class _QrScanViewState extends State<QrScanView> {
       content: Text('This is not a valid Coupon'),
       actions: <Widget>[
         FlatButton(
-            child: Text('Close'),
+          textColor: Colors.black,
+            child: Text('Close',),
             onPressed: () {
               _resetData();
               model.setState(ViewState.WaitingForInput);
@@ -110,31 +110,35 @@ class _QrScanViewState extends State<QrScanView> {
     //   child: CouponInfoItem(
     //       coupon: coupon,
     //       merchant: merchant,
-    //       onRedeemed: () => showConfirmationDialog(model, coupon)         
+    //       onRedeemed: () => showConfirmationDialog(model, coupon)
     //       ),
     // );
-    return Container(  
+    return Container(
       margin: EdgeInsets.symmetric(
         vertical: 16,
         horizontal: 24,
       ),
       child: Stack(
         overflow: Overflow.clip,
-        children: <Widget>[_getCouponInfoBody(model, coupon), _getCouponInfoHeader()],
+        children: <Widget>[
+          _getCouponInfoBody(model, coupon),
+          _getCouponInfoHeader(merchant)
+        ],
       ),
     );
   }
+
   showConfirmationDialog(QrScanViewModel model, Coupon coupon) {
+    String name = coupon.code;
     showDialog(
         context: context,
         builder: (context) {
           return CupertinoAlertDialog(
             title: Text('Confirmation'),
-            content: Text('Are you sure to use this coupon'),
+            content: Text('Are you sure to use this $name coupon'),
             actions: <Widget>[
               FlatButton(
                   onPressed: () {
-                    
                     model.onCouponRedeemed(coupon.id, widget.customer.id);
                     _resetData();
                     model.setState(ViewState.WaitingForInput);
@@ -176,7 +180,7 @@ class _QrScanViewState extends State<QrScanView> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: <Widget>[
           Image.asset(
-            'assets/logo.png',
+            'assets/scanner.jpg',
             height: 150,
           ),
           SizedBox(
@@ -185,11 +189,11 @@ class _QrScanViewState extends State<QrScanView> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 80, vertical: 10.0),
             child: RaisedButton(
-              color: Colors.amber,
+              color: Colors.black,
               textColor: Colors.black,
               splashColor: Colors.blueGrey,
               onPressed: () => scan(model),
-              child: const Text('Press to start scanning'),
+              child: Text('Press to start scanning', style: Style.commonTextStyle,),
             ),
           ),
           Padding(
@@ -214,10 +218,10 @@ class _QrScanViewState extends State<QrScanView> {
 
   Future scan(QrScanViewModel model) async {
     try {
-      this.barcode = await BarcodeScanner.scan();
-      // this.barcode = "-LjoOTKKlabjuoZ14Yhj";
-      // await new Future.delayed(new Duration(milliseconds: 100));
-      this.isValid = await model.onDataReceived(barcode);
+      // this.barcode = await BarcodeScanner.scan();
+      this.barcode = "-LjoOTKKlabjuoZ14Yhj";
+      await new Future.delayed(new Duration(milliseconds: 100));
+      this.isValid = await model.onDataReceived(model.coupons, barcode);
       if (isValid) {
         this.scannedCoupon = await model.getCouponFromBarcode(barcode);
         this.merchant = await model.getMerchantFromCoupon(scannedCoupon);
@@ -241,17 +245,19 @@ class _QrScanViewState extends State<QrScanView> {
       //do nothing
     }
   }
-  Widget _getCouponInfoHeader() {
+
+  Widget _getCouponInfoHeader(User merchant) {
     return Container(
         margin: EdgeInsets.symmetric(vertical: 16),
         alignment: FractionalOffset.topCenter,
         child: Hero(
           tag: "tag",
-          child: Image(
-            image: AssetImage("assets/logo.png"),
-            height: 92,
+          child: Image.network(
+            merchant.imageUrl,
             width: 92,
-          ),
+            height: 92,
+            fit: BoxFit.fill,
+          )
         ));
   }
 
@@ -279,11 +285,10 @@ class _QrScanViewState extends State<QrScanView> {
             height: 10,
           ),
           Text(
-            merchant.address, 
+            merchant.address,
             style: Style.commonTextStyle,
             textAlign: TextAlign.center,
           ),
-
           Container(
             height: 20,
           ),
@@ -328,6 +333,13 @@ class _QrScanViewState extends State<QrScanView> {
               color: Colors.white,
             ),
           ),
+           Container(
+            height: 20,
+          ),
+          Text(
+            "Valid till 30/4",
+            style: Style.commonTextStyle,
+          )
         ],
       ),
     );

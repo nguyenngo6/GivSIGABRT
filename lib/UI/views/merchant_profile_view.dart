@@ -5,40 +5,41 @@ import 'package:giver_app/UI/widgets/merchant_image.dart';
 import 'package:giver_app/UI/widgets/merchant_info.dart';
 
 import 'package:giver_app/UI/widgets/simple_toolbar.dart';
-import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/model/user.dart';
-
 import 'package:giver_app/scoped_model/merchant_profile_view_model.dart';
 import 'package:giver_app/UI/views/base_view.dart';
 import 'package:giver_app/enum/view_state.dart';
 import 'package:giver_app/UI/widgets/coupon_item.dart';
 
-import 'customer_home_view.dart';
-
 class MerchantProfileView extends StatelessWidget {
-  const MerchantProfileView({@required this.merchant, @required this.customer});
 
+  const MerchantProfileView({@required this.merchant, @required this.customer});
   final User customer;
   final User merchant;
+
   @override
   Widget build(BuildContext context) {
     return BaseView<MerchantProfileViewModel>(
-        builder: (context, child, model) => Scaffold(
+        builder: (context, child, model) => 
+        Stack(
+          children: <Widget>[
+            MerchantImage(merchant: merchant,),
+          Scaffold(
+            backgroundColor: Colors.transparent,
             appBar: AppBar(
+              elevation: 0,
+              backgroundColor: Colors.transparent,
               leading: FlatButton(
                   onPressed: () => Navigator.pop(context),
-                  child: Icon(Icons.backspace)),
+                  child: Icon(Icons.arrow_back, color: Colors.white,)),
             ),
-            backgroundColor: Theme.of(context).backgroundColor,
+           
             body: Column(
               children: <Widget>[
-//            SimpleToolbar(title: "Profile", showBackButton: true,),
                 Container(
-                  height: 140,
-                  child: MerchantImage(
-                    merchant: merchant,
-                  ),
+                  height: 70,
                 ),
+
                 Container(
                   height: 100,
                   child: MerchantInfo(
@@ -47,10 +48,13 @@ class MerchantProfileView extends StatelessWidget {
                 ),
                 Container(
                     height:
-                        screenHeight(context, decreasedBy: 240 + toolbarHeight),
+                        screenHeight(context, decreasedBy: 170 + toolbarHeight),
                     child: _getBodyUi(context, model)),
               ],
-            )));
+            )
+            )]
+            )
+            );
   }
 
   Widget _getBodyUi(BuildContext context, MerchantProfileViewModel model) {
