@@ -15,34 +15,39 @@ class AddCoupon extends StatefulWidget {
 
 class _AddCouponsState extends State<AddCoupon> {
   String description;
-  int point;
+  int points;
+  String code;
 //  bool isUse;
 
   void _addData(User user) {
     Firestore.instance.runTransaction((Transaction transaction) async {
       DocumentReference addDataCoupon =
-          await Firestore.instance.collection("coupons").add({
+      await Firestore.instance.collection("coupons").add({
 //        "user": widget.user,
         "description": description,
-        "point": point,
+        "points": points,
         "ownedBy": user.id,
+        "code": code,
         "isUsed": false,
+        "isPending": false,
 //        "isUse": isUse,
       });
-      print(addDataCoupon.documentID.toString());
+//      print(addDataCoupon.documentID.toString());
       CollectionReference addUidMerchant = Firestore.instance
           .collection("users")
           .document(user.id)
           .collection("ownedCoupons");
       await addUidMerchant.document(addDataCoupon.documentID).setData({
         "merchantId":
-            Firestore.instance.collection("users").document(user.id).documentID
+        Firestore.instance.collection("users").document(user.id).documentID
       });
     });
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (context) => new MerchantHomeView(user: user)));
+    _navigateToMerchantHomeView();
+  }
+
+  _navigateToMerchantHomeView(){
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => MerchantHomeView(user: widget.user,)));
+
   }
 
   @override
@@ -50,84 +55,107 @@ class _AddCouponsState extends State<AddCoupon> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.lightBlueAccent,
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: _navigateToMerchantHomeView),
+        title: Center(
+          child: Text('Add Coupon'),
+        ),
       ),
       body: Material(
           child: Form(
-        child: Column(
-          children: <Widget>[
-            new Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                onChanged: (String str) {
-                  setState(() {
-                    description = str;
-                  });
-                },
-                decoration: new InputDecoration(
-                    icon: Icon(Icons.dashboard),
-                    hintText: "Coupon Description"),
-              ),
-            ),
-            new Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextFormField(
-                onSaved: (input) => point = int.parse(input),
-                decoration: new InputDecoration(
-                  icon: Icon(Icons.control_point),
-                  hintText: "Enter number credit",
+            child: Column(
+              children: <Widget>[
+                new Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextField(
+                    onChanged: (String str) {
+                      setState(() {
+                        description = str;
+                      });
+                    },
+                    decoration: new InputDecoration(
+                        icon: Icon(Icons.dashboard),
+                        hintText: "Coupon Description"),
+                  ),
                 ),
-                keyboardType: TextInputType.number,
-              ),
-            ),
+                new Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextField(
+                    onChanged: (String str) {
+                      setState(() {
+                        code = str;
+                      });
+                    },
+                    decoration: new InputDecoration(
+                        icon: Icon(Icons.dashboard),
+                        hintText: "Coupon Description"),
+                  ),
+                ),
+                new Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextFormField(
+                    onSaved: (input) => setState((){points = int.parse(input);}),
+                    decoration: new InputDecoration(
+                      icon: Icon(Icons.control_point),
+                      hintText: "Enter number credit",
+                    ),
+                    keyboardType: TextInputType.number,
+                  ),
+                ),
 
-            // new Padding(
-            //   padding: const EdgeInsets.all(16.0),
-            //   child:TextField(
-            //     onChanged: (String str){
-            //       setState(() {
-            //         ownedBy = str;
-            //       });
-            //     },
-            //     decoration: InputDecoration(
-            //         icon: Icon(Icons.account_circle),
-            //         hintText: "Owned by"
-            //     ),
-            //   ),
-            // ),
+                // new Padding(
+                //   padding: const EdgeInsets.all(16.0),
+                //   child:TextField(
+                //     onChanged: (String str){
+                //       setState(() {
+                //         ownedBy = str;
+                //       });
+                //     },
+                //     decoration: InputDecoration(
+                //         icon: Icon(Icons.account_circle),
+                //         hintText: "Owned by"
+                //     ),
+                //   ),
+                // ),
 
-            // new Padding(
-            //   padding: const EdgeInsets.all(16.0),
-            //   child: TextField(
-            //     onChanged: (String str){
-            //       setState(() {
-            //         usedBy = str;
-            //       });
-            //     },
-            //     decoration: InputDecoration(
-            //         icon: Icon(Icons.account_circle),
-            //         hintText: "Used by"
-            //     ),
-            //   ),
+                // new Padding(
+                //   padding: const EdgeInsets.all(16.0),
+                //   child: TextField(
+                //     onChanged: (String str){
+                //       setState(() {
+                //         usedBy = str;
+                //       });
+                //     },
+                //     decoration: InputDecoration(
+                //         icon: Icon(Icons.account_circle),
+                //         hintText: "Used by"
+                //     ),
+                //   ),
 
-            // ),
+                // ),
 
-            new Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: IconButton(
-                icon: Icon(Icons.check),
-                onPressed: () {
-                  _addData(widget.user);
-                },
-              ),
-            ),
+                new Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    RaisedButton(
+                      onPressed: (){_addData(widget.user);},
+                      child: new Text('Add'),
+                    ),
+                    RaisedButton(
+                      onPressed: _navigateToMerchantHomeView,
+                      child: new Text('Cancel'),
+                    )
+                  ],
+                )
 
 //          new Padding(
 //              padding: const EdgeInsets.all(16.0),
 //            child: ,
 //          )
-          ],
-        ),
-      )),
+              ],
+            ),
+          )),
     );
   }
 }
