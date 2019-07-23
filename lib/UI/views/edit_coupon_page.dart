@@ -2,14 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
+import 'package:giver_app/UI/views/merchant_home_view.dart';
 import 'package:giver_app/model/coupon.dart';
+import 'package:giver_app/model/user.dart';
 
 class EditCoupon extends StatefulWidget {
-  EditCoupon({@required this.description, @required this.ownedBy});
-  final description;
-  final ownedBy;
+  EditCoupon({
+    @required this.user,
+    @required this.coupon,
+  });
+  final User user;
+  final Coupon coupon;
   // final usedBy;
-  // final point;
   // final index;
   @override
   _EditCouponState createState() => _EditCouponState();
@@ -17,201 +21,139 @@ class EditCoupon extends StatefulWidget {
 
 class _EditCouponState extends State<EditCoupon> {
   String description;
-  int point;
-
-//  bool isUse;
+  int points;
+  bool isUsed = false;
   String ownedBy;
-  String usedBy;
-  TextEditingController controllerDes;
-  TextEditingController controllerOwned;
+//  String usedBy;
 
-//   Future _editCoupon() async {
-//     Firestore.instance.runTransaction((Transaction transaction) async {
-//       DocumentSnapshot snapshot = await transaction.get(widget.index);
-//       await transaction.update(snapshot.reference, {
-//         "description": description,
-//         "ownedBy": ownedBy,
-//       });
-//     });
+  GlobalKey<FormState> _key = new GlobalKey();
+  bool _validate = false;
 
-//     Navigator.pop(context);
-// //    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => new kfc_store(user: widget.user))) ;
-//   }
-
-  @override
-  void initState() {
-    super.initState();
-    description = widget.description;
-    ownedBy = widget.ownedBy;
-
-    controllerDes = new TextEditingController(text: widget.description);
-    controllerOwned = new TextEditingController(text: widget.ownedBy);
+  void onChanged(bool value) {
+    setState(() {
+      isUsed = value;
+    });
   }
 
-  bool isNumber(String value) {
-    if (value == null) {
-      return true;
+  _editCoupon() {
+    if (_key.currentState.validate()) {
+      _key.currentState.save();
+      Firestore.instance
+          .collection("coupons")
+          .document(widget.coupon.id)
+          .updateData({
+        'description': description,
+        'points': points,
+        'isUsed': isUsed,
+      }).then(_navigateToMerchantHomeView());
     }
-    final n = num.tryParse(value);
-    return n != null;
+  }
+
+  _navigateToMerchantHomeView() {
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => MerchantHomeView(
+              user: widget.user,
+            )));
   }
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-        child: Form(
-      child: Column(
-        children: <Widget>[
-          new Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: controllerDes,
-              onChanged: (String str) {
-                setState(() {
-                  description = str;
-                });
-              },
-              decoration: new InputDecoration(
-                  icon: Icon(Icons.dashboard), hintText: "Coupon Description"),
-            ),
-          ),
-          // new Padding(
-          //   padding: const EdgeInsets.all(16.0),
-          //   child: TextFormField(
-          //     controller: controllerPoint,
-          //     onSaved: (input) => point = int.parse(input),
-          //     decoration: new InputDecoration(
-          //       icon: Icon(Icons.control_point),
-          //       hintText: "Enter number credit",
-          //     ),
-          //     keyboardType: TextInputType.number,
-          //     inputFormatters: <TextInputFormatter>[
-          //       WhitelistingTextInputFormatter.digitsOnly
-          //     ],
-          //   ),
-          // ),
-
-          new Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: TextField(
-              controller: controllerOwned,
-              onChanged: (String str) {
-                setState(() {
-                  ownedBy = str;
-                });
-              },
-              decoration: InputDecoration(
-                  icon: Icon(Icons.account_circle), hintText: "Owned by"),
-            ),
-          ),
-
-          new Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: IconButton(
-              icon: Icon(Icons.check),
-              onPressed: null,
-            ),
-          ),
-
-//          new Padding(
-//              padding: const EdgeInsets.all(16.0),
-//            child: ,
-//          )
-        ],
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: _navigateToMerchantHomeView),
+        title: Center(
+          child: Text('Edit Coupon'),
+        ),
       ),
-    ));
-  }
-}
-
-class CouponListView extends StatelessWidget {
-  CouponListView({@required this.couponList});
-//  final FirebaseUser user;
-
-  final List<Coupon> couponList;
-
-  @override
-  Widget build(BuildContext context) {
-    return new ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: couponList.length,
-        itemBuilder: (BuildContext context, rowNumber) {
-          Coupon coupon = couponList[rowNumber];
-          return new Container(
-            child: Dismissible(
-              key: new Key(coupon.id),
-              onDismissed: (direction) {
-                Firestore.instance.runTransaction((transaction) async {
-                  DocumentSnapshot snapshot = await transaction.get(Firestore
-                      .instance
-                      .collection('coupons')
-                      .document(coupon.id));
-                  await transaction.delete(snapshot.reference);
-                });
-              },
-              child: new Container(
-                margin: const EdgeInsets.all(8.0),
-                child: FittedBox(
-                  child: Material(
-                    color: Colors.lightBlueAccent,
-                    shadowColor: Colors.blueAccent,
-                    borderRadius: BorderRadius.circular(10.0),
-                    child: Row(
-                      children: <Widget>[
-                        Container(
-                            child: new Padding(
-                          padding: const EdgeInsets.only(
-                              left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
-                          child: Container(
-                            child: Row(
-                              children: <Widget>[
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    Text(
-                                      coupon.description,
-                                      style: new TextStyle(fontSize: 5.0),
-                                    )
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        )),
-                        Container(
-                          width: 25,
-                          height: 25,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(5.0),
-                            clipBehavior: Clip.antiAliasWithSaveLayer,
-                            child: Image(
-                                fit: BoxFit.contain,
-                                alignment: Alignment.topRight,
-                                image: AssetImage('assets/profile.png')),
-                          ),
-                        ),
-                        Container(
-                          child: new IconButton(
-                              iconSize: 10.0,
-                              icon: Icon(Icons.edit),
-                              onPressed: () {
-                                Navigator.of(context).push(
-                                    new MaterialPageRoute(
-                                        builder: (BuildContext context) =>
-                                            new EditCoupon(
-//                              user: user,
-//                              user: user,
-                                              description: coupon.description,
-                                              ownedBy: coupon.ownedBy,
-                                            )));
-                              }),
-                        )
-                      ],
-                    ),
+      body: Material(
+          child: Form(
+            key: _key,
+            autovalidate: _validate,
+            child: Column(
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextFormField(
+                    initialValue: widget.coupon.description,
+                    onSaved: (input) => description = input,
+                    decoration: new InputDecoration(
+                        icon: Icon(Icons.dashboard),
+                        hintText: "Coupon Description"),
                   ),
                 ),
-              ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextFormField(
+                    initialValue: widget.coupon.points.toString(),
+                    onSaved: (input) => points = int.parse(input),
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.control_point),
+//                 hintText: "${widget.user.points}",
+                    ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      WhitelistingTextInputFormatter.digitsOnly
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Radio(
+//
+                          value: true,
+//                  title: Text('True'),
+                          groupValue: isUsed,
+                          onChanged: (newValue) => setState(() => isUsed = newValue),
+//                  onChanged: (bool value) => isUsed = value,
+//                  selected: widget.coupon.isUsed,
+                          activeColor: Colors.red,
+//                  subtitle: Text('used'),
+                        ),
+                        Text("True")
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Radio(
+//                  selected: widget.coupon.isUsed,
+                          value: false,
+//                  title: Text('False'),
+                          groupValue: isUsed,
+                          onChanged:  (newValue) => setState(() => isUsed = newValue),
+//                  onChanged: (bool value) => isUsed = value,
+//                  selected: widget.coupon.isUsed,
+                          activeColor: Colors.red,
+//                  subtitle: Text('not used'),
+                        ),
+                        Text("False")
+                      ],
+                    )
+                  ],),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: <Widget>[
+                    RaisedButton(
+                      onPressed: _editCoupon,
+                      child: Text('Update'),
+                    ),
+                    RaisedButton(
+                      onPressed: _navigateToMerchantHomeView,
+                      child: Text('Cancel'),
+                    )
+                  ],
+                )
+              ],
             ),
-          );
-        });
+          )),
+    );
   }
 }
+

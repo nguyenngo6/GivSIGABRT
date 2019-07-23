@@ -18,7 +18,7 @@ class _CouponListState extends State<CouponList> {
         children: <Widget>[
           new Padding(
             padding: const EdgeInsets.all(16.0),
-            child: CouponListView(couponList: widget.couponList),
+//            child: CouponListView(couponList: widget.couponList),
           )
         ],
       ),
