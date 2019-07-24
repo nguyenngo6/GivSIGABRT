@@ -4,6 +4,7 @@ import 'package:giver_app/UI/widgets/coupon_info_item.dart';
 import 'package:giver_app/UI/widgets/qr_image.dart';
 import 'package:giver_app/service_locator.dart';
 import 'UI/views/sign_in_page.dart';
+import 'package:giver_app/UI/widgets/merchant_history_entry.dart';
 
 void main(){
   setupLocator();
@@ -29,7 +30,8 @@ class MyApp extends StatelessWidget {
         // is not restarted. 
         primarySwatch: Colors.blue,
       ),
-      home: SignInPage()
+//      home: SignInPage()
+    home: MerchantHistoryEntry(),
     );
 
   }

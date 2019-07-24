@@ -4,6 +4,7 @@ class Style {
   static final baseTextStyle = const TextStyle(
     fontFamily: 'Poppins'
   );
+
   static final smallTextStyle = commonTextStyle.copyWith(
     fontSize: 9.0,
   );
@@ -31,6 +32,16 @@ class Style {
   static final infoTextStyle = baseTextStyle.copyWith(
       color: Colors.purple,
     fontSize: 14.0,
+      fontWeight: FontWeight.w600
+  );
+  static final couponHistoryTextStyle = baseTextStyle.copyWith(
+      color: Colors.black,
+      fontSize: 14,
+      fontWeight: FontWeight.w600
+  );
+  static final couponHistoryTextStyleBigger = baseTextStyle.copyWith(
+      color: Colors.blueAccent,
+      fontSize: 18,
       fontWeight: FontWeight.w600
   );
   

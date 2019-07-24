@@ -24,6 +24,7 @@ class _EditCouponState extends State<EditCoupon> {
   int points;
   bool isUsed = false;
   String ownedBy;
+  String code;
 //  String usedBy;
 
   GlobalKey<FormState> _key = new GlobalKey();
@@ -45,6 +46,7 @@ class _EditCouponState extends State<EditCoupon> {
         'description': description,
         'points': points,
         'isUsed': isUsed,
+        'code': code,
       }).then(_navigateToMerchantHomeView());
     }
   }
@@ -78,6 +80,16 @@ class _EditCouponState extends State<EditCoupon> {
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: TextFormField(
+                    initialValue: widget.coupon.code,
+                    onSaved: (input) => code = input,
+                    decoration: new InputDecoration(
+                        icon: Icon(Icons.title),
+                        hintText: "Coupon Name"),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextFormField(
                     initialValue: widget.coupon.description,
                     onSaved: (input) => description = input,
                     decoration: new InputDecoration(
@@ -85,6 +97,7 @@ class _EditCouponState extends State<EditCoupon> {
                         hintText: "Coupon Description"),
                   ),
                 ),
+
                 Padding(
                   padding: const EdgeInsets.all(16.0),
                   child: TextFormField(
