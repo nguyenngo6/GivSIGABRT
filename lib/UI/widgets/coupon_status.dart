@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-enum CouponStatuses { Active, Used }
+enum CouponStatuses { Active, Used, Pending }
 
 class CouponStatus extends StatelessWidget {
-  final bool status;
+  final int status;
 
   CouponStatus({@required this.status});
 
@@ -23,10 +23,13 @@ class CouponStatus extends StatelessWidget {
 
   CouponStatuses _getCouponStatus() {
     switch (status) {
-      case false:
+      case 1:
         return CouponStatuses.Active;
-      case true:
+      case 2:
+        return CouponStatuses.Pending;
+      case 3:
         return CouponStatuses.Used;
+        
     }
 
     return CouponStatuses.Active;
@@ -38,6 +41,8 @@ class CouponStatus extends StatelessWidget {
         return Colors.green;
       case CouponStatuses.Used:
         return Colors.red;
+      case CouponStatuses.Pending:
+        return Colors.blue;
     }
 
     return null;

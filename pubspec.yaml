@@ -30,6 +30,8 @@ dependencies:
   qr_flutter: ^2.0.0
   firebase_storage:
   image_picker:
+  firebase_messaging: ^5.0.2
+  overlay_support: ^1.0.0
 
 
   # The following adds the Cupertino Icons font to your application.

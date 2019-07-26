@@ -18,6 +18,7 @@ import 'package:giver_app/scoped_model/merchant_profile_view_model.dart';
 import 'package:giver_app/UI/views/base_view.dart';
 import 'package:giver_app/enum/view_state.dart';
 import 'package:giver_app/UI/widgets/coupon_item.dart';
+import 'package:giver_app/services/merchant_notification_hander.dart';
 
 import 'add_coupon_page.dart';
 import 'edit_coupon_page.dart';
@@ -36,10 +37,12 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
   TextEditingController editingController = TextEditingController();
   int _selectedIndex = 0;
   PageController _pageController;
+  
   @override
   void initState() {
     super.initState();
     _pageController = new PageController();
+    
   }
 
   @override
@@ -286,6 +289,7 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
 
   @override
   Widget build(BuildContext context) {
+   
     return BaseView<UserHomeViewModel>(
         builder: (context, child, model) => Scaffold(
           appBar: AppBar(

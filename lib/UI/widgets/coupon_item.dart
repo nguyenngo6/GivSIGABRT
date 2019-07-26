@@ -44,12 +44,16 @@ class _CouponItemState extends State<CouponItem> {
     );
   }
 
+
   Widget get _redeemButton => Container(
       width: 200,
       child: Column(children: <Widget>[
-        !widget.couponItem.isUsed
-            ? FlatButton(
-                child: Text('Use Coupon'), onPressed: () => widget.onRedeemed)
+        (widget.couponItem.usedBy.isEmpty)
+            ? FlatButton( 
+                child: Text('Use Coupon'), onPressed: () {setState(() {
+                  widget.onRedeemed; 
+                });}
+                )
             : Container(),
         Expanded(
             child: Align(
@@ -67,7 +71,7 @@ class _CouponItemState extends State<CouponItem> {
             print('taptap');
             setState(() {
               if (!_showDetails) {
-                _height = 190;
+                _height = 190;  
               } else {
                 _height = 70.0;
               }
@@ -88,12 +92,12 @@ class _CouponItemState extends State<CouponItem> {
                     ? Padding(
                         padding: const EdgeInsets.symmetric(
                             vertical: descriptionPadding),
-                        child: Text(widget.couponItem.description),
+                        child: Text(widget.couponItem.ownedBy),
                       )
                     : Container(),
                 Expanded(
                     child: Align(
-                        child: CouponStatus(status: widget.couponItem.isUsed),
+                        child: CouponStatus(status: ( widget.couponItem.isUsed ? 3 : widget.couponItem.isPending ? 2 : 1)),
                         alignment: Alignment.bottomLeft))
               ],
             ),

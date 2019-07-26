@@ -3,6 +3,7 @@ import 'package:giver_app/UI/views/qr_scan_view.dart';
 import 'package:giver_app/UI/widgets/coupon_info_item.dart';
 import 'package:giver_app/UI/widgets/qr_image.dart';
 import 'package:giver_app/service_locator.dart';
+import 'package:giver_app/services/notification_handler.dart';
 import 'UI/views/sign_in_page.dart';
 
 void main(){
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
         // application has a blue toolbar. Then, without quitting the app, try
         // changing the primarySwatch below to Colors.green and then invoke
         // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
+        // or simply save your changes to "hot reloatoand" in a Flutter IDE).
         // Notice that the counter didn't reset back to zero; the application
         // is not restarted. 
         primarySwatch: Colors.blue,

@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/UI/shared/ui_reducers.dart';
+import 'package:giver_app/UI/widgets/coupon_status.dart';
 import 'package:giver_app/UI/widgets/merchant_image.dart';
 import 'package:giver_app/UI/widgets/merchant_info.dart';
-
 import 'package:giver_app/UI/widgets/simple_toolbar.dart';
+import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/model/user.dart';
 import 'package:giver_app/scoped_model/merchant_profile_view_model.dart';
 import 'package:giver_app/UI/views/base_view.dart';
 import 'package:giver_app/enum/view_state.dart';
-import 'package:giver_app/UI/widgets/coupon_item.dart';
 
 class MerchantProfileView extends StatelessWidget {
-
   const MerchantProfileView({@required this.merchant, @required this.customer});
   final User customer;
   final User merchant;
@@ -20,41 +19,41 @@ class MerchantProfileView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseView<MerchantProfileViewModel>(
-        builder: (context, child, model) => 
-        Stack(
-          children: <Widget>[
-            MerchantImage(merchant: merchant,),
-          Scaffold(
-            backgroundColor: Colors.transparent,
-            appBar: AppBar(
-              elevation: 0,
-              backgroundColor: Colors.transparent,
-              leading: FlatButton(
-                  onPressed: () => Navigator.pop(context),
-                  child: Icon(Icons.arrow_back, color: Colors.white,)),
-            ),
-           
-            body: Column(
-              children: <Widget>[
-                Container(
-                  height: 70,
-                ),
-
-                Container(
-                  height: 100,
-                  child: MerchantInfo(
-                    merchant: merchant,
+        builder: (context, child, model) =>
+            Stack(overflow: Overflow.clip, children: <Widget>[
+              MerchantImage(
+                merchant: merchant,
+              ),
+              Scaffold(
+                  backgroundColor: Colors.transparent,
+                  appBar: AppBar(
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                    leading: FlatButton(
+                        onPressed: () => Navigator.pop(context),
+                        child: Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
+                        )),
                   ),
-                ),
-                Container(
-                    height:
-                        screenHeight(context, decreasedBy: 170 + toolbarHeight),
-                    child: _getBodyUi(context, model)),
-              ],
-            )
-            )]
-            )
-            );
+                  body: Column(
+                    children: <Widget>[
+                      Container(
+                        height: 70,
+                      ),
+                      Container(
+                        height: 100,
+                        child: MerchantInfo(
+                          merchant: merchant,
+                        ),
+                      ),
+                      Container(
+                          height: screenHeight(context,
+                              decreasedBy: 195.143 + toolbarHeight),
+                          child: _getBodyUi(context, model)),
+                    ],
+                  ))
+            ]));
   }
 
   Widget _getBodyUi(BuildContext context, MerchantProfileViewModel model) {
@@ -73,19 +72,15 @@ class MerchantProfileView extends StatelessWidget {
   }
 
   Widget _getListUi(MerchantProfileViewModel model) {
+    List<Coupon> coupons = model.getCouponsByMerchantID(merchant.id);
     return ListView.builder(
-        itemCount: model.getCouponsByMerchantID(merchant.id).length,
+        itemCount: coupons.length,
         itemBuilder: (context, itemIndex) {
-          var couponItem = model.getCouponsByMerchantID(merchant.id)[itemIndex];
-          String couponID = couponItem.id;
-          return CouponItem(
-              customer: customer,
-              couponItem: couponItem,
-              onRedeemed: () => 
-                model.redeemCoupon(couponID, customer.id)
-              );
+          var couponItem = coupons[itemIndex];
+          return _getCouponItem(model, couponItem);
         });
   }
+
   //du ma met fvai lon
   Widget _getLoadingUi(BuildContext context) {
     return Center(
@@ -137,5 +132,84 @@ class MerchantProfileView extends StatelessWidget {
                     : Container()
               ],
             )));
+  }
+
+  Widget _getCouponItem(MerchantProfileViewModel model, Coupon couponItem) {
+    double _height = 70.0;
+    const descriptionPadding = 15.0;
+    bool _showDetails = false;
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 200),
+      curve: Curves.easeIn,
+      width: double.infinity,
+      height: _height,
+      margin: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      padding: EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(5.0), color: Colors.grey),
+      child: Row(
+        children: <Widget>[
+          Expanded(
+            child: GestureDetector(
+              onTap: () {
+                print('taptap');
+
+                if (!_showDetails) {
+                  _height = 190;
+                } else {
+                  _height = 70.0;
+                }
+              },
+              child: Container(
+                color: Colors.grey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      couponItem.description,
+                      maxLines: 1,
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    _showDetails
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: descriptionPadding),
+                            child: Text(couponItem.ownedBy),
+                          )
+                        : Container(),
+                    Expanded(
+                        child: Align(
+                            child: CouponStatus(
+                                status: (couponItem.isUsed
+                                    ? 3
+                                    : couponItem.isPending ? 2 : 1)),
+                            alignment: Alignment.bottomLeft))
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Container(
+              width: 200,
+              child: Column(children: <Widget>[
+                (couponItem.usedBy.isEmpty)
+                    ? FlatButton(
+                        child: Text('Use Coupon'),
+                        onPressed: () =>
+                            model.redeemCoupon(couponItem.id, customer.id))
+                    : Container(),
+                Expanded(
+                    child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Text('Today',
+                            style: TextStyle(
+                                color: Colors.green,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 9))))
+              ])),
+        ],
+      ),
+    );
   }
 }
