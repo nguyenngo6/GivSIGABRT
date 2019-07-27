@@ -65,10 +65,36 @@ class FirebaseService {
         .updateData({'isUsed': true});
   }
 
+  Future<bool> donate({@required String charityId, @required String uid, @required int donatePoints})async{
+    DocumentReference userReference =
+    await Firestore.instance.collection('users').document(uid);
+
+    Firestore.instance.runTransaction((Transaction transaction) async {
+      DocumentSnapshot snapshot = await transaction.get(userReference);
+      await transaction
+          .update(snapshot.reference, {"points": snapshot['points'] - donatePoints});
+    });
+
+    DocumentReference charityReference =
+    await Firestore.instance.collection('charities').document(charityId);
+
+    Firestore.instance.runTransaction((Transaction transaction) async {
+      DocumentSnapshot snapshot = await transaction.get(charityReference);
+      await transaction
+          .update(snapshot.reference, {"credits": snapshot['credits'] + donatePoints});
+    });
+
+    return true;
+
+
+  }
+
   void _couponAdded(QuerySnapshot snapshot) {
     var coupon = _getCouponFromSnapshot(snapshot);
     _couponController.add(coupon);
   }
+
+
 
   List<Coupon> _getCouponFromSnapshot(QuerySnapshot snapshot) {
     var couponList = List<Coupon>();

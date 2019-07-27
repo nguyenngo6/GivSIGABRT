@@ -34,9 +34,9 @@ class _CharityListState extends State<CharityList> {
           child: Scaffold(
             body: ListView.builder(
               itemCount: charityList.length,
-              itemBuilder: (contect, rowNumber) {
+              itemBuilder: (context, rowNumber) {
                 var charityItem = charityList[rowNumber];
-                return CharityItem(
+                return CharityItem(context: context, model: widget.model,
                   customer: widget.customer,
                   charity: charityItem,
                 );

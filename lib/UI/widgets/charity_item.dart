@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:giver_app/model/charity.dart';
 import 'package:giver_app/model/user.dart';
+import 'package:giver_app/scoped_model/user_home_view_model.dart';
 import 'charity_info.dart';
 
 class CharityItem extends StatelessWidget {
+  final BuildContext context;
+  final UserHomeViewModel model;
   final User customer;
   final Charity charity;
 
-  CharityItem({@required this.customer, @required this.charity});
+  CharityItem({@required this.context,@required this.model,@required this.customer, @required this.charity});
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,7 +24,7 @@ class CharityItem extends StatelessWidget {
                   onTap: () => Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => CharityInfo(
+                          builder: (context) => CharityInfo(context: context, model: model,
                               customer: customer, charity: charity))),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch, // add this

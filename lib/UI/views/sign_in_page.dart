@@ -26,15 +26,15 @@ class _SignInPageState extends State<SignInPage> {
     return BusyOverlay(
         show: this._state == ViewState.Busy,
         child: Scaffold(
-          appBar: new AppBar(),
-          body: new Container(
-              padding: new EdgeInsets.all(16.0),
-              child: Form(
-                  key: _formKey,
-                  child: SingleChildScrollView(
-                    child: Stack(
-                      children: <Widget>[
-                        Column(
+          appBar: AppBar(),
+          body: Container(
+              padding: EdgeInsets.all(16.0),
+              child: SingleChildScrollView(
+                child: Stack(
+                  children: <Widget>[
+                    Form(
+                        key: _formKey,
+                        child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
@@ -49,15 +49,14 @@ class _SignInPageState extends State<SignInPage> {
                               autofocus: true,
 //                style: style,
                               decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.fromLTRB(
-                                      20.0, 15.0, 20.0, 15.0),
+                                  contentPadding:
+                                      EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                                   hintText: "Email",
                                   border: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(32.0))),
+                                      borderRadius: BorderRadius.circular(32.0))),
                               onSaved: (input) => _email = input,
                             ),
-                            new Container(height: 15.0),
+                            new Container(height: 5.0),
                             TextFormField(
                               validator: (input) {
                                 if (input.isEmpty) {
@@ -70,17 +69,16 @@ class _SignInPageState extends State<SignInPage> {
                               },
                               autofocus: true,
                               decoration: InputDecoration(
-                                  contentPadding: EdgeInsets.fromLTRB(
-                                      20.0, 15.0, 20.0, 15.0),
+                                  contentPadding:
+                                      EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
                                   hintText: "Password",
                                   border: OutlineInputBorder(
-                                      borderRadius:
-                                          BorderRadius.circular(32.0))),
+                                      borderRadius: BorderRadius.circular(32.0))),
                               onSaved: (input) => _password = input,
                               obscureText: true,
                             ),
-                            new Container(
-                                height: 15.0,
+                            Container(
+                                height: 5.0,
                                 child: Text(
                                   _errorMessage,
                                   style: TextStyle(color: Colors.red),
@@ -110,10 +108,10 @@ class _SignInPageState extends State<SignInPage> {
                               onPressed: () {},
                             ),
                           ],
-                        )
-                      ],
-                    ),
-                  ))),
+                        ))
+                  ],
+                ),
+              )),
         ));
   }
 
