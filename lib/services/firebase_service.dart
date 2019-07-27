@@ -181,37 +181,33 @@ class FirebaseService {
   }
   
   Future<bool> editPhone(String newPhone, String uid) async {
-    DocumentReference reference =
-    await Firestore.instance.collection('users').document(uid);
-    Firestore.instance.runTransaction((Transaction transaction) async {
-      DocumentSnapshot snapshot = await transaction.get(reference);
-    var result =  await transaction
-          .update(snapshot.reference, {"phone": newPhone});
-    });
+    await Firestore.instance
+        .collection("users")
+        .document(uid)
+        .updateData({'phone': newPhone});
     return true;
   }
 
   Future<bool> editImageUrl(String newImageUrl, String uid) async {
-    DocumentReference reference =
-    await Firestore.instance.collection('users').document(uid);
-    Firestore.instance.runTransaction((Transaction transaction) async {
-      DocumentSnapshot snapshot = await transaction.get(reference);
-
-      await transaction
-          .update(snapshot.reference, {"imageUrl": newImageUrl});
-    });
+    await Firestore.instance
+        .collection("users")
+        .document(uid)
+        .updateData({'imageUrl': newImageUrl});
     return true;
   }
 
 
   Future<bool> editUsername(String newUsername, String uid) async {
-    DocumentReference reference = await Firestore.instance.collection('users').document(uid);
-    Firestore.instance.runTransaction((Transaction transaction) async {
-      DocumentSnapshot snapshot = await transaction.get(reference);
-
-      await transaction
-          .update(snapshot.reference, {"username": newUsername});
-    });
+    await Firestore.instance
+        .collection("users")
+        .document(uid)
+        .updateData({'username': newUsername});
+//    DocumentReference reference = await Firestore.instance.collection('users').document(uid);
+//    Firestore.instance.runTransaction((Transaction transaction) async {
+//      DocumentSnapshot snapshot = await transaction.get(reference);
+//      await transaction
+//          .update(snapshot.reference, {"username": newUsername});
+//    });
     return true;
   }
 }

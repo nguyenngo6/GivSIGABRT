@@ -55,7 +55,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
           .ref()
           .child('profileImages/' + widget.user.id);
 
-      if (firebaseStorageRef != null) {
+      if (firebaseStorageRef == null) {
         print('no old image to delete');
         updateNewImage(firebaseStorageRef, context, model);
       } else {
@@ -70,8 +70,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
         }).whenComplete(() {
           print('comleted deleting old image');
         }).then((_) => updateNewImage(firebaseStorageRef, context, model));
-
-        print('result deleting is: $result');
+        print('result add new Image is: $result');
       }
     }
 
@@ -285,16 +284,11 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
 
     return BaseView<CustomerProfileViewModel>(
       builder: (context, child, model) => BusyOverlay(
-        show: model.state == ViewState.Busy,
+        show: model.state == ViewState.Busy || model.state == ViewState.EditImageUrl,
         child: Scaffold(
           appBar: AppBar(
             leading: FlatButton(
                 onPressed: () => Navigator.pop(context),
-//                onPressed: () => Navigator.pushReplacement(
-//                    context,
-//                    MaterialPageRoute(
-//                        builder: (context) =>
-//                            CustomerHomeView(user: widget.user))),
                 child: Icon(Icons.backspace)),
             title: Text("Edit Profile Page"),
             actions: <Widget>[
