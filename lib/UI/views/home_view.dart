@@ -18,8 +18,8 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return BaseView<HomeViewModel>(
-      builder: (context, child, model) => Scaffold(
-        body: _getbody(model),
+      builder: (context, child, model) => Container(
+        child: _getbody(model),
       ),
     );
   }

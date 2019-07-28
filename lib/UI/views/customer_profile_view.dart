@@ -226,46 +226,45 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
     Widget _getCustomerProfile(
         BuildContext context, CustomerProfileViewModel model) {
       User currentUser = model.getCurrentUser(model.customers, widget.user.id);
-      return SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Container(
-              height: 20.0,
-            ),
-            _buildAvatar(context, model, currentUser.imageUrl),
-            ListTile(
-              leading: Icon(Icons.people),
-              title: model.state == ViewState.EditUsername
-                  ? TextFormField(
-                      onFieldSubmitted: (newInput) => onSubmit(newInput, currentUser.username, model),
-                      initialValue: currentUser.username,
-                    )
-                  : Text(currentUser.username,
-                      style: TextStyle(
-                          fontSize: 20, fontWeight: FontWeight.bold)),
-              trailing: FlatButton(
-                  onPressed: () => model.setState(ViewState.EditUsername),
-                  child: Icon(Icons.edit)),
-            ),
-            Divider(),
-            ListTile(
-              leading: Icon(Icons.email),
-              title: Text(currentUser.email),
-            ),
-            Divider(),
-            ListTile(
-              leading: Icon(Icons.phone),
-              title: model.state != ViewState.EditPhone
-                  ? Text(currentUser.phone)
-                  : TextFormField(
-                      onFieldSubmitted: (newInput) => onSubmit(newInput, currentUser.phone, model),
-                      initialValue: currentUser.phone,
-                    ),
-              trailing: FlatButton(
-                  onPressed: () => model.setState(ViewState.EditPhone),
-                  child: Icon(Icons.edit)),
-            ),
-          ],
+      return Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
+              children: <Widget>[
+                _buildAvatar(context, model, currentUser.imageUrl),
+                ListTile(
+                  leading: Icon(Icons.people),
+                  title: model.state == ViewState.EditUsername
+                      ? TextFormField(
+                          onFieldSubmitted: (newInput) => onSubmit(newInput, currentUser.username, model),
+                          initialValue: currentUser.username,
+                        )
+                      : Text(currentUser.username,
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
+                  trailing: FlatButton(
+                      onPressed: () => model.setState(ViewState.EditUsername),
+                      child: Icon(Icons.edit)),
+                ),
+                Divider(),
+                ListTile(
+                  leading: Icon(Icons.email),
+                  title: Text(currentUser.email),
+                ),
+                Divider(),
+                ListTile(
+                  leading: Icon(Icons.phone),
+                  title: model.state != ViewState.EditPhone
+                      ? Text(currentUser.phone)
+                      : TextFormField(
+                          onFieldSubmitted: (newInput) => onSubmit(newInput, currentUser.phone, model),
+                          initialValue: currentUser.phone,
+                        ),
+                  trailing: FlatButton(
+                      onPressed: () => model.setState(ViewState.EditPhone),
+                      child: Icon(Icons.edit)),
+                ),
+              ],
+          ),
         ),
       );
     }
