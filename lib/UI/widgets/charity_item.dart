@@ -25,7 +25,7 @@ class CharityItem extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) => CharityInfo(context: context, model: model,
-                              customer: customer, charity: charity))),
+                              customer: customer, charityId: charity.id))),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch, // add this
                     children: <Widget>[

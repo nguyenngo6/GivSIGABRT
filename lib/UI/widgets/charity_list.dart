@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../model/user.dart';
 import '../../scoped_model/user_home_view_model.dart';
 import 'charity_item.dart';

@@ -2,10 +2,15 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/model/charity.dart';
+import 'package:giver_app/model/donation.dart';
 import 'package:giver_app/model/user.dart';
 import 'package:meta/meta.dart';
 
 class FirebaseService {
+
+  final StreamController<List<Donation>> _donationController =
+      StreamController<List<Donation>>.broadcast();
+
   final StreamController<List<User>> _userController =
       StreamController<List<User>>.broadcast();
 
@@ -24,6 +29,13 @@ class FirebaseService {
   FirebaseService() {
     Firestore.instance.collection('users').snapshots().listen(_userAdded);
 
+    Firestore.instance
+        .collection('bank')
+        .document('creditBank')
+        .collection('donate')
+        .snapshots()
+        .listen(_donationAdded);
+
     Firestore.instance.collection('coupons').snapshots().listen(_couponAdded);
 
     Firestore.instance
@@ -31,6 +43,8 @@ class FirebaseService {
         .snapshots()
         .listen(_charityAdded);
   }
+
+  Stream<List<Donation>> get donations => _donationController.stream;
 
   Stream<List<Coupon>> get coupons => _couponController.stream;
 
@@ -46,17 +60,12 @@ class FirebaseService {
 //    Firestore.instance.collection('users').document(uid).snapshots().listen(_customerInfoAdded);
 //  }
 
-
-  void moveCouponToPending(String couponID, String customerID){
-    Firestore.instance
-        .collection("coupons")
-        .document(couponID)
-        .updateData({
-          'isPending': true,
-          'usedBy': customerID,
-        });
+  void moveCouponToPending(String couponID, String customerID) {
+    Firestore.instance.collection("coupons").document(couponID).updateData({
+      'isPending': true,
+      'usedBy': customerID,
+    });
   }
-
 
   void redeemCoupon({@required String couponID}) {
     Firestore.instance
@@ -65,28 +74,44 @@ class FirebaseService {
         .updateData({'isUsed': true});
   }
 
-  Future<bool> donate({@required String charityId, @required String uid, @required int donatePoints})async{
+  Future<bool> donate(
+      {@required String charityId,
+      @required String uid,
+      @required int donatePoints}) async {
     DocumentReference userReference =
-    await Firestore.instance.collection('users').document(uid);
+        await Firestore.instance.collection('users').document(uid);
 
     Firestore.instance.runTransaction((Transaction transaction) async {
       DocumentSnapshot snapshot = await transaction.get(userReference);
-      await transaction
-          .update(snapshot.reference, {"points": snapshot['points'] - donatePoints});
+      await transaction.update(
+          snapshot.reference, {"points": snapshot['points'] - donatePoints});
     });
 
     DocumentReference charityReference =
-    await Firestore.instance.collection('charities').document(charityId);
+        await Firestore.instance.collection('charities').document(charityId);
 
     Firestore.instance.runTransaction((Transaction transaction) async {
       DocumentSnapshot snapshot = await transaction.get(charityReference);
-      await transaction
-          .update(snapshot.reference, {"credits": snapshot['credits'] + donatePoints});
+      await transaction.update(
+          snapshot.reference, {"credits": snapshot['credits'] + donatePoints});
     });
 
+    await Firestore.instance
+        .collection('bank')
+        .document('creditBank')
+        .collection('donate')
+        .add({
+      'credits': donatePoints,
+      'charityId': charityId,
+      'customerId': uid,
+      'time': DateTime.now().millisecondsSinceEpoch,
+    });
     return true;
+  }
 
-
+  void _donationAdded(QuerySnapshot snapshot) {
+    var donate = _getDonateFromSnapshot(snapshot);
+    _donationController.add(donate);
   }
 
   void _couponAdded(QuerySnapshot snapshot) {
@@ -94,7 +119,19 @@ class FirebaseService {
     _couponController.add(coupon);
   }
 
+  List<Donation> _getDonateFromSnapshot(QuerySnapshot snapshot) {
+    var donateHistory = List<Donation>();
+    var documents = snapshot.documents;
+    if (documents.length > 0) {
+      for (var document in documents) {
+        var documentData = document.data;
+        documentData['id'] = document.documentID;
+        donateHistory.add(Donation.fromData(documentData));
+      }
+    }
 
+    return donateHistory;
+  }
 
   List<Coupon> _getCouponFromSnapshot(QuerySnapshot snapshot) {
     var couponList = List<Coupon>();
@@ -179,7 +216,7 @@ class FirebaseService {
     }
     return charityList;
   }
-  
+
   Future<bool> editPhone(String newPhone, String uid) async {
     await Firestore.instance
         .collection("users")
@@ -195,7 +232,6 @@ class FirebaseService {
         .updateData({'imageUrl': newImageUrl});
     return true;
   }
-
 
   Future<bool> editUsername(String newUsername, String uid) async {
     await Firestore.instance

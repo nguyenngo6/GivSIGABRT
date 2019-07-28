@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:giver_app/model/charity.dart';
+import 'package:giver_app/UI/views/base_view.dart';
 import 'package:giver_app/model/user.dart';
 import 'package:giver_app/scoped_model/user_home_view_model.dart';
 
@@ -7,7 +7,6 @@ bool isNumeric(String s) {
   if (s == null) {
     return false;
   }
-
   // TODO according to DartDoc num.parse() includes both (double.parse and int.parse)
   return double.parse(s, (e) => null) != null ||
       int.parse(s, onError: (e) => null) != null;
@@ -17,13 +16,13 @@ class CharityInfo extends StatefulWidget {
   final BuildContext context;
   final UserHomeViewModel model;
   final User customer;
-  final Charity charity;
+  final String charityId;
 
   CharityInfo(
       {@required this.context,
       @required this.model,
       @required this.customer,
-      @required this.charity});
+      @required this.charityId});
   @override
   _CharityInfoState createState() => _CharityInfoState();
 }
@@ -45,7 +44,7 @@ class _CharityInfoState extends State<CharityInfo> {
     }
 
     var currentCharity =
-        widget.model.getCharityById(widget.model.charities, widget.charity.id);
+        widget.model.getCharityById(widget.model.charities, widget.charityId);
     final topContentText = Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
@@ -207,7 +206,8 @@ class _CharityInfoState extends State<CharityInfo> {
       ),
     );
 
-    return Scaffold(
+    return BaseView<UserHomeViewModel>(
+        builder: (context, child, model) => Scaffold(
       body: Column(
         children: <Widget>[
           topContent,
@@ -217,6 +217,6 @@ class _CharityInfoState extends State<CharityInfo> {
           bottomContent
         ],
       ),
-    );
+    ));
   }
 }
