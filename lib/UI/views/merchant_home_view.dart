@@ -1,4 +1,7 @@
+import 'dart:io';
+import 'package:flushbar/flushbar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/UI/Views/sign_in_page.dart';
@@ -37,12 +40,13 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
   TextEditingController editingController = TextEditingController();
   int _selectedIndex = 0;
   PageController _pageController;
+
   
   @override
   void initState() {
     super.initState();
     _pageController = new PageController();
-    
+   
   }
 
   @override
@@ -288,9 +292,9 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
   }
 
   @override
-  Widget build(BuildContext context) {
-   
+  Widget build(BuildContext context) { 
     return BaseView<UserHomeViewModel>(
+        user: widget.user,
         builder: (context, child, model) => Scaffold(
           appBar: AppBar(
             title: Center(

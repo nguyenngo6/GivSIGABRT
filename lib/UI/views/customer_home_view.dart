@@ -46,6 +46,7 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
   @override
   Widget build(BuildContext context) {
     return BaseView<UserHomeViewModel>(
+        user: widget.user,
         builder: (context, child, model) => BusyOverlay(
           show: model.state == ViewState.Busy,
           child: MaterialApp(

@@ -58,6 +58,12 @@ class FirebaseService {
 
    
   }
+  void denyCoupon({@required String couponID}){
+    Firestore.instance
+        .collection("coupons")
+        .document(couponID)
+        .updateData({'usedBy': ""});
+  }
 
 
   void redeemCoupon({@required String couponID}) {

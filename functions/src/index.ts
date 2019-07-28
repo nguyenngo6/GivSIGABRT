@@ -20,29 +20,84 @@ export const user = functions.https.onRequest((request, response) => {
     })
 });
 
-export const sendToDevice = functions.firestore
-  .document('coupons/12345')
-  .onCreate(async snapshot => {
+export const sendAprrovalNotification = functions.firestore
+  .document('coupons/{couponID}')
+  .onUpdate(async snapshot => {
+    const old = snapshot.before.data()!;
+    const coupon = snapshot.after.data()!;
 
-
-    const coupon = snapshot.data()!;
-
-    const querySnapshot = await db
+    if (old.isPending == false && coupon.isPending == true){
+      const querySnapshot = await db
       .collection('users')
       .doc(coupon.ownedBy)
       .collection('tokens')
       .get();
 
-    const tokens = querySnapshot.docs.map(snap => snap.id);
+      
+      const documentSnapshot = await db
+        .collection('users')
+        .doc(coupon.usedBy).get();
+    
+      const customer = documentSnapshot.data()!;
 
-    const payload: admin.messaging.MessagingPayload = {
-      notification: {
-        title: 'New Coupon!',
-        body: `you created a ${coupon.code} coupon`,
-        click_action: 'FLUTTER_NOTIFICATION_CLICK'
-      }
+      const tokens = querySnapshot.docs.map(snap => snap.id);
+      
+
+      const payload: admin.messaging.MessagingPayload = {
+        notification: {
+          title: 'Coupon Aprroval Needed',
+          body: `Coupon: ${coupon.code}\nUsed by: ${customer.username}`,
+          click_action: 'FLUTTER_NOTIFICATION_CLICK'
+        },
+        data :{
+          cId: `${snapshot.before.id}`,
+          tag: `approval`,
+        }
+      };
+      return fcm.sendToDevice(tokens, payload);
     };
-    console.log(coupon.ownedBy);
 
-    return fcm.sendToDevice(tokens, payload);
+    return null;
+    
+
+  });
+
+
+export const sendCouponNotification = functions.firestore
+  .document('coupons/{couponID}')
+  .onUpdate(async snapshot => {
+
+    const old = snapshot.before.data()!;
+    const coupon = snapshot.after.data()!;
+
+    if (old.isUsed == false && coupon.isUsed == true){
+      const querySnapshot = await db
+        .collection('users')
+        .doc(coupon.usedBy)
+        .collection('tokens')
+        .get();
+
+      const documentSnapshot = await db
+        .collection('users')
+        .doc(coupon.ownedBy).get();
+    
+      const merchant = documentSnapshot.data()!;
+     
+      const tokens = querySnapshot.docs.map(snap => snap.id);
+      
+      const payload: admin.messaging.MessagingPayload = {
+        notification: {
+          title: 'Coupon Aprroved',
+          body: `The coupon ${coupon.code} has been approved by ${merchant.username}`,
+          click_action: 'FLUTTER_NOTIFICATION_CLICK'
+        },
+        data :{
+          cId: `${snapshot.before.id}`,
+          tag: `updateNotify`,
+        }
+      };
+      return fcm.sendToDevice(tokens, payload);
+    };
+
+    return null;
   });
