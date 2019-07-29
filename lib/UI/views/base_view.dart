@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -6,7 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:giver_app/model/user.dart';
 import 'package:giver_app/services/firebase_service.dart';
 import 'package:scoped_model/scoped_model.dart';
-
+import 'package:cloud_functions/cloud_functions.dart';
 import '../../service_locator.dart';
 
 class BaseView<T extends Model> extends StatefulWidget {
@@ -28,7 +30,6 @@ class BaseView<T extends Model> extends StatefulWidget {
 class _BaseViewState<T extends Model> extends State<BaseView<T>> {
   T _model = locator<T>();
   final FirebaseMessaging _fcm = FirebaseMessaging();
-  FirebaseService _firebaseService = locator<FirebaseService>();
   Flushbar flush;
   bool _wasButtonClicked;
 
@@ -38,6 +39,7 @@ class _BaseViewState<T extends Model> extends State<BaseView<T>> {
       widget.onModelReady(_model);
     }
     super.initState();
+    
     _fcm.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage : $message");
@@ -66,12 +68,13 @@ class _BaseViewState<T extends Model> extends State<BaseView<T>> {
           flush = Flushbar<bool>(
             title: message['notification']['title'],
             message: message['notification']['body'],
-            duration: Duration(seconds: 5),
+            duration: Duration(seconds: 4),
             mainButton: FlatButton(
               child: Text('Approve', style: TextStyle(color: Colors.amber)),
               onPressed: () {
-                _redeem(message['data']['cId']);
                 flush.dismiss(true);
+                _redeem(message['data']['cId']);
+                
               },
             ),
           )..show(context).then((result) {
@@ -103,14 +106,12 @@ class _BaseViewState<T extends Model> extends State<BaseView<T>> {
     );
   }
 
-  _deny(String id) {
-    _firebaseService.redeemCoupon(couponID: id);
-    Navigator.of(context).pop();
-  }
+  
 
-  _redeem(String id) {
-    _firebaseService.redeemCoupon(couponID: id);
-    Navigator.of(context).pop();
+  _redeem(String id) async {
+    final HttpsCallable callable = CloudFunctions.instance.getHttpsCallable(functionName: 'approveCoupon');
+    dynamic isSuccess = await callable.call(<String, dynamic> {'couponID' : id});
+    
   }
 
   @override
@@ -120,9 +121,30 @@ class _BaseViewState<T extends Model> extends State<BaseView<T>> {
         child: ScopedModelDescendant<T>(
             child: Container(color: Colors.red), builder: widget._builder));
   }
+
+  _saveDeviceToken() async {
+    // Get the current user
+    
+    // FirebaseUser user = await _auth.currentUser();
+
+    // Get the token for this device
+    String fcmToken = await _fcm.getToken();
+
+    // Save it to Firestore
+    if (fcmToken != null) {
+      var tokens = Firestore.instance
+          .collection('users')
+          .document(widget.user.id)
+          .collection('tokens')
+          .document(fcmToken);
+
+      await tokens.setData({
+        'token': fcmToken,
+        'createdAt': FieldValue.serverTimestamp(), // optional
+        'platform': Platform.operatingSystem // optional
+      });
+    }
+  }
 }
 
 
-class Message {
-  
-}

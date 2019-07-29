@@ -11,14 +11,6 @@ admin.initializeApp(functions.config().firebase);
 const db = admin.firestore();
 const fcm = admin.messaging();
 
-export const user = functions.https.onRequest((request, response) => {
-    const userID = request.path;
-    admin.firestore().collection('users').doc(userID).get().then(result => {
-        response.send(result.data());
-    }).catch(error => {
-        response.send(error);
-    })
-});
 
 export const sendAprrovalNotification = functions.firestore
   .document('coupons/{couponID}')
@@ -26,22 +18,20 @@ export const sendAprrovalNotification = functions.firestore
     const old = snapshot.before.data()!;
     const coupon = snapshot.after.data()!;
 
-    if (old.isPending == false && coupon.isPending == true){
+    if (old.isPending == false && coupon.isPending == true) {
       const querySnapshot = await db
-      .collection('users')
-      .doc(coupon.ownedBy)
-      .collection('tokens')
-      .get();
+        .collection('users')
+        .doc(coupon.ownedBy)
+        .collection('tokens')
+        .get();
 
-      
       const documentSnapshot = await db
         .collection('users')
         .doc(coupon.usedBy).get();
-    
+
       const customer = documentSnapshot.data()!;
 
       const tokens = querySnapshot.docs.map(snap => snap.id);
-      
 
       const payload: admin.messaging.MessagingPayload = {
         notification: {
@@ -49,7 +39,7 @@ export const sendAprrovalNotification = functions.firestore
           body: `Coupon: ${coupon.code}\nUsed by: ${customer.username}`,
           click_action: 'FLUTTER_NOTIFICATION_CLICK'
         },
-        data :{
+        data: {
           cId: `${snapshot.before.id}`,
           tag: `approval`,
         }
@@ -58,7 +48,7 @@ export const sendAprrovalNotification = functions.firestore
     };
 
     return null;
-    
+
 
   });
 
@@ -70,7 +60,7 @@ export const sendCouponNotification = functions.firestore
     const old = snapshot.before.data()!;
     const coupon = snapshot.after.data()!;
 
-    if (old.isUsed == false && coupon.isUsed == true){
+    if (old.isUsed == false && coupon.isUsed == true) {
       const querySnapshot = await db
         .collection('users')
         .doc(coupon.usedBy)
@@ -80,24 +70,43 @@ export const sendCouponNotification = functions.firestore
       const documentSnapshot = await db
         .collection('users')
         .doc(coupon.ownedBy).get();
-    
+
       const merchant = documentSnapshot.data()!;
-     
+
       const tokens = querySnapshot.docs.map(snap => snap.id);
-      
+
       const payload: admin.messaging.MessagingPayload = {
         notification: {
           title: 'Coupon Aprroved',
           body: `The coupon ${coupon.code} has been approved by ${merchant.username}`,
           click_action: 'FLUTTER_NOTIFICATION_CLICK'
         },
-        data :{
+        data: {
           cId: `${snapshot.before.id}`,
           tag: `updateNotify`,
+          
         }
+        
       };
-      return fcm.sendToDevice(tokens, payload);
-    };
+      tokens.forEach(function (value)  {
+        return fcm.sendToDevice(value, payload);
+      });
+    };  
 
     return null;
+  });
+
+  export const approveCoupon = functions.https.onCall(async (data, context) => {
+    try {
+      const couponID = data.couponID;
+      const coupon = await db
+        .collection('coupons').doc(couponID).update({
+          'isUsed': true,
+        });
+    } catch (error) {
+  
+    }
+  
+  
+  
   });

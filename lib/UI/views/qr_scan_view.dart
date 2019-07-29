@@ -31,6 +31,7 @@ class _QrScanViewState extends State<QrScanView> {
   @override
   Widget build(BuildContext context) {
     return BaseView<QrScanViewModel>(
+        user: widget.customer,
         builder: (context, child, model) => Scaffold(
               backgroundColor: Colors.white,
               appBar: AppBar(
