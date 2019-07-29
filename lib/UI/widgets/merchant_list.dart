@@ -32,6 +32,7 @@ class _MerchantListState extends State<MerchantList> {
               itemBuilder: (context, rowNumber) {
                 var merchants = widget.model.merchants;
                 var merchant = merchants[rowNumber];
+                print('merchant item:');
                 return MerchantItem(
                     merchant: merchant, customer: widget.customer);
               }),

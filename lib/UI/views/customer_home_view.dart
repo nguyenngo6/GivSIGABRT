@@ -133,14 +133,6 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
     }
   }
 
-  Widget _getHistoryWidget(UserHomeViewModel model){
-    return TabBarView(
-        children: [
-        Text('1'),
-    Text('2'),
-    ]);
-  }
-
 
   Widget _noDataUi(BuildContext context, UserHomeViewModel model) {
     return _getCenteredViewMessage(context, "No data available yet", model);

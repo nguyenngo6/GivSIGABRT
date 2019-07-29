@@ -40,7 +40,7 @@ class _SignInPageState extends State<SignInPage> {
     return BusyOverlay(
         show: this._state == ViewState.Busy,
         child: Scaffold(
-          appBar: AppBar(title: Text('Giver App'),),
+          appBar: AppBar(title: Center(child: Text('Giver App')),),
           body: SingleChildScrollView(
             child: Stack(
               children: <Widget> [Container(

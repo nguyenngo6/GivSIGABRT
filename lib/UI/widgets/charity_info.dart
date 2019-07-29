@@ -60,18 +60,29 @@ class _CharityInfoState extends State<CharityInfo> {
             Expanded(
                 flex: 2,
                 child: Container(
-                  padding: EdgeInsets.all(7.0),
-                  decoration: BoxDecoration(
-                      boxShadow: [
-                        new BoxShadow(
-                          color: Colors.grey,
-                        )
-                      ],
-                      border: Border.all(color: Colors.black, width: 2.0),
-                      borderRadius: BorderRadius.circular(5.0)),
-                  child: Text(
-                    "\$" + currentCharity.credits.toString(),
-                    style: TextStyle(color: Colors.blue),
+                  padding: EdgeInsets.only(top: 90.0),
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(7.0),
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromRGBO(220, 220, 220, 1.0),
+                          )
+                        ],
+                        border: Border.all(color: Colors.black, width: 1.0),
+                        borderRadius: BorderRadius.circular(18.0)),
+                    child: RichText(
+                      text: TextSpan(
+                        text: '\$',
+                        style: TextStyle(fontSize: 20, color: Colors.brown, fontWeight: FontWeight.bold),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: currentCharity.credits.toString(),
+                              style: TextStyle(color: Colors.red, fontSize: 20.0)),
+                        ],
+                      ),
+                    ),
                   ),
                 ))
           ],
@@ -92,20 +103,20 @@ class _CharityInfoState extends State<CharityInfo> {
             )),
         Container(
           height: MediaQuery.of(context).size.height * 0.5,
-          padding: EdgeInsets.all(20.0),
+          padding: EdgeInsets.all(5.0),
           width: MediaQuery.of(context).size.width,
           child: Center(
             child: topContentText,
           ),
         ),
         Positioned(
-          left: 8.0,
-          top: 60.0,
+          left: 20.0,
+          top: 40.0,
           child: InkWell(
             onTap: () {
               Navigator.pop(context);
             },
-            child: Icon(Icons.arrow_back, color: Colors.black),
+            child: Icon(Icons.arrow_back),
           ),
         )
       ],
@@ -208,7 +219,9 @@ class _CharityInfoState extends State<CharityInfo> {
 
     return BaseView<UserHomeViewModel>(
         builder: (context, child, model) => Scaffold(
-      body: Column(
+          resizeToAvoidBottomPadding: false,
+          resizeToAvoidBottomInset: false,
+          body: Column(
         children: <Widget>[
           topContent,
           Divider(

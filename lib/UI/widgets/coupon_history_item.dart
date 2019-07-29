@@ -26,7 +26,7 @@ class _CouponHistoryItemState extends State<CouponHistoryItem> {
               if (_showDetails) {
                 _height = 150.0;
               } else {
-                _height = 70.0;
+                _height = 80.0;
               }
             });
           },
@@ -48,7 +48,7 @@ class _CouponHistoryItemState extends State<CouponHistoryItem> {
                           description,
                           maxLines: 1,
                           style:
-                              TextStyle(fontSize: 30.0, color: Color.fromRGBO(198, 99, 0, 1.0)),
+                              TextStyle(fontSize: 20.0, color: Color.fromRGBO(198, 99, 0, 1.0)),
                         ),
                       ),
                       Expanded(
