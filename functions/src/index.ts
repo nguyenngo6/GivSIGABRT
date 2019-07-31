@@ -44,7 +44,9 @@ export const sendAprrovalNotification = functions.firestore
           tag: `approval`,
         }
       };
-      return fcm.sendToDevice(tokens, payload);
+      tokens.forEach(function (value)  {
+        return fcm.sendToDevice(value, payload);
+      });
     };
 
     return null;
@@ -103,8 +105,11 @@ export const sendCouponNotification = functions.firestore
         .collection('coupons').doc(couponID).update({
           'isUsed': true,
         });
+
+      return coupon;
     } catch (error) {
-  
+      console.log("error");
+      return null;
     }
   
   

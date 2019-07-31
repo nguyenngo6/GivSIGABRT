@@ -32,6 +32,7 @@ class _BaseViewState<T extends Model> extends State<BaseView<T>> {
   final FirebaseMessaging _fcm = FirebaseMessaging();
   Flushbar flush;
   bool _wasButtonClicked;
+  
 
   @override
   void initState() {
@@ -39,33 +40,14 @@ class _BaseViewState<T extends Model> extends State<BaseView<T>> {
       widget.onModelReady(_model);
     }
     super.initState();
-    
+    _saveDeviceToken();
     _fcm.configure(
       onMessage: (Map<String, dynamic> message) async {
         print("onMessage : $message");
-        // showDialog(
-        //         context: context,
-        //         builder: (context) => AlertDialog(
-        //                 content: ListTile(
-        //                 title: Text(message['notification']['title']),
-        //                 subtitle: Text(message['notification']['body']),
-        //                 ),
-        //                 actions: <Widget>[
-        //                   FlatButton(
-        //                     child: Text('Approve'),
-        //                     onPressed: () => _redeem(message['data']['cId'])),
-        //                    FlatButton(
-        //                     child: Text('Deny'),
-        //                     onPressed: () => _deny(message['data']['cId'])),
-        //                 FlatButton(
-        //                     child: Text('Ok'),
-        //                     onPressed: () => Navigator.of(context).pop(),
-        //                 ),
-        //             ],
-        //         ),
-        //     );
+      
         if (message['data']['tag'] == 'approval' && widget.user.level == 2) {
           flush = Flushbar<bool>(
+            flushbarPosition: FlushbarPosition.TOP,
             title: message['notification']['title'],
             message: message['notification']['body'],
             duration: Duration(seconds: 4),
@@ -131,7 +113,7 @@ class _BaseViewState<T extends Model> extends State<BaseView<T>> {
     String fcmToken = await _fcm.getToken();
 
     // Save it to Firestore
-    if (fcmToken != null) {
+    if (fcmToken != null && widget.user != null) {
       var tokens = Firestore.instance
           .collection('users')
           .document(widget.user.id)
@@ -140,8 +122,8 @@ class _BaseViewState<T extends Model> extends State<BaseView<T>> {
 
       await tokens.setData({
         'token': fcmToken,
-        'createdAt': FieldValue.serverTimestamp(), // optional
-        'platform': Platform.operatingSystem // optional
+        'createdAt': FieldValue.serverTimestamp(), 
+        'platform': Platform.operatingSystem 
       });
     }
   }

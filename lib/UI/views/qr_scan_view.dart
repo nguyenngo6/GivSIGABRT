@@ -219,8 +219,8 @@ class _QrScanViewState extends State<QrScanView> {
 
   Future scan(QrScanViewModel model) async {
     try {
-      // this.barcode = await BarcodeScanner.scan();
-      this.barcode = "-LjoqASvIqPJv-brWKjK";
+      this.barcode = await BarcodeScanner.scan();
+      // this.barcode = "-LjoqASvIqPJv-brWKjK";
       await new Future.delayed(new Duration(milliseconds: 100));
       this.isValid = await model.onDataReceived(model.coupons, barcode);
       if (isValid) {
