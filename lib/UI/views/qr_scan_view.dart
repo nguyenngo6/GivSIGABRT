@@ -31,6 +31,7 @@ class _QrScanViewState extends State<QrScanView> {
   @override
   Widget build(BuildContext context) {
     return BaseView<QrScanViewModel>(
+        user: widget.customer,
         builder: (context, child, model) => Scaffold(
               backgroundColor: Colors.white,
               appBar: AppBar(
@@ -219,7 +220,7 @@ class _QrScanViewState extends State<QrScanView> {
   Future scan(QrScanViewModel model) async {
     try {
       // this.barcode = await BarcodeScanner.scan();
-      this.barcode = "-LjoOTKKlabjuoZ14Yhj";
+      this.barcode = "-LjoqASvIqPJv-brWKjK";
       await new Future.delayed(new Duration(milliseconds: 100));
       this.isValid = await model.onDataReceived(model.coupons, barcode);
       if (isValid) {

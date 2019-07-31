@@ -59,11 +59,25 @@ class FirebaseService {
 //    Firestore.instance.collection('users').document(uid).snapshots().listen(_customerInfoAdded);
 //  }
 
-  void moveCouponToPending(String couponID, String customerID) {
-    Firestore.instance.collection("coupons").document(couponID).updateData({
-      'isPending': true,
-      'usedBy': customerID,
-    });
+
+
+  void moveCouponToPending(String couponID, String customerID){
+    Firestore.instance
+        .collection("coupons")
+        .document(couponID)
+        .updateData({
+          'isPending': true,
+          'usedBy': customerID,
+        });
+
+   
+  }
+  void denyCoupon({@required String couponID}){
+    Firestore.instance
+        .collection("coupons")
+        .document(couponID)
+        .updateData({'usedBy': ""});
+
   }
 
   void redeemCoupon({@required String couponID}) {

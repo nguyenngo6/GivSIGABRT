@@ -182,6 +182,7 @@ class _SignInPageState extends State<SignInPage> {
           });
         });
         if (user.isEmailVerified) {
+          
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => HomeView(user: user)));
         } else {
@@ -202,4 +203,5 @@ class _SignInPageState extends State<SignInPage> {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => SignUpPage()));
   }
+  
 }

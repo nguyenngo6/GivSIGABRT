@@ -29,7 +29,9 @@ class MerchantProfileViewModel extends BaseModel {
     var result = List<Coupon>();
     for (Coupon coupon in coupons){
       if (coupon.ownedBy == merchantID) {
-        result.add(coupon);
+        if (coupon.usedBy.isEmpty) {
+          result.add(coupon);
+        }
       }
     }
 
