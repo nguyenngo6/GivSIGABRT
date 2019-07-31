@@ -56,10 +56,10 @@ class CharityInfo extends StatelessWidget {
             Expanded(
                 flex: 2,
                 child: Container(
-                  padding: EdgeInsets.only(top: 90.0),
+                  padding: EdgeInsets.only(top: 30.0),
                   child: Container(
                     alignment: Alignment.center,
-                    padding: EdgeInsets.all(7.0),
+                    padding: EdgeInsets.all(4.0),
                     decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
