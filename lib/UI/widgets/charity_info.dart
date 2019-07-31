@@ -40,8 +40,7 @@ class CharityInfo extends StatelessWidget {
           int.parse(s, onError: (e) => null) != null;
     }
 
-    var currentCharity =
-        model.getCharityById(model.charities, charityId);
+    var currentCharity = model.getCharityById(model.charities, charityId);
     final topContentText = Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
@@ -72,11 +71,15 @@ class CharityInfo extends StatelessWidget {
                     child: RichText(
                       text: TextSpan(
                         text: '\$',
-                        style: TextStyle(fontSize: 20, color: Colors.brown, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.brown,
+                            fontWeight: FontWeight.bold),
                         children: <TextSpan>[
                           TextSpan(
                               text: currentCharity.credits.toString(),
-                              style: TextStyle(color: Colors.red, fontSize: 20.0)),
+                              style:
+                                  TextStyle(color: Colors.red, fontSize: 20.0)),
                         ],
                       ),
                     ),
@@ -144,24 +147,24 @@ class CharityInfo extends StatelessWidget {
     );
     onDonate(String value, BuildContext context) async {
       print('donate');
-      bool result = await model.onDonate(currentCharity.id, customer.id, int.parse(value));
-      
-      if(result){
+      bool result = await model.onDonate(
+          currentCharity.id, customer.id, int.parse(value));
+
+      if (result) {
         flush = Flushbar<bool>(
           flushbarPosition: FlushbarPosition.BOTTOM,
           title: "Donate Successful",
           message: "Donated $value Credits to " + currentCharity.name,
           duration: Duration(seconds: 4),
-          )..show(context);
-
-        
-      }else{
+        )..show(context);
+      } else {
         flush = Flushbar<bool>(
           flushbarPosition: FlushbarPosition.BOTTOM,
           title: "Donate Fail",
           message: "Failed to donate $value Credits to " + currentCharity.name,
           duration: Duration(seconds: 4),
-          )..show(context);
+        )..show(context);
+      }
     }
 
     final donateButton = Container(
@@ -220,17 +223,17 @@ class CharityInfo extends StatelessWidget {
 
     return BaseView<UserHomeViewModel>(
         builder: (context, child, model) => Scaffold(
-          resizeToAvoidBottomPadding: false,
-          resizeToAvoidBottomInset: false,
-          body: Column(
-        children: <Widget>[
-          topContent,
-          Divider(
-            color: Colors.blue,
-          ),
-          bottomContent
-        ],
-      ),
-    ));
+              resizeToAvoidBottomPadding: false,
+              resizeToAvoidBottomInset: false,
+              body: Column(
+                children: <Widget>[
+                  topContent,
+                  Divider(
+                    color: Colors.blue,
+                  ),
+                  bottomContent
+                ],
+              ),
+            ));
   }
 }
