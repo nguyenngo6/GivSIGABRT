@@ -8,8 +8,6 @@ import 'package:giver_app/scoped_model/customer_profile_view_model.dart';
 import 'package:giver_app/enum/view_state.dart';
 import 'package:image_picker/image_picker.dart';
 import 'base_view.dart';
-import 'customer_home_view.dart';
-import 'package:path/path.dart';
 
 class CustomerProfileView extends StatefulWidget {
   final User user;
@@ -29,7 +27,8 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
   @override
   Widget build(BuildContext context) {
 
-    Future<bool> updateNewImage(StorageReference ref, BuildContext context, CustomerProfileViewModel model) async{
+    Future<bool> updateNewImage(StorageReference ref, BuildContext context,
+        CustomerProfileViewModel model) async {
       String uid = widget.user.id;
       print('start add new image');
       print('firename:');
@@ -40,36 +39,39 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
       String url = dowurl.toString();
       setState(() {
         isEditProfileImage = false;
-        Scaffold.of(context).showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
+        Scaffold.of(context)
+            .showSnackBar(SnackBar(content: Text('Profile Picture Uploaded')));
       });
       model.onInfoEdited(url, uid);
       return true;
     }
 
-    Future uploadPic(BuildContext context, CustomerProfileViewModel model) async {
+    Future uploadPic(
+        BuildContext context, CustomerProfileViewModel model) async {
       model.setState(ViewState.EditImageUrl);
       print('deleting old image && add new image process:');
       // reference to image file of current user
-      StorageReference firebaseStorageRef = FirebaseStorage.instance.ref().child('profileImages/' + widget.user.id);
-      
-      if (firebaseStorageRef != null) {
+      StorageReference firebaseStorageRef = FirebaseStorage.instance
+          .ref()
+          .child('profileImages/' + widget.user.id);
+
+      if (firebaseStorageRef == null) {
         print('no old image to delete');
         updateNewImage(firebaseStorageRef, context, model);
-      }else{
+      } else {
         // Delete the current image file
-        bool result = await firebaseStorageRef.delete().catchError((error){
-          print('this error occur when delete file in Firebase Storage:'+ error);
+        bool result = await firebaseStorageRef.delete().catchError((error) {
+          print(
+              'this error occur when delete file in Firebase Storage:' + error);
           setState(() {
             isEditProfileImage = false;
             uploadFile = null;
           });
-        }).whenComplete((){
+        }).whenComplete(() {
           print('comleted deleting old image');
-        }).then((_)=>updateNewImage(firebaseStorageRef, context, model));
-
-        print('result deleting is: $result');
+        }).then((_) => updateNewImage(firebaseStorageRef, context, model));
+        print('result add new Image is: $result');
       }
-
     }
 
     imageSelectorGallery() async {
@@ -95,7 +97,9 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
         isEditProfileImage = true;
       });
     }
-    Widget _buildAvatar(BuildContext context,CustomerProfileViewModel model, String url) {
+
+    Widget _buildAvatar(
+        BuildContext context, CustomerProfileViewModel model, String url) {
       return Row(
         children: <Widget>[
           Expanded(
@@ -134,7 +138,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
                               url,
                               fit: BoxFit.fill,
                             )
-                          :Image.file(
+                          : Image.file(
                               uploadFile,
                               fit: BoxFit.fill,
                             ),
@@ -172,10 +176,14 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
         ],
       );
     }
-    onSubmit(String input, CustomerProfileViewModel model) async {
-      await model.onInfoEdited(input, widget.user.id);
-    }
 
+    onSubmit(String newInput, String currentInput, CustomerProfileViewModel model) async {
+      if (newInput != currentInput){
+      await model.onInfoEdited(newInput, widget.user.id);
+      }else{
+        model.setState(ViewState.DataFetched);
+      }
+    }
     Widget _getCenteredViewMessage(
         BuildContext context, String message, CustomerProfileViewModel model,
         {bool error = false}) {
@@ -214,23 +222,20 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
           context, "Error retrieving your data. Tap to try again", model,
           error: true);
     }
+
     Widget _getCustomerProfile(
         BuildContext context, CustomerProfileViewModel model) {
       User currentUser = model.getCurrentUser(model.customers, widget.user.id);
-      return SingleChildScrollView(
-        child: Stack(
-          children: <Widget>[
-            Column(
+      return Scaffold(
+        body: SingleChildScrollView(
+          child: Column(
               children: <Widget>[
-                Container(
-                  height: 20.0,
-                ),
-                _buildAvatar(context,model, currentUser.imageUrl),
+                _buildAvatar(context, model, currentUser.imageUrl),
                 ListTile(
                   leading: Icon(Icons.people),
                   title: model.state == ViewState.EditUsername
                       ? TextFormField(
-                          onFieldSubmitted: (input) => onSubmit(input, model),
+                          onFieldSubmitted: (newInput) => onSubmit(newInput, currentUser.username, model),
                           initialValue: currentUser.username,
                         )
                       : Text(currentUser.username,
@@ -251,7 +256,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
                   title: model.state != ViewState.EditPhone
                       ? Text(currentUser.phone)
                       : TextFormField(
-                          onFieldSubmitted: (input) => onSubmit(input, model),
+                          onFieldSubmitted: (newInput) => onSubmit(newInput, currentUser.phone, model),
                           initialValue: currentUser.phone,
                         ),
                   trailing: FlatButton(
@@ -259,8 +264,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
                       child: Icon(Icons.edit)),
                 ),
               ],
-            )
-          ],
+          ),
         ),
       );
     }
@@ -279,16 +283,11 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
 
     return BaseView<CustomerProfileViewModel>(
       builder: (context, child, model) => BusyOverlay(
-        show: model.state == ViewState.Busy,
+        show: model.state == ViewState.Busy || model.state == ViewState.EditImageUrl,
         child: Scaffold(
           appBar: AppBar(
             leading: FlatButton(
-              onPressed: ()=> Navigator.pop(context),
-//                onPressed: () => Navigator.pushReplacement(
-//                    context,
-//                    MaterialPageRoute(
-//                        builder: (context) =>
-//                            CustomerHomeView(user: widget.user))),
+                onPressed: () => Navigator.pop(context),
                 child: Icon(Icons.backspace)),
             title: Text("Edit Profile Page"),
             actions: <Widget>[

@@ -40,6 +40,25 @@ class UserHomeViewModel extends BaseModel {
     return currentUser;
   }
 
+  Charity getCharityById(List<Charity> charities,String id){
+    this.setState(ViewState.Busy);
+    Charity currentCharity;
+    for (Charity charity in charities){
+      if (charity.id == id ){
+        currentCharity = charity;
+      }
+    }
+    this.setState(ViewState.DataFetched);
+    return currentCharity;
+  }
+
+  Future<bool> onDonate(String charityId, String uId, int credits)async{
+    setState(ViewState.Busy);
+    bool result = await _firebaseService.donate(charityId: charityId, uid: uId, donatePoints: credits);
+    setState(ViewState.DataFetched);
+    return result;
+  }
+
   void _onCustomerUpdated(List<User> customer) {
     setState(ViewState.Busy);
     customers = customer;
