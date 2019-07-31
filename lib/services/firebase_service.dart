@@ -98,6 +98,8 @@ class FirebaseService {
       await Firestore.instance.collection('users').document(uid);
       Firestore.instance.runTransaction((Transaction transaction) async {
         DocumentSnapshot snapshot = await transaction.get(userReference);
+        await transaction.update(
+            snapshot.reference, {"points": snapshot['points'] - donatePoints});
       });
 
       DocumentReference charityReference =

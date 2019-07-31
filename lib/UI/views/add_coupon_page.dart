@@ -15,8 +15,9 @@ class AddCoupon extends StatefulWidget {
 }
 
 class _AddCouponsState extends State<AddCoupon> {
+   final _pointController = TextEditingController();
   String description;
-  int point;
+  int points;
   String code;
 //  bool isUse;
 
@@ -26,7 +27,7 @@ class _AddCouponsState extends State<AddCoupon> {
           await Firestore.instance.collection("coupons").add({
 //        "user": widget.user,
         "description": description,
-        "points": point,
+        "points": int.parse(_pointController.text),
         "ownedBy": user.id,
         "code": code,
         "isUsed": false,
@@ -101,7 +102,7 @@ class _AddCouponsState extends State<AddCoupon> {
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextFormField(
-                onSaved: (input) => point = int.tryParse(input),
+                controller: _pointController,
                 decoration: InputDecoration(
                   icon: Icon(Icons.control_point),
                  hintText: "Enter points number",
@@ -121,11 +122,11 @@ class _AddCouponsState extends State<AddCoupon> {
                   onPressed: () {
                     _addData(widget.user);
                   },
-                  child: new Text('Add'),
+                  child: Text('Add'),
                 ),
                 RaisedButton(
                   onPressed: _navigateToMerchantHomeView,
-                  child: new Text('Cancel'),
+                  child: Text('Cancel'),
                 )
               ],
             )
