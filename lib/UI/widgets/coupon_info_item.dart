@@ -105,7 +105,7 @@ class _CouponInfoItemState extends State<CouponInfoItem> {
           ),
           ButtonTheme(
             shape: RoundedRectangleBorder(
-                borderRadius: new BorderRadius.circular(30.0)),
+                borderRadius: BorderRadius.circular(30.0)),
             minWidth: 200,
             child: RaisedButton(
               child: Text(

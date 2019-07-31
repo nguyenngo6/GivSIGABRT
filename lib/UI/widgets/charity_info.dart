@@ -1,13 +1,47 @@
+import 'package:flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
-import 'package:giver_app/model/charity.dart';
+import 'package:giver_app/UI/views/base_view.dart';
 import 'package:giver_app/model/user.dart';
+import 'package:giver_app/scoped_model/user_home_view_model.dart';
+
+bool isNumeric(String s) {
+  if (s == null) {
+    return false;
+  }
+  // TODO according to DartDoc num.parse() includes both (double.parse and int.parse)
+  return double.parse(s, (e) => null) != null ||
+      int.parse(s, onError: (e) => null) != null;
+}
 
 class CharityInfo extends StatelessWidget {
+  final BuildContext context;
+  final UserHomeViewModel model;
   final User customer;
-  final Charity charity;
-  CharityInfo({@required this.customer, @required this.charity});
+  final String charityId;
+
+  CharityInfo(
+      {@required this.context,
+      @required this.model,
+      @required this.customer,
+      @required this.charityId});
+
+  int donatePoints;
+  final _inputController = TextEditingController();
+  Flushbar flush;
   @override
   Widget build(BuildContext context) {
+    bool isNumeric(String s) {
+      if (s == null) {
+        return false;
+      }
+
+      // TODO according to DartDoc num.parse() includes both (double.parse and int.parse)
+      return double.parse(s, (e) => null) != null ||
+          int.parse(s, onError: (e) => null) != null;
+    }
+
+    var currentCharity =
+        model.getCharityById(model.charities, charityId);
     final topContentText = Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
@@ -23,18 +57,29 @@ class CharityInfo extends StatelessWidget {
             Expanded(
                 flex: 2,
                 child: Container(
-                  padding: EdgeInsets.all(7.0),
-                  decoration: BoxDecoration(
-                      boxShadow: [
-                        new BoxShadow(
-                          color: Colors.grey,
-                        )
-                      ],
-                      border: Border.all(color: Colors.black, width: 2.0),
-                      borderRadius: BorderRadius.circular(5.0)),
-                  child: Text(
-                    "\$" + charity.credits.toString(),
-                    style: TextStyle(color: Colors.blue),
+                  padding: EdgeInsets.only(top: 90.0),
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: EdgeInsets.all(7.0),
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromRGBO(220, 220, 220, 1.0),
+                          )
+                        ],
+                        border: Border.all(color: Colors.black, width: 1.0),
+                        borderRadius: BorderRadius.circular(18.0)),
+                    child: RichText(
+                      text: TextSpan(
+                        text: '\$',
+                        style: TextStyle(fontSize: 20, color: Colors.brown, fontWeight: FontWeight.bold),
+                        children: <TextSpan>[
+                          TextSpan(
+                              text: currentCharity.credits.toString(),
+                              style: TextStyle(color: Colors.red, fontSize: 20.0)),
+                        ],
+                      ),
+                    ),
                   ),
                 ))
           ],
@@ -49,26 +94,26 @@ class CharityInfo extends StatelessWidget {
             height: MediaQuery.of(context).size.height * 0.5,
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: NetworkImage(charity.imageUrl),
+                image: NetworkImage(currentCharity.imageUrl),
                 fit: BoxFit.fill,
               ),
             )),
         Container(
           height: MediaQuery.of(context).size.height * 0.5,
-          padding: EdgeInsets.all(20.0),
+          padding: EdgeInsets.all(5.0),
           width: MediaQuery.of(context).size.width,
           child: Center(
             child: topContentText,
           ),
         ),
         Positioned(
-          left: 8.0,
-          top: 60.0,
+          left: 20.0,
+          top: 40.0,
           child: InkWell(
             onTap: () {
               Navigator.pop(context);
             },
-            child: Icon(Icons.arrow_back, color: Colors.black),
+            child: Icon(Icons.arrow_back),
           ),
         )
       ],
@@ -77,13 +122,13 @@ class CharityInfo extends StatelessWidget {
     final bottomContentText = Column(
       children: <Widget>[
         Text(
-          charity.name,
+          currentCharity.name,
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         SizedBox(height: 5.0),
         RichText(
           text: TextSpan(
-            text: charity.name,
+            text: currentCharity.name,
             style: TextStyle(fontSize: 15, color: Colors.black),
             children: <TextSpan>[
               TextSpan(
@@ -97,11 +142,69 @@ class CharityInfo extends StatelessWidget {
         )
       ],
     );
+    onDonate(String value, BuildContext context) async {
+      print('donate');
+      bool result = await model.onDonate(currentCharity.id, customer.id, int.parse(value));
+      
+      if(result){
+        flush = Flushbar<bool>(
+          flushbarPosition: FlushbarPosition.BOTTOM,
+          title: "Donate Successful",
+          message: "Donated $value Credits to " + currentCharity.name,
+          duration: Duration(seconds: 4),
+          )..show(context);
+
+        
+      }else{
+        flush = Flushbar<bool>(
+          flushbarPosition: FlushbarPosition.BOTTOM,
+          title: "Donate Fail",
+          message: "Failed to donate $value Credits to " + currentCharity.name,
+          duration: Duration(seconds: 4),
+          )..show(context);
+    }
+
     final donateButton = Container(
         padding: EdgeInsets.symmetric(vertical: 16.0),
         width: MediaQuery.of(context).size.width,
         child: RaisedButton(
-          onPressed: () => print('donate tap tap'),
+          onPressed: () {
+            showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                      title: const Text('Number of credits ?'),
+                      content: TextFormField(
+                        controller: _inputController,
+                        decoration: InputDecoration(
+                            contentPadding:
+                                EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 15.0),
+                            hintText: "credits",
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(32.0))),
+//                        onSaved: (input) => _username = input,
+                      ),
+                      actions: <Widget>[
+                        FlatButton(
+                          child: Text('Cancel'),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                        FlatButton(
+                          child: Text('OK'),
+                          onPressed: () =>
+                              Navigator.pop(context, _inputController.text),
+                        )
+                      ],
+                    )).then((returnVal) {
+              if (returnVal != null) {
+                print('return Val not null');
+                if (!isNumeric(returnVal)) {
+                  print('return Val not an Number');
+                } else {
+                  onDonate(returnVal, context);
+                }
+              }
+            });
+          },
           color: Color.fromRGBO(58, 66, 86, 1.0),
           child: Text("DONATE THEM", style: TextStyle(color: Colors.white)),
         ));
@@ -115,8 +218,11 @@ class CharityInfo extends StatelessWidget {
       ),
     );
 
-    return Scaffold(
-      body: Column(
+    return BaseView<UserHomeViewModel>(
+        builder: (context, child, model) => Scaffold(
+          resizeToAvoidBottomPadding: false,
+          resizeToAvoidBottomInset: false,
+          body: Column(
         children: <Widget>[
           topContent,
           Divider(
@@ -125,6 +231,6 @@ class CharityInfo extends StatelessWidget {
           bottomContent
         ],
       ),
-    );
+    ));
   }
 }

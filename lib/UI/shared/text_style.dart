@@ -33,6 +33,18 @@ class Style {
     fontSize: 14.0,
       fontWeight: FontWeight.w600
   );
+
+   static final couponHistoryTextStyle = baseTextStyle.copyWith(
+      color: Colors.black,
+      fontSize: 14,
+      fontWeight: FontWeight.w600
+  );
+  static final couponHistoryTextStyleBigger = baseTextStyle.copyWith(
+      color: Colors.blueAccent,
+      fontSize: 18,
+      fontWeight: FontWeight.w600
+  );
+  
   
   
 

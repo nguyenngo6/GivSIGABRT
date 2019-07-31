@@ -33,7 +33,6 @@ class _BaseViewState<T extends Model> extends State<BaseView<T>> {
   Flushbar flush;
   bool _wasButtonClicked;
   
-
   @override
   void initState() {
     if (widget.onModelReady != null) {

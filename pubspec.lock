@@ -35,14 +35,14 @@ packages:
       name: cloud_firestore
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.12.7"
+    version: "0.12.9"
   cloud_functions:
     dependency: "direct main"
     description:
       name: cloud_functions
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.0+3"
+    version: "0.4.1"
   collection:
     dependency: transitive
     description:
@@ -57,6 +57,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.1.2"
+  email_validator:
+    dependency: "direct main"
+    description:
+      name: email_validator
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0"
   firebase_analytics:
     dependency: "direct main"
     description:
@@ -70,14 +77,14 @@ packages:
       name: firebase_auth
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.11.1+11"
+    version: "0.11.1+12"
   firebase_core:
     dependency: "direct main"
     description:
       name: firebase_core
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.4.0+6"
+    version: "0.4.0+8"
   firebase_messaging:
     dependency: "direct main"
     description:
@@ -91,14 +98,14 @@ packages:
       name: firebase_storage
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.3"
+    version: "3.0.4"
   flushbar:
     dependency: "direct main"
     description:
       name: flushbar
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.8.0"
+    version: "1.8.1"
   flutter:
     dependency: "direct main"
     description: flutter
@@ -143,7 +150,14 @@ packages:
       name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.6.0+17"
+    version: "0.6.1"
+  intl:
+    dependency: "direct main"
+    description:
+      name: intl
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.15.8"
   matcher:
     dependency: transitive
     description:
@@ -178,7 +192,7 @@ packages:
       name: platform
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.0"
+    version: "2.2.1"
   qr:
     dependency: transitive
     description:
@@ -254,6 +268,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.2.5"
+  time_formatter:
+    dependency: "direct main"
+    description:
+      name: time_formatter
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.0+5"
+  timeago:
+    dependency: "direct main"
+    description:
+      name: timeago
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "2.0.18"
   typed_data:
     dependency: transitive
     description:

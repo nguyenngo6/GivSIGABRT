@@ -243,6 +243,7 @@ EXTERNAL SOURCES:
 SPEC CHECKSUMS:
   barcode_scan: 33f586d02270046fc6559135038b34b5754eaa4f
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318
+<<<<<<< HEAD
   cloud_firestore: 5698a9bd01b94fd31e7b7b56d8fe1665f4fb43cb
   cloud_functions: 8c19087f03b77ec4a3c4d3abf207f8c296972726
   Firebase: dedc9e48ea3f3649ad5f6b982f8a0c73508a14b5
@@ -251,6 +252,14 @@ SPEC CHECKSUMS:
   firebase_core: 44f31f51532812598f0f9f4af0caa705b9edfc19
   firebase_messaging: 049d2d722cb4c48d62be7f7a8020fc4d7b2b9e0a
   firebase_storage: ad2e96fb734b0254a42adba43f9aafb77de84d0a
+=======
+  cloud_firestore: e67bf5ff264d23610795c7319d1f5c9f44dbaee4
+  Firebase: dedc9e48ea3f3649ad5f6b982f8a0c73508a14b5
+  firebase_analytics: bd50d8f5d3f42dcab6da67944a849062470b0a19
+  firebase_auth: 00d6e1ab6d890cd6d3c624df61702e3a7072d1e3
+  firebase_core: b3b02d0b5e9d01aab5e50ba7cbcf84c73cb6883c
+  firebase_storage: 52033ea2e6ad58bfa852de92002598850d325c36
+>>>>>>> 718238b80e78961f6ef3818f939197ae2f8d73a0
   FirebaseAnalytics: 3fb375bc9d13779add4039716f868d233a473fad
   FirebaseAnalyticsInterop: efbe45c8385ec626e29f9525e5ebd38520dfb6c1
   FirebaseAuth: a06ad63e9bf4c86165b54cceb1c14d4f4c38d419
