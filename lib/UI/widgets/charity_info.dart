@@ -12,7 +12,7 @@ bool isNumeric(String s) {
       int.parse(s, onError: (e) => null) != null;
 }
 
-class CharityInfo extends StatefulWidget {
+class CharityInfo extends StatelessWidget {
   final BuildContext context;
   final UserHomeViewModel model;
   final User customer;
@@ -23,11 +23,7 @@ class CharityInfo extends StatefulWidget {
       @required this.model,
       @required this.customer,
       @required this.charityId});
-  @override
-  _CharityInfoState createState() => _CharityInfoState();
-}
 
-class _CharityInfoState extends State<CharityInfo> {
   int donatePoints;
   final _inputController = TextEditingController();
 
@@ -44,7 +40,7 @@ class _CharityInfoState extends State<CharityInfo> {
     }
 
     var currentCharity =
-        widget.model.getCharityById(widget.model.charities, widget.charityId);
+        model.getCharityById(model.charities, charityId);
     final topContentText = Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
@@ -147,7 +143,7 @@ class _CharityInfoState extends State<CharityInfo> {
     );
     onDonate(String value, BuildContext context) async {
       print('donate');
-      bool result = await widget.model.onDonate(currentCharity.id, widget.customer.id, int.parse(value));
+      bool result = await model.onDonate(currentCharity.id, customer.id, int.parse(value));
       if(result){
         Scaffold.of(context).showSnackBar(SnackBar(
             content: Text('Donate to ' +

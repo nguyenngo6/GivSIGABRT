@@ -7,7 +7,6 @@ import 'package:giver_app/model/user.dart';
 import 'package:meta/meta.dart';
 
 class FirebaseService {
-
   final StreamController<List<Donation>> _donationController =
       StreamController<List<Donation>>.broadcast();
 
