@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/model/charity.dart';
 import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/services/firebase_service.dart';
@@ -52,9 +53,9 @@ class UserHomeViewModel extends BaseModel {
     return currentCharity;
   }
 
-  Future<bool> onDonate(String charityId, String uId, int credits)async{
+  Future<bool> onDonate(String charityId, String uId, int credits, int userPoints)async{
     setState(ViewState.Busy);
-    bool result = await _firebaseService.donate(charityId: charityId, uid: uId, donatePoints: credits);
+    bool result = await _firebaseService.donate(charityId: charityId, uid: uId, donatePoints: credits, userPoints: userPoints);
     setState(ViewState.DataFetched);
     return result;
   }
