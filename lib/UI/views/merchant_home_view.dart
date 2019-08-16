@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/UI/Views/sign_in_page.dart';
@@ -80,6 +81,32 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
     setState(() {
       _selectedIndex = index;
     });
+  }
+  showConfirmationDialog(Coupon coupon,User merchant) {
+    String name = coupon.code;
+    showDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text('Confirmation'),
+            content: Text('Are you sure to delete this $name coupon'),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () {
+                    _deleteCoupon(coupon, merchant);
+                    Navigator.pop(context);
+                  },
+                  child: Text('Ok')),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+
+                },
+                child: Text('Cancel'),
+              )
+            ],
+          );
+        });
   }
 
   signOut() {
@@ -225,8 +252,12 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
                                                         icon: Icon(Icons.edit,size: 20,),
                                                       ),
                                                       IconButton(
+                                                        onPressed: null,
+                                                        icon: Icon(Icons.wallpaper,size: 20,),
+                                                      ),
+                                                      IconButton(
                                                         onPressed: () {
-                                                          _deleteCoupon(coupon,
+                                                        showConfirmationDialog(coupon,
                                                               widget.user);
                                                         },
                                                         icon: Icon(Icons.delete,size: 20,),

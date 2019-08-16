@@ -51,6 +51,7 @@ class MerchantHistoryEntry extends StatelessWidget {
                       margin: EdgeInsets.only(top: 10, left: 10, bottom: 5),
                     ),
                     Row(
+                      
                       children: <Widget>[
                         Container(
                           child: Text("Description:",
@@ -58,11 +59,15 @@ class MerchantHistoryEntry extends StatelessWidget {
                           alignment: Alignment.centerLeft,
                           margin: EdgeInsets.only(top: 10, left: 20, bottom: 5),
                         ),
-                        Container(
-                          child: Text(coupon.description,
-                              style: Style.couponHistoryTextStyle),
-                          alignment: Alignment.centerLeft,
-                          margin: EdgeInsets.only(top: 10, left: 10, bottom: 5),
+                        Expanded(
+                          child: Container(
+                            child: Text(coupon.description,
+                                style: Style.couponHistoryTextStyle,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,),
+                            alignment: Alignment.centerLeft,
+                            margin: EdgeInsets.only(top: 10, left: 10, bottom: 5),
+                          ),
                         ),
                       ],
                     ),
