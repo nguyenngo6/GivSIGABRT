@@ -11,18 +11,28 @@ import 'package:giver_app/scoped_model/merchant_profile_view_model.dart';
 import 'package:giver_app/UI/views/base_view.dart';
 import 'package:giver_app/enum/view_state.dart';
 
-class MerchantProfileView extends StatelessWidget {
-  const MerchantProfileView({@required this.merchant, @required this.customer});
+class MerchantProfileView extends StatefulWidget {
+
+
   final User customer;
   final User merchant;
+  const MerchantProfileView({@required this.merchant, @required this.customer});
 
+
+  @override
+  _MerchantProfileViewState createState() => _MerchantProfileViewState();
+}
+
+class _MerchantProfileViewState extends State<MerchantProfileView>{
+  double _height = 70.0;
+  bool _showDetails = false;
   @override
   Widget build(BuildContext context) {
     return BaseView<MerchantProfileViewModel>(
         builder: (context, child, model) =>
             Stack(overflow: Overflow.clip, children: <Widget>[
               MerchantImage(
-                merchant: merchant,
+                merchant: widget.merchant,
               ),
               Scaffold(
                   backgroundColor: Colors.transparent,
@@ -44,7 +54,7 @@ class MerchantProfileView extends StatelessWidget {
                       Container(
                         height: 100,
                         child: MerchantInfo(
-                          merchant: merchant,
+                          merchant: widget.merchant,
                         ),
                       ),
                       Container(
@@ -72,7 +82,7 @@ class MerchantProfileView extends StatelessWidget {
   }
 
   Widget _getListUi(MerchantProfileViewModel model) {
-    List<Coupon> coupons = model.getCouponsByMerchantID(merchant.id);
+    List<Coupon> coupons = model.getCouponsByMerchantID(widget.merchant.id);
     return ListView.builder(
         itemCount: coupons.length,
         itemBuilder: (context, itemIndex) {
@@ -135,9 +145,7 @@ class MerchantProfileView extends StatelessWidget {
   }
 
   Widget _getCouponItem(MerchantProfileViewModel model, Coupon couponItem) {
-    double _height = 70.0;
     const descriptionPadding = 15.0;
-    bool _showDetails = false;
     return AnimatedContainer(
       duration: Duration(milliseconds: 200),
       curve: Curves.easeIn,
@@ -152,9 +160,9 @@ class MerchantProfileView extends StatelessWidget {
           Expanded(
             child: GestureDetector(
               onTap: () {
-                print('taptap');
-
-                if (!_showDetails) {
+                print('taptap con cac ne  8==>> $_showDetails  height ne du me may: $_height');
+                _showDetails = !_showDetails;
+                if (_showDetails) {
                   _height = 190;
                 } else {
                   _height = 70.0;
@@ -197,7 +205,7 @@ class MerchantProfileView extends StatelessWidget {
                     ? FlatButton(
                         child: Text('Use Coupon'),
                         onPressed: () =>
-                            model.redeemCoupon(couponItem.id, customer.id))
+                            model.redeemCoupon(couponItem.id, widget.customer.id))
                     : Container(),
                 Expanded(
                     child: Align(

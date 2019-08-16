@@ -39,6 +39,7 @@ dependencies:
   firebase_messaging: ^5.0.2
   flushbar: ^1.5.0 
   cloud_functions: ^0.4.0+3
+  carousel_pro: ^1.0.0
 
 
 

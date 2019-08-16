@@ -113,43 +113,43 @@ class _EditCouponState extends State<EditCoupon> {
                     ],
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(children: <Widget>[
-                    Row(
-                      children: <Widget>[
-                        Radio(
-//
-                          value: true,
-//                  title: Text('True'),
-                          groupValue: isUsed,
-                          onChanged: (newValue) => setState(() => isUsed = newValue),
-//                  onChanged: (bool value) => isUsed = value,
-//                  selected: widget.coupon.isUsed,
-                          activeColor: Colors.red,
-//                  subtitle: Text('used'),
-                        ),
-                        Text("True")
-                      ],
-                    ),
-                    Row(
-                      children: <Widget>[
-                        Radio(
-//                  selected: widget.coupon.isUsed,
-                          value: false,
-//                  title: Text('False'),
-                          groupValue: isUsed,
-                          onChanged:  (newValue) => setState(() => isUsed = newValue),
-//                  onChanged: (bool value) => isUsed = value,
-//                  selected: widget.coupon.isUsed,
-                          activeColor: Colors.red,
-//                  subtitle: Text('not used'),
-                        ),
-                        Text("False")
-                      ],
-                    )
-                  ],),
-                ),
+//                Padding(
+//                  padding: const EdgeInsets.all(16.0),
+//                  child: Column(children: <Widget>[
+//                    Row(
+//                      children: <Widget>[
+//                        Radio(
+////
+//                          value: true,
+////                  title: Text('True'),
+//                          groupValue: isUsed,
+//                          onChanged: (newValue) => setState(() => isUsed = newValue),
+////                  onChanged: (bool value) => isUsed = value,
+////                  selected: widget.coupon.isUsed,
+//                          activeColor: Colors.red,
+////                  subtitle: Text('used'),
+//                        ),
+//                        Text("True")
+//                      ],
+//                    ),
+//                    Row(
+//                      children: <Widget>[
+//                        Radio(
+////                  selected: widget.coupon.isUsed,
+//                          value: false,
+////                  title: Text('False'),
+//                          groupValue: isUsed,
+//                          onChanged:  (newValue) => setState(() => isUsed = newValue),
+////                  onChanged: (bool value) => isUsed = value,
+////                  selected: widget.coupon.isUsed,
+//                          activeColor: Colors.red,
+////                  subtitle: Text('not used'),
+//                        ),
+//                        Text("False")
+//                      ],
+//                    )
+//                  ],),
+//                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[

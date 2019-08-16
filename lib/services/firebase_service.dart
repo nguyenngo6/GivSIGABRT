@@ -90,36 +90,43 @@ class FirebaseService {
   Future<bool> donate(
       {@required String charityId,
       @required String uid,
-      @required int donatePoints}) async {
-    DocumentReference userReference =
-        await Firestore.instance.collection('users').document(uid);
+      @required int donatePoints, @required int userPoints}) async {
+    print('userpoints: $userPoints donatepoints: $donatePoints');
 
-    Firestore.instance.runTransaction((Transaction transaction) async {
-      DocumentSnapshot snapshot = await transaction.get(userReference);
-      await transaction.update(
-          snapshot.reference, {"points": snapshot['points'] - donatePoints});
-    });
+    if(userPoints >= donatePoints){
+      DocumentReference userReference =
+      await Firestore.instance.collection('users').document(uid);
+      Firestore.instance.runTransaction((Transaction transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(userReference);
+        await transaction.update(
+            snapshot.reference, {"points": snapshot['points'] - donatePoints});
+      });
 
-    DocumentReference charityReference =
-        await Firestore.instance.collection('charities').document(charityId);
+      DocumentReference charityReference =
+      await Firestore.instance.collection('charities').document(charityId);
+      Firestore.instance.runTransaction((Transaction transaction) async {
+        DocumentSnapshot snapshot = await transaction.get(charityReference);
+        await transaction.update(
+            snapshot.reference, {"credits": snapshot['credits'] + donatePoints});
+      });
 
-    Firestore.instance.runTransaction((Transaction transaction) async {
-      DocumentSnapshot snapshot = await transaction.get(charityReference);
-      await transaction.update(
-          snapshot.reference, {"credits": snapshot['credits'] + donatePoints});
-    });
+      await Firestore.instance
+          .collection('bank')
+          .document('creditBank')
+          .collection('donate')
+          .add({
+        'credits': donatePoints,
+        'charityId': charityId,
+        'customerId': uid,
+        'time': DateTime.now().millisecondsSinceEpoch,
+      });
+      return true;
+    }else{
+      return false;
+    }
 
-    await Firestore.instance
-        .collection('bank')
-        .document('creditBank')
-        .collection('donate')
-        .add({
-      'credits': donatePoints,
-      'charityId': charityId,
-      'customerId': uid,
-      'time': DateTime.now().millisecondsSinceEpoch,
-    });
-    return true;
+
+
   }
 
   void _donationAdded(QuerySnapshot snapshot) {
