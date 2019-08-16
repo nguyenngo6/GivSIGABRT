@@ -7,6 +7,7 @@ class Coupon {
   int points;
   bool isUsed;
   String id;
+  String imageUrl;
 
   Coupon({
     this.code,
@@ -17,6 +18,8 @@ class Coupon {
     this.points,
     this.isUsed,
     this.id,
+    this.imageUrl,
+
   });
 
   Coupon.fromData(Map<String, dynamic> data)
@@ -27,7 +30,9 @@ class Coupon {
           points = data['points'],
           isUsed = data['isUsed'],
           isPending = data['isPending'],
+          imageUrl = data['imageUrl'],
           code = data['code'];
+
 
 
         

@@ -68,12 +68,13 @@ class _CouponItemState extends State<CouponItem> {
   Widget get _detailSection => Expanded(
         child: GestureDetector(
           onTap: () {
-            print('taptap');
             setState(() {
-              if (!_showDetails) {
-                _height = 190;  
+              print('tap' + _showDetails.toString());
+              _showDetails = !_showDetails;
+              if (_showDetails) {
+                _height = 150.0;
               } else {
-                _height = 70.0;
+                _height = 80.0;
               }
             });
           },

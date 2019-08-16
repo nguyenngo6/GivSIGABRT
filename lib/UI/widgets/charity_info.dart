@@ -28,13 +28,13 @@ class CharityInfo extends StatelessWidget {
   int donatePoints;
   final _inputController = TextEditingController();
   Flushbar flush;
+
   @override
   Widget build(BuildContext context) {
     bool isNumeric(String s) {
       if (s == null) {
         return false;
       }
-
       // TODO according to DartDoc num.parse() includes both (double.parse and int.parse)
       return double.parse(s, (e) => null) != null ||
           int.parse(s, onError: (e) => null) != null;
@@ -148,7 +148,9 @@ class CharityInfo extends StatelessWidget {
     onDonate(String value, BuildContext context) async {
       print('donate');
       bool result = await model.onDonate(
-          currentCharity.id, customer.id, int.parse(value));
+
+          currentCharity.id, customer.id,int.parse(value),customer.points,);
+
 
       if (result) {
         flush = Flushbar<bool>(

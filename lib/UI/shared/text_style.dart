@@ -44,6 +44,7 @@ class Style {
       fontSize: 18,
       fontWeight: FontWeight.w600
   );
+
   
   
   

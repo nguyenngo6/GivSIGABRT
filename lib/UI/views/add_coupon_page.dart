@@ -15,10 +15,33 @@ class AddCoupon extends StatefulWidget {
 }
 
 class _AddCouponsState extends State<AddCoupon> {
+  String selectedImageUrl = '';
+  final _pointController = TextEditingController();
   String description;
-  int point;
+  int points;
   String code;
+//  String imageUrl;
+  int selectRadio;
 //  bool isUse;
+
+  String imageUrl1 =
+      'https://www.kfc.com.au/sites/default/files/alohadata/images/products/zinger_box_web_mobile.jpg';
+  String imageUrl2 =
+      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTBIWOP97VpX378KHyoggAd12JFRJdNcY8vDHRxtF3sNuUaCZvO';
+  String imageUrl3 =
+      'https://fishryimages.blob.core.windows.net/product/1555331915948-product.jpeg/xs';
+//  @override
+//  void innitState() {
+//    super.initState();
+//    selectRadio = 0;
+//  }
+
+  setSelectedRadio(int val) {
+    setState(() {
+      selectRadio = val;
+
+    });
+  }
 
   void _addData(User user) {
     Firestore.instance.runTransaction((Transaction transaction) async {
@@ -26,13 +49,13 @@ class _AddCouponsState extends State<AddCoupon> {
           await Firestore.instance.collection("coupons").add({
 //        "user": widget.user,
         "description": description,
-        "points": point,
+        "points": int.parse(_pointController.text),
         "ownedBy": user.id,
         "code": code,
         "isUsed": false,
         "isPending": false,
-            "usedBy":"",
-
+        "usedBy": "",
+        "imageUrl": selectedImageUrl
       });
 //      print(addDataCoupon.documentID.toString());
       CollectionReference addUidMerchant = Firestore.instance
@@ -69,72 +92,156 @@ class _AddCouponsState extends State<AddCoupon> {
         ),
       ),
       body: Material(
-          child: Form(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                onChanged: (String str) {
-                  setState(() {
-                    code = str;
-                  });
-                },
-                decoration: new InputDecoration(
-                    icon: Icon(Icons.title), hintText: "Coupon Name"),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextField(
-                onChanged: (String str) {
-                  setState(() {
-                    description = str;
-                  });
-                },
-                decoration: new InputDecoration(
-                    icon: Icon(Icons.dashboard),
-                    hintText: "Coupon Description"),
-              ),
-            ),
-
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: TextFormField(
-                onSaved: (input) => point = int.tryParse(input),
-                decoration: InputDecoration(
-                  icon: Icon(Icons.control_point),
-                 hintText: "Enter points number",
+          child: SingleChildScrollView(
+        child: Form(
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextField(
+                  onChanged: (String str) {
+                    setState(() {
+                      code = str;
+                    });
+                  },
+                  decoration: new InputDecoration(
+                      icon: Icon(Icons.title), hintText: "Coupon Name"),
                 ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextField(
+                  onChanged: (String str) {
+                    setState(() {
+                      description = str;
+                    });
+                  },
+                  decoration: new InputDecoration(
+                      icon: Icon(Icons.dashboard),
+                      hintText: "Coupon Description"),
+                ),
+              ),
 
-                keyboardType: TextInputType.number,
-                inputFormatters: <TextInputFormatter>[
-                  WhitelistingTextInputFormatter.digitsOnly
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextFormField(
+                  controller: _pointController,
+                  decoration: InputDecoration(
+                    icon: Icon(Icons.control_point),
+                    hintText: "Enter points number",
+                  ),
+                  keyboardType: TextInputType.number,
+                  inputFormatters: <TextInputFormatter>[
+                    WhitelistingTextInputFormatter.digitsOnly
+                  ],
+                ),
+              ),
+
+              Row(
+                children: <Widget>[
+                  Column(
+                    children: <Widget>[
+                      Radio(
+                        value: 1,
+                        groupValue: selectRadio,
+                        onChanged: (val) {
+                          setState(() {
+                            selectedImageUrl = imageUrl1;
+                          });
+                          setSelectedRadio(val);
+                        },
+                      ),
+                      Container(
+                        width: 125,
+                        height: 125,
+                        margin: EdgeInsets.only(left: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: Image.network(imageUrl1),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: <Widget>[
+                      Radio(
+                        value: 2,
+                        groupValue: selectRadio,
+                        onChanged: (val) {
+                          setState(() {
+                            selectedImageUrl = imageUrl2;
+                          });
+                          setSelectedRadio(val);
+                        },
+                      ),
+                      Container(
+                        width: 125,
+                        height: 125,
+                        margin: EdgeInsets.only(left: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: Image.network(imageUrl2),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    children: <Widget>[
+                      Radio(
+                        value: 3,
+                        groupValue: selectRadio,
+                        onChanged: (val) {
+                          setState(() {
+                            selectedImageUrl = imageUrl3;
+                          });
+                          setSelectedRadio(val);
+                        },
+                      ),
+                      Container(
+                        width: 125,
+                        height: 125,
+                        margin: EdgeInsets.only(left: 10),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: FittedBox(
+                          fit: BoxFit.fill,
+                          child: Image.network(imageUrl3),
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
-            ),
 
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: <Widget>[
-                RaisedButton(
-                  onPressed: () {
-                    _addData(widget.user);
-                  },
-                  child: new Text('Add'),
-                ),
-                RaisedButton(
-                  onPressed: _navigateToMerchantHomeView,
-                  child: new Text('Cancel'),
-                )
-              ],
-            )
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: <Widget>[
+                  RaisedButton(
+                    onPressed: () {
+                      _addData(widget.user);
+                    },
+                    child: Text('Add'),
+                  ),
+                  RaisedButton(
+                    onPressed: _navigateToMerchantHomeView,
+                    child: Text('Cancel'),
+                  )
+                ],
+              )
 
 //          new Padding(
 //              padding: const EdgeInsets.all(16.0),
 //            child: ,
 //          )
-          ],
+            ],
+          ),
         ),
       )),
     );

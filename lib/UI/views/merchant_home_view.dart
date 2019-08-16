@@ -5,6 +5,7 @@ import 'package:giver_app/UI/Views/sign_in_page.dart';
 import 'package:giver_app/UI/shared/text_style.dart';
 import 'package:giver_app/UI/shared/ui_reducers.dart';
 import 'package:giver_app/UI/views/merchant_profile_view.dart';
+import 'package:giver_app/UI/views/top_screen_design.dart';
 import 'package:giver_app/UI/widgets/coupon_list.dart';
 import 'package:giver_app/UI/widgets/merchant_image.dart';
 import 'package:giver_app/UI/widgets/merchant_info.dart';
@@ -37,6 +38,7 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
   TextEditingController editingController = TextEditingController();
   int _selectedIndex = 0;
   PageController _pageController;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   @override
   void initState() {
     super.initState();
@@ -94,7 +96,7 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
     switch (_selectedIndex) {
       case 0:
         return getHomeView(model);
-      case 2:
+      case 1:
         return getHistoryView(model);
     }
   }
@@ -102,146 +104,154 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
   Widget getHomeView(UserHomeViewModel model) {
     List<Coupon> couponList =
         model.getCouponsByMerchantId(model.coupons, widget.user.id);
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: TextField(
-            controller: editingController,
-            decoration: InputDecoration(
-              labelText: "Search",
-              hintText: "Search",
-              prefixIcon: Icon(Icons.search),
-            ),
+    List<Coupon> usedCoupons = List<Coupon>();
+    for (Coupon coupon in couponList) {
+      if (!coupon.isUsed) {
+        usedCoupons.add(coupon);
+      }
+    }
+    return Stack(
+      children:<Widget>[
+        Column(
+        children: <Widget>[
+          Container(
+            margin: EdgeInsets.all(4),
+            padding: EdgeInsets.only(left: 20,top: 10),
+            width: MediaQuery.of(context).size.width,
+//            color: Color(0xFFC6FF00),
+            child: Text('Coupon List', style: Style.couponHistoryTextStyleBigger,),
           ),
-          flex: 1,
-        ),
-        Expanded(
-          child: ListView.builder(
-              itemCount: couponList.length,
-              itemBuilder: (context, rowNumber) {
-                var coupon = couponList[rowNumber];
-                String description = coupon.description.toString();
-                String name = coupon.code.toString();
-                return Container(
-                    color: Colors.white10,
-                    height: 140.0,
-                    padding: EdgeInsets.all(5.0),
+          Expanded(
+            child: ListView.builder(
+                itemCount: usedCoupons.length,
+                itemBuilder: (context, rowNumber) {
+                  var coupon = usedCoupons[rowNumber];
+                  String description = coupon.description.toString();
+                  String name = coupon.code.toString();
+                  String imageUrl = coupon.imageUrl.toString();
+
+                  return Container(
+                      color: Colors.white10,
+                      height: 140.0,
+                      padding: EdgeInsets.all(5.0),
 
 //                        child: Card(
 //                          shape: RoundedRectangleBorder(
 //                              borderRadius:
 //                              BorderRadius.all(Radius.circular(8.0))),
-                      child: Card(
+                        child: Card(
 //                        color: Colors.,
-                        elevation: 15.0,
-                        child: Column(
-                          crossAxisAlignment:
-                              CrossAxisAlignment.stretch, // add this
-                          children: <Widget>[
-                            Expanded(
-                              child: Row(
-                                children: <Widget>[
-                                  Expanded(
-                                    child: Container(
-                                      margin: EdgeInsets.only(left: 10),
-                                      height: 100,
-                                      width: 150,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(20),
-                                      ),
-                                      child: FittedBox(
-                                        fit: BoxFit.fill,
-                                        child: Image.network(
-                                          'http://www.kfcrecipe.com/wp-content/uploads/2018/11/KFC-fried-chicken-recipe-1-1.jpg',
-                                          fit: BoxFit.cover,
-                                        ),
-                                      ),
-                                    ),
-                                    flex: 3,
-                                  ),
-                                  Expanded(
-                                    flex: 5,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.only(
-                                          topLeft: Radius.circular(2.0),
-                                          topRight: Radius.circular(2.0),
-                                          bottomLeft: Radius.circular(2.0),
-                                          bottomRight: Radius.circular(2.0)),
+                          elevation: 15.0,
+                          child: Column(
+                            crossAxisAlignment:
+                                CrossAxisAlignment.stretch, // add this
+                            children: <Widget>[
+                              Expanded(
+                                child: Row(
+                                  children: <Widget>[
+                                    Expanded(
                                       child: Container(
-                                        margin: EdgeInsets.only(left: 3),
-                                        height: 140,
+                                        margin: EdgeInsets.only(left: 10),
+                                        height: 100,
+                                        width: 150,
+                                        decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(20),
+                                        ),
+                                        child: FittedBox(
+                                          fit: BoxFit.fill,
+                                          child: Image.network(coupon.imageUrl,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      flex: 3,
+                                    ),
+                                    Expanded(
+                                      flex: 5,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(2.0),
+                                            topRight: Radius.circular(2.0),
+                                            bottomLeft: Radius.circular(2.0),
+                                            bottomRight: Radius.circular(2.0)),
+                                        child: Container(
+                                          margin: EdgeInsets.only(left: 3),
+                                          height: 140,
 //                                      color: Colors.lightBlue[200],
-                                        alignment: Alignment.center,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: <Widget>[
-                                            Expanded(
-                                              child: Container(
-                                                child: Text(
-                                                  name,style: Style.couponHistoryTextStyle,
+                                          alignment: Alignment.center,
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: <Widget>[
+                                              Expanded(
+                                                child: Container(
+                                                  padding:EdgeInsets.only(top: 5) ,
+                                                  child: Text(
+                                                    name,style: Style.couponHistoryTextStyle,
+                                                  ),
                                                 ),
+                                                flex: 1,
                                               ),
-                                              flex: 1,
-                                            ),
-                                            Expanded(
-                                              child: Container(
-                                                margin: EdgeInsets.all(10),
-                                                child: Text(description,),
+                                              Expanded(
+                                                child: Container(
+                                                  margin: EdgeInsets.all(10),
+                                                  child: Text(description,),
+                                                ),
+                                                flex: 3,
                                               ),
-                                              flex: 3,
-                                            ),
-                                            Expanded(
-                                              flex: 2,
-                                              child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceAround,
-                                                  children: <Widget>[
-                                                    IconButton(
-                                                      onPressed: () {
-                                                        Navigator
-                                                            .pushReplacement(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder:
-                                                                        (context) =>
-                                                                            EditCoupon(
-                                                                              user: widget.user,
-                                                                              coupon: coupon,
-                                                                            )));
-                                                      },
-                                                      icon: Icon(Icons.edit,size: 20,),
-                                                    ),
-                                                    IconButton(
-                                                      onPressed: () {
-                                                        _deleteCoupon(coupon,
-                                                            widget.user);
-                                                      },
-                                                      icon: Icon(Icons.delete,size: 20,),
-                                                    )
-                                                  ]),
-                                            )
-                                          ],
+                                              Expanded(
+                                                flex: 2,
+                                                child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceAround,
+                                                    children: <Widget>[
+                                                      IconButton(
+                                                        onPressed: () {
+                                                          Navigator
+                                                              .pushReplacement(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              EditCoupon(
+                                                                                user: widget.user,
+                                                                                coupon: coupon,
+                                                                              )));
+                                                        },
+                                                        icon: Icon(Icons.edit,size: 20,),
+                                                      ),
+                                                      IconButton(
+                                                        onPressed: () {
+                                                          _deleteCoupon(coupon,
+                                                              widget.user);
+                                                        },
+                                                        icon: Icon(Icons.delete,size: 20,),
+                                                      )
+                                                    ]),
+                                              )
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
+                                flex: 10,
                               ),
-                              flex: 10,
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
-                      ),
 //                    )
-                    );
-              }),
-          flex: 9,
-        )
-      ],
+                      );
+                }),
+            flex: 9,
+          )
+        ],
+      ),
+  ],
     );
   }
 
@@ -260,7 +270,6 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
         usedCoupons.add(coupon);
       }
     }
-    ;
     return Column(
       children: <Widget>[
         Expanded(
@@ -329,27 +338,18 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
   Widget build(BuildContext context) {
     return BaseView<UserHomeViewModel>(
         builder: (context, child, model) => Scaffold(
-              appBar: AppBar(
-                title: Center(
-                  child: Text('Home'),
-                ),
-                actions: <Widget>[
-                  IconButton(
-                    icon: Icon(Icons.add),
-                    onPressed: addCoupons,
-                  )
-                ],
-              ),
-              drawer: new Drawer(
-                child: new ListView(
+          key: scaffoldKey,
+          appBar: TopScreenDesign(user: widget.user,scaffoldKey: scaffoldKey,),
+              drawer:  Drawer(
+                child:  ListView(
                   children: <Widget>[
                     UserAccountsDrawerHeader(
                       accountName: Text(widget.user.username),
-                      accountEmail: new Text(widget.user.email),
+                      accountEmail: Text(widget.user.email),
                       currentAccountPicture: GestureDetector(
                         onTap: () => print("avatar tap"),
                         child: CircleAvatar(
-                          backgroundImage: new NetworkImage(
+                          backgroundImage: NetworkImage(
                               "https://profilepicturesdp.com/wp-content/uploads/2018/06/cute-baby-wallpaper-for-whatsapp-dp-11.jpg"),
                         ),
                       ),
@@ -393,10 +393,10 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
                     icon: Icon(Icons.home),
                     title: Text('Home'),
                   ),
-                  BottomNavigationBarItem(
-                    icon: Icon(Icons.camera),
-                    title: Text('Camera'),
-                  ),
+//                  BottomNavigationBarItem(
+//                    icon: Icon(Icons.camera),
+//                    title: Text('Camera'),
+//                  ),
                   BottomNavigationBarItem(
                     icon: Icon(Icons.history),
                     title: Text('History'),
