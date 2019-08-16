@@ -7,6 +7,7 @@ import 'package:giver_app/UI/shared/ui_reducers.dart';
 import 'package:giver_app/UI/views/merchant_profile_view.dart';
 import 'package:giver_app/UI/views/top_screen_design.dart';
 import 'package:giver_app/UI/widgets/coupon_list.dart';
+import 'package:giver_app/UI/widgets/merchant_history_entry.dart';
 import 'package:giver_app/UI/widgets/merchant_image.dart';
 import 'package:giver_app/UI/widgets/merchant_info.dart';
 
@@ -262,76 +263,16 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
   }
 
   Widget getHistoryView(UserHomeViewModel model) {
-    List<Coupon> couponList =
-        model.getCouponsByMerchantId(model.coupons, widget.user.id);
-    List<Coupon> usedCoupons = List<Coupon>();
-    for (Coupon coupon in couponList) {
-      if (coupon.isUsed) {
-        usedCoupons.add(coupon);
-      }
-    }
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: ListView.builder(
-              itemCount: usedCoupons.length,
-              itemBuilder: (context, rowNumber) {
-                var usedCoupon = usedCoupons[rowNumber];
-                String name = usedCoupon.code.toString();
-                String description = usedCoupon.description.toString();
-                return Container(
-                  margin: EdgeInsets.all(5),
-                  child: Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: Container(
-                          height: 140,
-                          width: 200,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Image.network(
-                            'http://www.kfcrecipe.com/wp-content/uploads/2018/11/KFC-fried-chicken-recipe-1-1.jpg',
-                            fit: BoxFit.cover,
-                          ),
-                        ),
-                        flex: 3,
-                      ),
-                      Expanded(
-                        flex: 6,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(1.0),
-                              topRight: Radius.circular(1.0),
-                              bottomLeft: Radius.circular(1.0),
-                              bottomRight: Radius.circular(1.0)),
-                          child: Container(
-//                                          margin: EdgeInsets.only(right: 3),
-                            height: 140,
-                            color: Colors.lightBlue[200],
-                            alignment: Alignment.center,
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: <Widget>[
-                                Container(
-                                  child: Text(name),
-                                ),
-                                Container(
-                                  child: Text(description),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
-              }),
-        )
-      ],
-    );
+    List<Coupon> usedCoupons = model.getUsedCouponsByMerchantId(widget.user.id);
+    return ListView.builder(
+        itemCount: usedCoupons.length,
+        itemBuilder: (context, itemIndex) {
+          var couponItem = usedCoupons[itemIndex];
+          String usedBy = model.getUsedBy(couponItem.usedBy);
+          return MerchantHistoryEntry(coupon: couponItem, usedBy: usedBy);
+        });
+    
+    
   }
 
   @override

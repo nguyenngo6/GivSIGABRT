@@ -92,7 +92,7 @@ class TopScreenDesign extends StatelessWidget implements PreferredSizeWidget {
             padding: EdgeInsets.only(top: 90, right: 20.0, left: 70.0),
             child: Carousel(
               images: [
-                giNetworkImage(
+                NetworkImage(
                     'https://www.kfc.com.au/sites/default/files/WEBSITE_CATERING_768x432px_V2.jpg'),
                 NetworkImage(
                     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqWibJNYq3NL83RDe__GPE0vQAmhLr788XyZGbCqnWe00NliLa'),

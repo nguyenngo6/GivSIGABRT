@@ -108,6 +108,29 @@ class UserHomeViewModel extends BaseModel {
     }
   }
 
+  String getUsedBy(String id){
+    for (User user in customers) {
+      if (user.id == id) {
+        return user.email;
+      }
+    }
+
+    return "N/A";
+  }
+
+  List<Coupon> getUsedCouponsByMerchantId(String merchantId) {
+    var result = List<Coupon>();
+    for (Coupon coupon in coupons){
+      if (coupon.ownedBy == merchantId) {
+        if (coupon.isUsed == true) {
+          result.add(coupon);
+        }
+      }
+    }
+
+    return result;
+  }
+
   List<Coupon> getCouponsByMerchantId(List<Coupon> coupons,String merchantId){
     setState(ViewState.Busy);
     var couponList = List<Coupon>();
