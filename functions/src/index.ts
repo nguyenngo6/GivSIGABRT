@@ -131,7 +131,7 @@ export const markFavorite = functions.https.onCall(async (data, context) => {
       .collection('users')
       .doc(merchantId).get();
     const merchant = documentSnapshot.data()!;
-    
+
     const strings = merchant.email.split("@");
     const topic = strings[0];
     const tokens = querySnapshot.docs.map(snap => snap.id);
@@ -156,61 +156,62 @@ export const unmarkFavorite = functions.https.onCall(async (data, context) => {
     const merchantId = data.merchantId;
     const customerId = data.customerId;
     const dr = await db.collection('users').doc(customerId).collection('favorites').doc(merchantId);
-     const querySnapshot = await db
+    const querySnapshot = await db
       .collection('users')
       .doc(customerId)
       .collection('tokens')
       .get();
-      db.runTransaction(t => {
-        return t.get(dr)
-          .then(doc => {
-            t.delete(dr);
-          });
-      }).then(result => {
-        console.log('Transaction success!');
-      }).catch(err => {
-        console.log('Transaction failure:', err);
-      });
-      
-    const documentSnapshot = await db
-    .collection('users')
-    .doc(merchantId).get();
-  const merchant = documentSnapshot.data()!;
+    db.runTransaction(t => {
+      return t.get(dr)
+        .then(doc => {
+          t.delete(dr);
+        });
+    }).then(result => {
+      console.log('Transaction success!');
+    }).catch(err => {
+      console.log('Transaction failure:', err);
+    });
 
- 
+    const documentSnapshot = await db
+      .collection('users')
+      .doc(merchantId).get();
+    const merchant = documentSnapshot.data()!;
+
+
     const strings = merchant.email.split("@");
     const topic = strings[0];
     const tokens = querySnapshot.docs.map(snap => snap.id);
     admin.messaging().unsubscribeFromTopic(tokens, topic)
-  .then(function(response) {
-    console.log('Successfully unsubscribed from topic:', response);
-  })
-  .catch(function(error) {
-    console.log('Error unsubscribing from topic:', error);
-  });
+      .then(function (response) {
+        console.log('Successfully unsubscribed from topic:', response);
+      })
+      .catch(function (error) {
+        console.log('Error unsubscribing from topic:', error);
+      });
 
-    
+
   } catch (error) {
     console.log("error");
-    
+
   }
 
 });
+
 export const sendNewCouponNotification = functions.firestore
   .document('coupons/{couponID}')
   .onCreate(async snapshot => {
-    
+
     const coupon = snapshot.data()!;
 
     if (coupon !== null) {
-      
+
       const documentSnapshot = await db
         .collection('users')
         .doc(coupon.ownedBy).get();
 
       const merchant = documentSnapshot.data()!;
       const strings = merchant.email.split("@");
-    const topic = strings[0];
+      const topic = strings[0];
 
 
       const payload: admin.messaging.MessagingPayload = {
@@ -224,9 +225,9 @@ export const sendNewCouponNotification = functions.firestore
           tag: `newCoupon`,
         }
       };
-      
+
       return fcm.sendToTopic(topic, payload);
-     
+
     };
 
     return null;
