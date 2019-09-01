@@ -196,6 +196,7 @@ class _SignUpPageState extends State<SignUpPage> {
               {"email": _email, "username": _username, "level": _selected});
           DocumentReference docRef =
               Firestore.instance.collection('users').document(user.uid);
+          
           if (_selected == 1) {
             docRef
                 .collection('usedCoupons')

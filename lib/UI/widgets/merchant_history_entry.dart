@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:giver_app/UI/shared/text_style.dart';
 import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/model/user.dart';
+import 'package:intl/intl.dart';
+import 'package:date_format/date_format.dart';
 
 class MerchantHistoryEntry extends StatelessWidget {
 
@@ -12,6 +14,8 @@ class MerchantHistoryEntry extends StatelessWidget {
   
   @override
   Widget build(BuildContext context) {
+    DateTime time = coupon.time.toDate();
+    var date = formatDate(time, [yyyy, '-', mm, '-', dd, ' ', hh, ':', nn, ':', ss, ' ', am]);
     return Container(
       height: 190,
       child: Card(
@@ -30,7 +34,7 @@ class MerchantHistoryEntry extends StatelessWidget {
                 margin: EdgeInsets.only(bottom: 3, right: 10, top: 10),
                 alignment: Alignment.bottomRight,
                 child: Text(
-                  "July 24 2019",
+                  date,
                   style: Style.couponHistoryTextStyle,
                 ),
               ),

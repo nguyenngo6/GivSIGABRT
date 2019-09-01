@@ -2,6 +2,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:giver_app/services/firebase_service.dart';
 import 'package:giver_app/scoped_model/base_model.dart';
@@ -51,5 +52,7 @@ class MerchantProfileViewModel extends BaseModel {
           : ViewState.DataFetched);
     }
   }
+
+ 
 
 }

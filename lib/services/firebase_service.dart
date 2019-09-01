@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/model/charity.dart';
 import 'package:giver_app/model/donation.dart';
@@ -59,43 +60,81 @@ class FirebaseService {
 //    Firestore.instance.collection('users').document(uid).snapshots().listen(_customerInfoAdded);
 //  }
 
-
-
-  void moveCouponToPending(String couponID, String customerID){
-    Firestore.instance
-        .collection("coupons")
-        .document(couponID)
-        .updateData({
-          'isPending': true,
-          'usedBy': customerID,
-        });
-
-   
+  void moveCouponToPending(String couponID, String customerID) {
+    Firestore.instance.collection("coupons").document(couponID).updateData({
+      'isPending': true,
+      'usedBy': customerID,
+      'time': DateTime.now(),
+    });
   }
-  void denyCoupon({@required String couponID}){
+
+  void denyCoupon({@required String couponID}) {
     Firestore.instance
         .collection("coupons")
         .document(couponID)
-        .updateData({'usedBy': ""});
-
+        .updateData({'usedBy': "", "isPending": false, "isUsed": false});
   }
 
   void redeemCoupon({@required String couponID}) {
     Firestore.instance
         .collection("coupons")
         .document(couponID)
-        .updateData({'isUsed': true});
+        .updateData({'isUsed': true, "isPending": false});
+  }
+
+  void awardCredit({@required int credit, @required String customerId}) {
+    DocumentReference userReference =
+        Firestore.instance.collection('users').document(customerId);
+    Firestore.instance.runTransaction((Transaction transaction) async {
+      DocumentSnapshot snapshot = await transaction.get(userReference);
+      await transaction
+          .update(snapshot.reference, {"points": snapshot['points'] + credit});
+    });
+  }
+
+  // markFavorite(String customerId, String merchantId) async {
+  //   var ds = Firestore.instance
+  //       .collection('users')
+  //       .document(customerId)
+  //       .collection('favorites')
+  //       .document(merchantId);
+
+  //   await ds.setData({"time": DateTime.now()});
+  // }
+
+  // void unmarkFavorite(String customerId, String merchantId) async {
+  //   var ds = Firestore.instance
+  //       .collection('users')
+  //       .document(customerId)
+  //       .collection('favorites')
+  //       .document(merchantId);
+
+  //   await Firestore.instance.runTransaction((Transaction myTransaction) async {
+  //     await myTransaction.delete(ds);
+  //   });
+  // }
+   markFavorite(String customerId, String merchantId) async {
+    final HttpsCallable callable = CloudFunctions.instance.getHttpsCallable(functionName: 'markFavorite');
+    dynamic isSuccess = await callable.call(<String, dynamic> {'customerId' : customerId, 'merchantId' : merchantId, 'time' : DateTime.now().millisecondsSinceEpoch});
+    
+  }
+
+  unmarkFavorite(String customerId, String merchantId) async {
+    final HttpsCallable callable = CloudFunctions.instance.getHttpsCallable(functionName: 'unmarkFavorite');
+    dynamic isSuccess = await callable.call(<String, dynamic> {'customerId' : customerId, 'merchantId' : merchantId});
+    
   }
 
   Future<bool> donate(
       {@required String charityId,
       @required String uid,
-      @required int donatePoints, @required int userPoints}) async {
+      @required int donatePoints,
+      @required int userPoints}) async {
     print('userpoints: $userPoints donatepoints: $donatePoints');
 
-    if(userPoints >= donatePoints){
+    if (userPoints >= donatePoints) {
       DocumentReference userReference =
-      await Firestore.instance.collection('users').document(uid);
+          await Firestore.instance.collection('users').document(uid);
       Firestore.instance.runTransaction((Transaction transaction) async {
         DocumentSnapshot snapshot = await transaction.get(userReference);
         await transaction.update(
@@ -103,11 +142,11 @@ class FirebaseService {
       });
 
       DocumentReference charityReference =
-      await Firestore.instance.collection('charities').document(charityId);
+          await Firestore.instance.collection('charities').document(charityId);
       Firestore.instance.runTransaction((Transaction transaction) async {
         DocumentSnapshot snapshot = await transaction.get(charityReference);
-        await transaction.update(
-            snapshot.reference, {"credits": snapshot['credits'] + donatePoints});
+        await transaction.update(snapshot.reference,
+            {"credits": snapshot['credits'] + donatePoints});
       });
 
       await Firestore.instance
@@ -121,12 +160,9 @@ class FirebaseService {
         'time': DateTime.now().millisecondsSinceEpoch,
       });
       return true;
-    }else{
+    } else {
       return false;
     }
-
-
-
   }
 
   void _donationAdded(QuerySnapshot snapshot) {

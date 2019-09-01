@@ -5,7 +5,7 @@ class Style {
     fontFamily: 'Poppins'
   );
   static final smallTextStyle = commonTextStyle.copyWith(
-    fontSize: 9.0,
+    fontSize: 12.0,
   );
   static final commonTextStyle = baseTextStyle.copyWith(
       color: const Color(0xffb6b2df),
@@ -44,6 +44,12 @@ class Style {
       fontSize: 18,
       fontWeight: FontWeight.w600
   );
+  static final merchantNameTextStyle = baseTextStyle.copyWith(
+      color: Colors.black,
+      fontSize: 18,
+      fontWeight: FontWeight.w600
+  );
+
 
   
   

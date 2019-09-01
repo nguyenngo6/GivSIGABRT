@@ -46,7 +46,7 @@ class _BaseViewState<T extends Model> extends State<BaseView<T>> {
       
         if (message['data']['tag'] == 'approval' && widget.user.level == 2) {
           flush = Flushbar<bool>(
-            flushbarPosition: FlushbarPosition.TOP,
+            flushbarPosition: FlushbarPosition.BOTTOM,
             title: message['notification']['title'],
             message: message['notification']['body'],
             duration: Duration(seconds: 4),
@@ -65,6 +65,19 @@ class _BaseViewState<T extends Model> extends State<BaseView<T>> {
             });
         }
         if (message['data']['tag'] == 'updateNotify' && widget.user.level == 1) {
+          flush = Flushbar(
+            title: message['notification']['title'],
+            message: message['notification']['body'],
+            duration: Duration(seconds: 5),
+            mainButton: FlatButton(
+              child: Text('Dismiss', style: TextStyle(color: Colors.amber)),
+              onPressed: () {
+                flush.dismiss(true);
+              },
+            ),
+          )..show(context);
+        }
+        if (message['data']['tag'] == 'newCoupon' && widget.user.level == 1) {
           flush = Flushbar(
             title: message['notification']['title'],
             message: message['notification']['body'],

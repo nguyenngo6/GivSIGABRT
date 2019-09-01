@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:giver_app/UI/views/qr_scan_view.dart';
+import 'package:giver_app/UI/widgets/category_widget.dart';
 import 'package:giver_app/UI/widgets/coupon_info_item.dart';
+import 'package:giver_app/UI/widgets/pending_coupon_entry.dart';
 import 'package:giver_app/UI/widgets/qr_image.dart';
 import 'package:giver_app/service_locator.dart';
 import 'package:giver_app/services/notification_handler.dart';

@@ -16,16 +16,7 @@ class _MerchantListState extends State<MerchantList> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        Expanded(
-          child: TextField(
-            decoration: InputDecoration(
-              labelText: "Search",
-              hintText: "Search",
-              prefixIcon: Icon(Icons.search),
-            ),
-          ),
-          flex: 1,
-        ),
+        
         Expanded(
           child: ListView.builder(
               itemCount: widget.model.merchants.length,

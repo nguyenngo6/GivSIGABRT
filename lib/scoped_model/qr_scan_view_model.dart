@@ -1,5 +1,6 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/model/user.dart';
 import 'package:giver_app/services/firebase_service.dart';
@@ -78,6 +79,10 @@ class QrScanViewModel extends BaseModel {
           : ViewState.WaitingForInput);
     }
   }
+
+  
+
+
 
 
 

@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/UI/Views/sign_in_page.dart';
@@ -10,6 +13,7 @@ import 'package:giver_app/UI/widgets/coupon_list.dart';
 import 'package:giver_app/UI/widgets/merchant_history_entry.dart';
 import 'package:giver_app/UI/widgets/merchant_image.dart';
 import 'package:giver_app/UI/widgets/merchant_info.dart';
+import 'package:giver_app/UI/widgets/pending_coupon_entry.dart';
 
 import 'package:giver_app/UI/widgets/simple_toolbar.dart';
 import 'package:giver_app/model/coupon.dart';
@@ -43,8 +47,10 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
   @override
   void initState() {
     super.initState();
+  
     _pageController = new PageController();
   }
+   
 
   @override
   void dispose() {
@@ -278,7 +284,9 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
   @override
   Widget build(BuildContext context) {
     return BaseView<UserHomeViewModel>(
+        user: widget.user,
         builder: (context, child, model) => Scaffold(
+          
           key: scaffoldKey,
           appBar: TopScreenDesign(user: widget.user,scaffoldKey: scaffoldKey,),
               drawer:  Drawer(
@@ -315,7 +323,8 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
                     ListTile(
                       title: Text("Link2"),
                       trailing: IconButton(
-                          icon: Icon(Icons.arrow_left), onPressed: null),
+                          icon: Icon(Icons.arrow_left), onPressed: () { Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)
+                          => PendingCouponEntry(merchant: widget.user,)));})
                     ),
                     ListTile(
                       title: Text("Sign Out"),

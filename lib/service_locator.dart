@@ -7,6 +7,7 @@ import 'package:giver_app/scoped_model/merchant_profile_view_model.dart';
 import 'package:giver_app/services/firebase_service.dart';
 import 'package:giver_app/scoped_model/home_view_model.dart';
 
+import 'scoped_model/pending_coupon_entry_view_model.dart';
 import 'scoped_model/qr_scan_view_model.dart';
 
 
@@ -21,7 +22,7 @@ void setupLocator() {
 
   locator.registerSingleton(HomeViewModel());
   locator.registerSingleton(UserHomeViewModel());
-
+  locator.registerSingleton(PendingCouponEntryViewModel());
   locator.registerSingleton(MerchantProfileViewModel());
 
   locator.registerSingleton(CustomerProfileViewModel());

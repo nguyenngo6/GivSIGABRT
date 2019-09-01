@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class Coupon {
   String code;
   String description;
@@ -8,6 +10,7 @@ class Coupon {
   bool isUsed;
   String id;
   String imageUrl;
+  Timestamp time;
 
   Coupon({
     this.code,
@@ -19,6 +22,7 @@ class Coupon {
     this.isUsed,
     this.id,
     this.imageUrl,
+    this.time,
 
   });
 
@@ -31,7 +35,8 @@ class Coupon {
           isUsed = data['isUsed'],
           isPending = data['isPending'],
           imageUrl = data['imageUrl'],
-          code = data['code'];
+          code = data['code'],
+          time = data['time'];
 
 
 

@@ -18,7 +18,7 @@ export const sendAprrovalNotification = functions.firestore
     const old = snapshot.before.data()!;
     const coupon = snapshot.after.data()!;
 
-    if (old.isPending == false && coupon.isPending == true) {
+    if (old.isPending === false && coupon.isPending === true) {
       const querySnapshot = await db
         .collection('users')
         .doc(coupon.ownedBy)
@@ -44,7 +44,7 @@ export const sendAprrovalNotification = functions.firestore
           tag: `approval`,
         }
       };
-      tokens.forEach(function (value)  {
+      tokens.forEach(function (value) {
         return fcm.sendToDevice(value, payload);
       });
     };
@@ -62,7 +62,7 @@ export const sendCouponNotification = functions.firestore
     const old = snapshot.before.data()!;
     const coupon = snapshot.after.data()!;
 
-    if (old.isUsed == false && coupon.isUsed == true) {
+    if (old.isUsed === false && coupon.isUsed === true) {
       const querySnapshot = await db
         .collection('users')
         .doc(coupon.usedBy)
@@ -86,32 +86,150 @@ export const sendCouponNotification = functions.firestore
         data: {
           cId: `${snapshot.before.id}`,
           tag: `updateNotify`,
-          
+
         }
-        
+
       };
-      tokens.forEach(function (value)  {
+      tokens.forEach(function (value) {
         return fcm.sendToDevice(value, payload);
       });
-    };  
+    };
 
     return null;
   });
 
-  export const approveCoupon = functions.https.onCall(async (data, context) => {
-    try {
-      const couponID = data.couponID;
-      const coupon = await db
-        .collection('coupons').doc(couponID).update({
-          'isUsed': true,
-        });
+export const approveCoupon = functions.https.onCall(async (data, context) => {
+  try {
+    const couponID = data.couponID;
+    const coupon = await db
+      .collection('coupons').doc(couponID).update({
+        'isUsed': true,
+        'isPending': false,
+      });
 
-      return coupon;
-    } catch (error) {
-      console.log("error");
-      return null;
-    }
-  
-  
-  
+    return coupon;
+  } catch (error) {
+    console.log("error");
+    return null;
+  }
+});
+
+export const markFavorite = functions.https.onCall(async (data, context) => {
+  try {
+    const merchantId = data.merchantId;
+    const customerId = data.customerId;
+    const time = data.time;
+    let addDoc = db.collection('users').doc(customerId).collection('favorites').doc(merchantId).set({ "time": time });
+
+    const querySnapshot = await db
+      .collection('users')
+      .doc(customerId)
+      .collection('tokens')
+      .get();
+
+    const documentSnapshot = await db
+      .collection('users')
+      .doc(merchantId).get();
+    const merchant = documentSnapshot.data()!;
+    
+    const strings = merchant.email.split("@");
+    const topic = strings[0];
+    const tokens = querySnapshot.docs.map(snap => snap.id);
+    admin.messaging().subscribeToTopic(tokens, topic)
+      .then(function (response) {
+        console.log('Successfully subscribed to topic:', response);
+      })
+      .catch(function (error) {
+        console.log('Error subscribing to topic:', error);
+      });
+
+
+    return addDoc;
+  } catch (error) {
+    console.log("error");
+    return null;
+  }
+
+});
+export const unmarkFavorite = functions.https.onCall(async (data, context) => {
+  try {
+    const merchantId = data.merchantId;
+    const customerId = data.customerId;
+    const dr = await db.collection('users').doc(customerId).collection('favorites').doc(merchantId);
+     const querySnapshot = await db
+      .collection('users')
+      .doc(customerId)
+      .collection('tokens')
+      .get();
+      db.runTransaction(t => {
+        return t.get(dr)
+          .then(doc => {
+            t.delete(dr);
+          });
+      }).then(result => {
+        console.log('Transaction success!');
+      }).catch(err => {
+        console.log('Transaction failure:', err);
+      });
+      
+    const documentSnapshot = await db
+    .collection('users')
+    .doc(merchantId).get();
+  const merchant = documentSnapshot.data()!;
+
+ 
+    const strings = merchant.email.split("@");
+    const topic = strings[0];
+    const tokens = querySnapshot.docs.map(snap => snap.id);
+    admin.messaging().unsubscribeFromTopic(tokens, topic)
+  .then(function(response) {
+    console.log('Successfully unsubscribed from topic:', response);
+  })
+  .catch(function(error) {
+    console.log('Error unsubscribing from topic:', error);
+  });
+
+    
+  } catch (error) {
+    console.log("error");
+    
+  }
+
+});
+export const sendNewCouponNotification = functions.firestore
+  .document('coupons/{couponID}')
+  .onCreate(async snapshot => {
+    
+    const coupon = snapshot.data()!;
+
+    if (coupon !== null) {
+      
+      const documentSnapshot = await db
+        .collection('users')
+        .doc(coupon.ownedBy).get();
+
+      const merchant = documentSnapshot.data()!;
+      const strings = merchant.email.split("@");
+    const topic = strings[0];
+
+
+      const payload: admin.messaging.MessagingPayload = {
+        notification: {
+          title: 'A Wild Coupon Appeared!',
+          body: `Coupon: ${coupon.code}\nCreated By: ${merchant.username}`,
+          click_action: 'FLUTTER_NOTIFICATION_CLICK'
+        },
+        data: {
+          cId: `${snapshot.id}`,
+          tag: `newCoupon`,
+        }
+      };
+      
+      return fcm.sendToTopic(topic, payload);
+     
+    };
+
+    return null;
+
+
   });
