@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:giver_app/UI/views/add_coupon_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/UI/views/custom_shape_clipper.dart';
 import 'package:giver_app/model/user.dart';
 import 'package:carousel_pro/carousel_pro.dart';

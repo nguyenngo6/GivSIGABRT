@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:giver_app/UI/views/merchant_home_view.dart';
 import 'package:giver_app/model/user.dart';
