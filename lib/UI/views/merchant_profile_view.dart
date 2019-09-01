@@ -41,9 +41,12 @@ class MerchantProfileView extends StatelessWidget {
                                         user: customer,
                                       )));
                         },
-                        child: Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
+                        child: Container(
+                          color: Colors.black,
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: Colors.white,
+                          ),
                         )),
                   ),
                   body: Column(
