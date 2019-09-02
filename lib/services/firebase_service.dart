@@ -113,6 +113,18 @@ class FirebaseService {
   //     await myTransaction.delete(ds);
   //   });
   // }
+
+  Future<void> updateMerchantData(String merchantId, String username, String phone, String address) async {
+    await Firestore.instance
+          .collection("users")
+          .document(merchantId)
+          .updateData({
+        'username': username,
+        'phone': phone,
+        'address': address,
+      });
+  }
+
    markFavorite(String customerId, String merchantId) async {
     final HttpsCallable callable = CloudFunctions.instance.getHttpsCallable(functionName: 'markFavorite');
     dynamic isSuccess = await callable.call(<String, dynamic> {'customerId' : customerId, 'merchantId' : merchantId, 'time' : DateTime.now().millisecondsSinceEpoch});

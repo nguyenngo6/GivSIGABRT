@@ -194,7 +194,7 @@ export const unmarkFavorite = functions.https.onCall(async (data, context) => {
     console.log("error");
 
   }
-
+  
 });
 
 export const sendNewCouponNotification = functions.firestore
