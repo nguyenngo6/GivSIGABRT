@@ -1,5 +1,7 @@
 
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class User {
   String username;
   String email;
@@ -9,6 +11,8 @@ class User {
   int points;
   String id;
   String address;
+  String category;
+  
 
   User({
     this.username,
@@ -18,7 +22,9 @@ class User {
     this.phone,
     this.id,
     this.points,
-    this.address
+    this.address,
+    this.category,
+   
   });
 
   User.fromData(Map<String, dynamic> data)
@@ -29,5 +35,8 @@ class User {
         phone = data['phone'],
         email = data['email'],
         points = data['points'],
-        address = data['address'];
+        address = data['address'],
+        category = data['category'];
+        
+        
 }

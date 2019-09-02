@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:giver_app/UI/shared/text_style.dart';
+import 'package:giver_app/UI/views/coupon_info_view.dart';
 import 'package:giver_app/UI/views/qr_scan_view.dart';
 import 'package:giver_app/UI/widgets/busy_overlay.dart';
 import 'package:giver_app/UI/widgets/charity_list.dart';
 import 'package:giver_app/UI/widgets/customer_drawer.dart';
+import 'package:giver_app/UI/widgets/customer_home_widget.dart';
+import 'package:giver_app/UI/shared/text_style.dart';
+import 'package:giver_app/UI/widgets/merchant_item.dart';
 import 'package:giver_app/UI/widgets/merchant_list.dart';
 import 'package:giver_app/enum/view_state.dart';
+import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/model/user.dart';
 import 'package:giver_app/scoped_model/user_home_view_model.dart';
 import 'base_view.dart';
 import 'customer_history_view.dart';
 
-enum WidgetMarker { listOfMerchants, charityOrganizations, history }
+enum WidgetMarker { home, charityOrganizations, history }
 
 class CustomerHomeView extends StatefulWidget {
   const CustomerHomeView({@required this.user});
@@ -20,10 +26,10 @@ class CustomerHomeView extends StatefulWidget {
 }
 
 class _CustomerHomeViewState extends State<CustomerHomeView> {
-  WidgetMarker selectedWidget = WidgetMarker.listOfMerchants;
+  WidgetMarker selectedWidget = WidgetMarker.home;
   String _selectedTittle = 'Home';
   int _selectedIndex = 0;
-
+ final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
   static const TextStyle optionStyle =
       TextStyle(fontSize: 10, fontWeight: FontWeight.bold);
 
@@ -31,7 +37,7 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
     setState(() {
       _selectedIndex = index;
       _selectedIndex == 0
-          ? selectedWidget = WidgetMarker.listOfMerchants
+          ? selectedWidget = WidgetMarker.home
           : _selectedIndex == 1
               ? selectedWidget = WidgetMarker.charityOrganizations
               : selectedWidget = WidgetMarker.history;
@@ -39,7 +45,7 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
           ? _selectedTittle = 'Home'
           : _selectedIndex == 1
               ? _selectedTittle = 'Charity'
-              : _selectedTittle = 'History';
+              :_selectedTittle = 'History' ;
     });
   }
 
@@ -53,6 +59,7 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
             home: DefaultTabController(
               length: 2,
               child: Scaffold(
+                    key: scaffoldKey,
                     appBar: _getAppBar(_selectedTittle, widget.user.points),
                     drawer: CustomerDrawer(customer: widget.user),
                     body: _getBodyUi(context, model),
@@ -64,7 +71,8 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
   }
 
   Widget _getAppBar(String title, int points) {
-    return AppBar(
+    if (_selectedIndex != 0){
+      return AppBar(
       title: Center(child: Text(title)),
       actions: <Widget>[
             Center(
@@ -92,6 +100,8 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
     ): null,
       
     );
+    }
+    return null;
   }
 
   Widget _getBottomBar() {
@@ -99,23 +109,60 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
-          title: Text('Home'),
+          title: Text('Home', ),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.card_giftcard),
           title: Text('Charity'),
         ),
+     
+        
         BottomNavigationBarItem(
           icon: Icon(Icons.history),
           title: Text('History'),
         ),
       ],
       currentIndex: _selectedIndex,
-      selectedItemColor: Colors.amber[800],
+      selectedItemColor: Colors.deepPurpleAccent,
       onTap: _onItemTapped,
+      type: BottomNavigationBarType.fixed,
     );
   }
 
+  foodTapped(UserHomeViewModel model){
+    model.setState(ViewState.FoodMerchant);
+    
+  }
+
+  
+  clothingTapped(UserHomeViewModel model){
+    model.setState(ViewState.FoodMerchant);
+    
+  }
+
+  accessoriesTapped(UserHomeViewModel model){
+     model.setState(ViewState.AccessoriesMerchant);
+  }
+
+  Widget getMerchantList(String category, UserHomeViewModel model){
+    return Column(
+      children: <Widget>[
+        
+        Expanded(
+          child: ListView.builder(
+              itemCount: model.getCategorizedMechants(model.merchants, category).length,
+              itemBuilder: (context, rowNumber) {
+                var merchants = model.getCategorizedMechants(model.merchants, category);
+                var merchant = merchants[rowNumber];
+                print('merchant item:');
+                return MerchantItem(
+                    merchant: merchant, customer: widget.user);
+              }),
+          flex: 9,
+        ),
+      ],
+    );
+  }
 
 //switch body widget function
   Widget _getBodyUi(BuildContext context, UserHomeViewModel model) {
@@ -125,12 +172,14 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
       case ViewState.Error:
         return _errorUi(context, model);
       case ViewState.DataFetched:
-        return selectedWidget == WidgetMarker.listOfMerchants
-            ? MerchantList(model: model, customer: widget.user):
-            selectedWidget == WidgetMarker.charityOrganizations?
-            CharityList(model: model,customer: widget.user,): CustomerHistoryView(user: widget.user,);
+        return selectedWidget == WidgetMarker.home
+            ? CustomerHomeWidget(scaffoldKey: scaffoldKey, customer: widget.user, coupons: model.coupons, merchants: model.merchants,  ):
+            selectedWidget == WidgetMarker.charityOrganizations
+            ? CharityList(model: model,customer: widget.user,):
+            CustomerHistoryView(user: widget.user,);
+      
       default:
-        return MerchantList(model: model, customer: widget.user,);
+        return CustomerHomeWidget(scaffoldKey: scaffoldKey, customer: widget.user, coupons: model.coupons, merchants: model.merchants, );
     }
   }
 

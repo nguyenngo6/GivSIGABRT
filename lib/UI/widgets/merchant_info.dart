@@ -97,9 +97,14 @@ checkIfLikedOrNot() async{
                       Row(
                         children: <Widget>[
                           Icon(Icons.location_on),
-                          Text(
-                            widget.merchant.address,
-                            style: Style.baseTextStyle,
+                          Container(
+                            width: 260,
+                            child: Text(
+                              widget.merchant.address,
+                              style: Style.baseTextStyle,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                            ),
                           )
                         ],
                       )

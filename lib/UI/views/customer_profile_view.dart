@@ -59,7 +59,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
         print('no old image to delete');
         updateNewImage(firebaseStorageRef, context, model);
       } else {
-        // Delete the current image file
+        
         bool result = await firebaseStorageRef.delete().catchError((error) {
           print(
               'this error occur when delete file in Firebase Storage:' + error);

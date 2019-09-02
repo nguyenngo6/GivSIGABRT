@@ -92,6 +92,8 @@ class FirebaseService {
     });
   }
 
+  
+
   // markFavorite(String customerId, String merchantId) async {
   //   var ds = Firestore.instance
   //       .collection('users')
@@ -124,6 +126,7 @@ class FirebaseService {
         'address': address,
       });
   }
+
 
    markFavorite(String customerId, String merchantId) async {
     final HttpsCallable callable = CloudFunctions.instance.getHttpsCallable(functionName: 'markFavorite');

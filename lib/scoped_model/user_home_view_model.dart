@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/model/charity.dart';
 import 'package:giver_app/model/coupon.dart';
@@ -40,6 +42,19 @@ class UserHomeViewModel extends BaseModel {
     this.setState(ViewState.DataFetched);
     return currentUser;
   }
+
+  List<User> getCategorizedMechants (List<User> users, String category){
+    var result = List<User>();
+    for (User merchant in users){
+      if (merchant.category == category){
+        result.add(merchant);
+      }
+    }
+    return result;
+  }
+   
+  
+  
 
   Charity getCharityById(List<Charity> charities,String id){
     this.setState(ViewState.Busy);

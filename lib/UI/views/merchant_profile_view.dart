@@ -1,11 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/UI/shared/text_style.dart';
 import 'package:giver_app/UI/shared/ui_reducers.dart';
 import 'package:giver_app/UI/views/coupon_info_view.dart';
 import 'package:giver_app/UI/views/customer_home_view.dart';
-import 'package:giver_app/UI/widgets/coupon_status.dart';
 import 'package:giver_app/UI/widgets/merchant_image.dart';
 import 'package:giver_app/UI/widgets/merchant_info.dart';
 import 'package:giver_app/UI/widgets/simple_toolbar.dart';
@@ -22,6 +20,7 @@ class MerchantProfileView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double appBarHeight = 50;
     return BaseView<MerchantProfileViewModel>(
         user: customer,
         builder: (context, child, model) =>
@@ -31,22 +30,29 @@ class MerchantProfileView extends StatelessWidget {
               ),
               Scaffold(
                   backgroundColor: Colors.transparent,
-                  appBar: AppBar(
-                    elevation: 0,
-                    backgroundColor: Colors.transparent,
-                    leading: FlatButton(
-                        onPressed: () {
-                          Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => CustomerHomeView(
-                                        user: customer,
-                                      )));
-                        },
-                        child: Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                        )),
+                  appBar: PreferredSize(
+                     preferredSize: Size.fromHeight(appBarHeight),
+                                      child: AppBar(
+                      
+                      elevation: 0,
+                      backgroundColor: Colors.transparent,
+                      leading: FlatButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => CustomerHomeView(
+                                          user: customer,
+                                        )));
+                          },
+                          child: Container(
+                            color: Colors.black,
+                            child: Icon(
+                              Icons.arrow_back,
+                              color: Colors.white,
+                            ),
+                          )),
+                    ),
                   ),
                   body: Column(
                     children: <Widget>[
@@ -64,7 +70,7 @@ class MerchantProfileView extends StatelessWidget {
                       Container(
                           color: Colors.white,
                           height: screenHeight(context,
-                              decreasedBy: 195.143 + toolbarHeight),
+                              decreasedBy: 194 + appBarHeight),
                           child: _getBodyUi(context, model)),
                     ],
                   ))
@@ -150,6 +156,15 @@ class MerchantProfileView extends StatelessWidget {
                           coupon: coupon,
                           customer: customer,
                           merchant: merchant,
+                          navigate: () {
+                                
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MerchantProfileView(
+                                  customer: customer, merchant: merchant,
+                                )));
+                          },
                         )));
           },
           child: Container(

@@ -1,11 +1,9 @@
-import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:giver_app/UI/views/home_view.dart';
 import 'package:giver_app/UI/views/block_home_page.dart';
 
 import 'package:giver_app/UI/views/sign_up_page.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/UI/widgets/busy_overlay.dart';
 import 'package:giver_app/enum/view_state.dart';
 
@@ -22,6 +20,8 @@ class _SignInPageState extends State<SignInPage> {
   String _email;
   String _password;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _passwordFocus = FocusNode();
 
   String validateEmail(String value) {
     Pattern pattern =
@@ -35,129 +35,167 @@ class _SignInPageState extends State<SignInPage> {
 
   @override
   Widget build(BuildContext context) {
-//    print('validator');
-//    print(EmailValidator.validate('toando0612@gmail.com') == true);
+    _fieldFocusChange(
+        BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+      currentFocus.unfocus();
+      FocusScope.of(context).requestFocus(nextFocus);
+    }
+
     return BusyOverlay(
         show: this._state == ViewState.Busy,
         child: Scaffold(
-          appBar: AppBar(title: Center(child: Text('Giver App')),),
+          appBar: AppBar(
+            title: Center(child: Text('Giver App')),
+          ),
           body: SingleChildScrollView(
-            child: Stack(
-              children: <Widget> [Container(
-                  padding: EdgeInsets.all(16.0),
-                  child: Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          TextFormField(
-                            validator: (input) {
-                              if (input.isEmpty) {
-                                return 'Provide an email';
-                              } else {
-                                return null;
-                              }
-                            },
-//                style: style,
-                            decoration: InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                                hintText: "Email",
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(32.0))),
-                            onSaved: (input) => _email = input,
-                          ),
-                          new Container(height: 5.0),
-                          TextFormField(
-                            validator: (input) {
-                              if (input.isEmpty) {
-                                return 'Provide a password';
-                              } else if (input.length < 6) {
-                                return 'Password must have at least 6 characters';
-                              } else {
-                                return null;
-                              }
-                            },
-                            decoration: InputDecoration(
-                                contentPadding:
-                                    EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-                                hintText: "Password",
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(32.0))),
-                            onSaved: (input) => _password = input,
-                            obscureText: true,
-                          ),
-                          Container(
-                              height: 5.0,
-                              child: Text(
-                                _errorMessage,
-                                style: TextStyle(color: Colors.red),
-                              )),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              RaisedButton(
-                                onPressed: signIn,
-                                child: Text('Sign in'),
-                              ),
-                              Container(
-                                width: 50.0,
-                              ),
-                              RaisedButton(
-                                onPressed: signUp,
-                                child: Text('Sign up'),
-                              ),
-                            ],
-                          ),
-                          FlatButton(
-                            child: Text(
-                              'Forgot password?',
-                              style: TextStyle(color: Colors.blue),
+            child: Container(
+                padding: EdgeInsets.all(16.0),
+                child: Column(
+                  children: <Widget>[
+                    Image.asset('assets/upup.png'),
+                    Form(
+                        key: _formKey,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            TextFormField(
+                              autofocus: true,
+                              textInputAction: TextInputAction.next,
+                              focusNode: _emailFocus,
+                              onFieldSubmitted: (term) {
+                                _fieldFocusChange(
+                                    context, _emailFocus, _passwordFocus);
+                              },
+                              validator: (input) {
+                                if (input.isEmpty) {
+                                  return 'Provide an email';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.fromLTRB(
+                                      20.0, 15.0, 20.0, 15.0),
+                                  hintText: "Email",
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(32.0))),
+                              onSaved: (input) => _email = input,
                             ),
-                            onPressed: () { showDialog<String>(
-                                context: context,
-                                builder: (BuildContext context) => AlertDialog(
-                                  title: const Text('Please enter your email'),
-                                  content: TextFormField(
-                                    keyboardType: TextInputType.emailAddress,
-                                    validator: validateEmail,
-                                    controller: _inputController,
-                                    decoration: InputDecoration(
-                                        contentPadding:
-                                        EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 15.0),
-                                        hintText: "Email",
-                                        border: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(20.0))),
+                            new Container(height: 5.0),
+                            TextFormField(
+                              autofocus: true,
+                              textInputAction: TextInputAction.done,
+                              focusNode: _passwordFocus,
+                              onFieldSubmitted: (value) {
+                                _passwordFocus.unfocus();
+                                signIn();
+                              },
+                              validator: (input) {
+                                if (input.isEmpty) {
+                                  return 'Provide a password';
+                                } else if (input.length < 6) {
+                                  return 'Password must have at least 6 characters';
+                                } else {
+                                  return null;
+                                }
+                              },
+                              decoration: InputDecoration(
+                                  contentPadding: EdgeInsets.fromLTRB(
+                                      20.0, 15.0, 20.0, 15.0),
+                                  hintText: "Password",
+                                  border: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(32.0))),
+                              onSaved: (input) => _password = input,
+                              obscureText: true,
+                            ),
+                            Container(
+                                height: 5.0,
+                                child: Text(
+                                  _errorMessage,
+                                  style: TextStyle(color: Colors.red),
+                                )),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                RaisedButton(
+                                  onPressed: signIn,
+                                  child: Text('Sign in'),
+                                ),
+                                Container(
+                                  width: 50.0,
+                                ),
+                                RaisedButton(
+                                  onPressed: signUp,
+                                  child: Text('Sign up'),
+                                ),
+                              ],
+                            ),
+                            FlatButton(
+                              child: Text(
+                                'Forgot password?',
+                                style: TextStyle(color: Colors.blue),
+                              ),
+                              onPressed: () {
+                                showDialog<String>(
+                                    context: context,
+                                    builder: (BuildContext context) =>
+                                        AlertDialog(
+                                          title: const Text(
+                                              'Please enter your email'),
+                                          content: TextFormField(
+                                            keyboardType:
+                                                TextInputType.emailAddress,
+                                            validator: validateEmail,
+                                            controller: _inputController,
+                                            decoration: InputDecoration(
+                                                contentPadding:
+                                                    EdgeInsets.fromLTRB(
+                                                        20.0, 10.0, 20.0, 15.0),
+                                                hintText: "Email",
+                                                border: OutlineInputBorder(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20.0))),
 //                        onSaved: (input) => _username = input,
-                                  ),
-                                  actions: <Widget>[
-                                    FlatButton(
-                                      child: Text('Cancel'),
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
-                                    FlatButton(
-                                      child: Text('OK'),
-                                      onPressed: () =>
-                                          Navigator.pop(context, _inputController.text),
-                                    )
-                                  ],
-                                )).then((returnVal) {
-                              if (returnVal != null) {
-                                print('return Val not null');
-                                FirebaseAuth.instance.sendPasswordResetEmail(email: _inputController.text);
-                                print('email sent to' + _inputController.text);
-                                Scaffold.of(context).showSnackBar(SnackBar(
-                                    content: Text('Email sent to ' +
-                                        _inputController.text),
-                                    action: SnackBarAction(label: 'OK', onPressed: () {})));
-                              }
-                            });},
-                          ),
-                        ],
-                      )))],
-            ),
+                                          ),
+                                          actions: <Widget>[
+                                            FlatButton(
+                                              child: Text('Cancel'),
+                                              onPressed: () =>
+                                                  Navigator.pop(context),
+                                            ),
+                                            FlatButton(
+                                              child: Text('OK'),
+                                              onPressed: () => Navigator.pop(
+                                                  context,
+                                                  _inputController.text),
+                                            )
+                                          ],
+                                        )).then((returnVal) {
+                                  if (returnVal != null) {
+                                    print('return Val not null');
+                                    FirebaseAuth.instance
+                                        .sendPasswordResetEmail(
+                                            email: _inputController.text);
+                                    print('email sent to' +
+                                        _inputController.text);
+                                    Scaffold.of(context).showSnackBar(SnackBar(
+                                        content: Text('Email sent to ' +
+                                            _inputController.text),
+                                        action: SnackBarAction(
+                                            label: 'OK', onPressed: () {})));
+                                  }
+                                });
+                              },
+                            ),
+                          ],
+                        ))
+                  ],
+                )),
           ),
         ));
   }
@@ -182,7 +220,6 @@ class _SignInPageState extends State<SignInPage> {
           });
         });
         if (user.isEmailVerified) {
-          
           Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => HomeView(user: user)));
         } else {
@@ -196,6 +233,10 @@ class _SignInPageState extends State<SignInPage> {
           title: Text('error'),
         );
       }
+    } else {
+      setState(() {
+        _state = ViewState.DataFetched;
+      });
     }
   }
 
@@ -203,5 +244,4 @@ class _SignInPageState extends State<SignInPage> {
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => SignUpPage()));
   }
-  
 }
