@@ -1,31 +1,15 @@
-import 'dart:io';
-
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/UI/Views/sign_in_page.dart';
 import 'package:giver_app/UI/shared/text_style.dart';
-import 'package:giver_app/UI/shared/ui_reducers.dart';
-import 'package:giver_app/UI/views/merchant_profile_view.dart';
 import 'package:giver_app/UI/views/top_screen_design.dart';
-import 'package:giver_app/UI/widgets/coupon_list.dart';
 import 'package:giver_app/UI/widgets/merchant_history_entry.dart';
-import 'package:giver_app/UI/widgets/merchant_image.dart';
-import 'package:giver_app/UI/widgets/merchant_info.dart';
 import 'package:giver_app/UI/widgets/pending_coupon_entry.dart';
-
-import 'package:giver_app/UI/widgets/simple_toolbar.dart';
 import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/model/user.dart';
 import 'package:giver_app/scoped_model/user_home_view_model.dart';
-
-import 'package:giver_app/services/firebase_service.dart';
-import 'package:giver_app/scoped_model/merchant_profile_view_model.dart';
 import 'package:giver_app/UI/views/base_view.dart';
-import 'package:giver_app/enum/view_state.dart';
-import 'package:giver_app/UI/widgets/coupon_item.dart';
-
 import 'add_coupon_page.dart';
 import 'edit_coupon_page.dart';
 import 'merchant_edit_info_view.dart';

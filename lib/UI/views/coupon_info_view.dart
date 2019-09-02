@@ -5,14 +5,10 @@ import 'package:giver_app/UI/shared/text_style.dart';
 import 'package:giver_app/UI/shared/ui_reducers.dart';
 import 'package:giver_app/UI/views/base_view.dart';
 import 'package:giver_app/UI/views/merchant_profile_view.dart';
-import 'package:giver_app/UI/views/qr_scan_view.dart';
-import 'package:giver_app/UI/widgets/simple_toolbar.dart';
 import 'package:giver_app/enum/view_state.dart';
 import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/model/user.dart';
 import 'package:giver_app/scoped_model/qr_scan_view_model.dart';
-
-import 'customer_home_view.dart';
 
 class CouponInfoView extends StatefulWidget {
   const CouponInfoView({@required this.customer, @required this.merchant, @required this.coupon});

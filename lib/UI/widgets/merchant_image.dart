@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/widgets.dart';
@@ -17,13 +19,13 @@ class _MerchantImageState extends State<MerchantImage> {
 
   @override
   Widget build(BuildContext context) {
-    Image image = Image.network(widget.merchant.imageUrl);
+    String imageUrl = widget.merchant.imageUrl;
     return Container(
       width: double.infinity,
       height: _height,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: image.image,
+          image: imageUrl==null ? ExactAssetImage('assets/merchant.jpg'):NetworkImage(imageUrl),
           fit: BoxFit.cover
         )
       ),
