@@ -71,8 +71,9 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
   }
 
   Widget _getAppBar(String title, int points) {
-    if (_selectedIndex != 0){
+    
       return AppBar(
+        backgroundColor: Color(0xFF9C27B0),
       title: Center(child: Text(title)),
       actions: <Widget>[
             Center(
@@ -100,8 +101,8 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
     ): null,
       
     );
-    }
-    return null;
+    
+  
   }
 
   Widget _getBottomBar() {
@@ -129,20 +130,7 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
     );
   }
 
-  foodTapped(UserHomeViewModel model){
-    model.setState(ViewState.FoodMerchant);
-    
-  }
-
   
-  clothingTapped(UserHomeViewModel model){
-    model.setState(ViewState.FoodMerchant);
-    
-  }
-
-  accessoriesTapped(UserHomeViewModel model){
-     model.setState(ViewState.AccessoriesMerchant);
-  }
 
   Widget getMerchantList(String category, UserHomeViewModel model){
     return Column(
@@ -173,13 +161,15 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
         return _errorUi(context, model);
       case ViewState.DataFetched:
         return selectedWidget == WidgetMarker.home
-            ? CustomerHomeWidget(scaffoldKey: scaffoldKey, customer: widget.user, coupons: model.coupons, merchants: model.merchants,  ):
+            ? CustomerHomeWidget(customer: widget.user, coupons: model.coupons, merchants: model.merchants,
+
+             ):
             selectedWidget == WidgetMarker.charityOrganizations
             ? CharityList(model: model,customer: widget.user,):
             CustomerHistoryView(user: widget.user,);
       
       default:
-        return CustomerHomeWidget(scaffoldKey: scaffoldKey, customer: widget.user, coupons: model.coupons, merchants: model.merchants, );
+        return CustomerHomeWidget( customer: widget.user, coupons: model.coupons, merchants: model.merchants, );
     }
   }
 

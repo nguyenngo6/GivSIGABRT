@@ -9,10 +9,10 @@ class CustomerDrawer extends StatefulWidget {
   final User customer;
   CustomerDrawer({@required this.customer});
   @override
-  _MerChanrDrawerState createState() => _MerChanrDrawerState();
+  _CustomerDrawerState createState() => _CustomerDrawerState();
 }
 
-class _MerChanrDrawerState extends State<CustomerDrawer> {
+class _CustomerDrawerState extends State<CustomerDrawer> {
   @override
   Widget build(BuildContext context) {
     signOut() {

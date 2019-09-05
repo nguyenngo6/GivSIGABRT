@@ -15,12 +15,12 @@ import 'package:giver_app/model/user.dart';
 
 class CustomerHomeWidget extends StatelessWidget {
   
-  final GlobalKey<ScaffoldState> scaffoldKey;
+  
   final User customer;
   final List<Coupon> coupons;
   final List<User> merchants;
-
-  const CustomerHomeWidget({Key key, this.scaffoldKey, this.customer, this.coupons, this.merchants}) : super(key: key);
+ 
+  const CustomerHomeWidget({this.customer, this.coupons, this.merchants});
   @override
   Widget build(BuildContext context) {
   
@@ -179,37 +179,37 @@ class CustomerHomeWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
 //                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: <Widget>[
-                        IconButton(
-                          padding: EdgeInsets.only(top: 30),
-                          icon: Icon(Icons.sort),
-                          onPressed:()=> scaffoldKey.currentState.openDrawer(),
-                          color: Colors.white,
-                          iconSize: 28.0,
-                        ),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Container(
-                                margin: EdgeInsets.only(left: 20, top: 25),
-                                child: Text(
-                                  'abc',
-                                  style: TextStyle(
-                                      fontSize: 25, color: Colors.white),
-                                ),
-                              ),
-                              Container(
-                                margin: EdgeInsets.only(left: 20),
-                                child: Text(
-                                  'abc',
-                                  style: TextStyle(
-                                      fontSize: 15, color: Colors.white),
-                                ),
-                              )
-                            ],
-                          ),
-                          flex: 2,
-                        ),
+                        // IconButton(
+                        //   padding: EdgeInsets.only(top: 30),
+                        //   icon: Icon(Icons.sort),
+                        //   onPressed: null,
+                        //   color: Colors.white,
+                        //   iconSize: 28.0,
+                        // ),
+                        // Expanded(
+                        //   child: Column(
+                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                        //     children: <Widget>[
+                        //       Container(
+                        //         margin: EdgeInsets.only(left: 20, top: 25),
+                        //         child: Text(
+                        //           'abc',
+                        //           style: TextStyle(
+                        //               fontSize: 25, color: Colors.white),
+                        //         ),
+                        //       ),
+                        //       Container(
+                        //         margin: EdgeInsets.only(left: 20),
+                        //         child: Text(
+                        //           'abc',
+                        //           style: TextStyle(
+                        //               fontSize: 15, color: Colors.white),
+                        //         ),
+                        //       )
+                        //     ],
+                        //   ),
+                        //   flex: 2,
+                        // ),
                       ],
                     )
                   ],
@@ -223,7 +223,7 @@ class CustomerHomeWidget extends StatelessWidget {
               Container(
                   width: 290,
                   alignment: Alignment.topCenter,
-                  padding: EdgeInsets.only(top: 120, left: 40.0, bottom: 300),
+                  padding: EdgeInsets.only(top: 30, left: 40.0, bottom: 420),
                   child: Container(
                     height: 180,
                     child: Stack(
@@ -259,7 +259,7 @@ class CustomerHomeWidget extends StatelessWidget {
                   width: 290,
                   alignment: Alignment.topCenter,
                   padding: EdgeInsets.only(
-                      top: 120,left: 20,right: 20, bottom: 300),
+                      top: 30,left: 20,right: 20, bottom: 420),
                   child: Container(
                     height: 180,
                    child: Stack(
@@ -295,7 +295,7 @@ class CustomerHomeWidget extends StatelessWidget {
                   width: 290,
                   alignment: Alignment.topCenter,
                   padding: EdgeInsets.only(
-                      top: 120,right:40 ,  bottom: 300),
+                      top: 30,right:40 ,  bottom: 420),
                   child: Container(
                     height: 180,
                     child: Stack(
@@ -330,7 +330,7 @@ class CustomerHomeWidget extends StatelessWidget {
             ],
           ),
           Container(
-            padding: EdgeInsets.only(top: 290),
+            padding: EdgeInsets.only(top: 210),
             width: double.infinity,
             child: Column(
               children: <Widget>[
@@ -475,7 +475,7 @@ class CustomerHomeWidget extends StatelessWidget {
             ),
           ),
           Container(
-            padding: EdgeInsets.only(top: 425),
+            padding: EdgeInsets.only(top: 345),
             child: Column(
               children: <Widget>[
                 Row(
