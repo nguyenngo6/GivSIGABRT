@@ -25,7 +25,7 @@ class _MerchantImageState extends State<MerchantImage> {
       height: _height,
       decoration: BoxDecoration(
         image: DecorationImage(
-          image: imageUrl==null ? ExactAssetImage('assets/merchant.jpg'):NetworkImage(imageUrl),
+          image: imageUrl==null||imageUrl=='' ? ExactAssetImage('assets/merchant.jpg'):NetworkImage(imageUrl),
           fit: BoxFit.cover
         )
       ),

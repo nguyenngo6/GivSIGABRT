@@ -30,7 +30,7 @@ class MerchantItem extends StatelessWidget {
                             topLeft: Radius.circular(8.0),
                             topRight: Radius.circular(8.0),
                           ),
-                          child: merchant.imageUrl==null?Image.asset('assets/merchant.jpg', fit: BoxFit.fill,):Image.network(merchant.imageUrl,
+                          child: merchant.imageUrl==null||merchant.imageUrl==''?Image.asset('assets/merchant.jpg', fit: BoxFit.fill,):Image.network(merchant.imageUrl,
                               fit: BoxFit.fill),
                         ),
                         flex: 8,

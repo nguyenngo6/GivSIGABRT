@@ -317,20 +317,18 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
                 child:  ListView(
                   children: <Widget>[
                     UserAccountsDrawerHeader(
-                      accountName: Text(widget.user.username),
-                      accountEmail: Text(widget.user.email),
-                      currentAccountPicture: GestureDetector(
-                        onTap: () => print("avatar tap"),
-                        child: CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              "https://profilepicturesdp.com/wp-content/uploads/2018/06/cute-baby-wallpaper-for-whatsapp-dp-11.jpg"),
-                        ),
-                      ),
+                      accountName: Text(widget.user.username, style: TextStyle( color: Colors.tealAccent)),
+                      accountEmail: Text(widget.user.email, style: TextStyle( color: Colors.tealAccent, fontSize: 12, fontStyle: FontStyle.italic),),
+//                      currentAccountPicture: GestureDetector(
+//                        onTap: () => print("avatar tap"),
+//                        child: CircleAvatar(
+//                          backgroundImage: widget.user.imageUrl==null||widget.user.imageUrl=='' ? ExactAssetImage('assets/merchant.jpg'):NetworkImage(widget.user.imageUrl),
+//                        ),
+//                      ),
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               fit: BoxFit.fill,
-                              image: NetworkImage(
-                                  "https://previews.123rf.com/images/wmitrmatr/wmitrmatr1408/wmitrmatr140800310/30747109-beautiful-paddy-with-nice-background.jpg"))),
+                              image: widget.user.imageUrl==null||widget.user.imageUrl=='' ? ExactAssetImage('assets/merchant.jpg'):NetworkImage(widget.user.imageUrl))),
                     ),
                     ListTile(
                         title: Text("Edit"),
