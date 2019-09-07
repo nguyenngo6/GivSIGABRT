@@ -84,27 +84,27 @@ class TopScreenDesign extends StatelessWidget implements PreferredSizeWidget {
               ),
             ),
           ),
-          Container(
-            width: 350,
-            alignment: Alignment.topCenter,
-            padding: EdgeInsets.only(top: 90, right: 20.0, left: 70.0),
-            child: Carousel(
-              images: [
-                NetworkImage(
-                    'https://www.kfc.com.au/sites/default/files/WEBSITE_CATERING_768x432px_V2.jpg'),
-                NetworkImage(
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqWibJNYq3NL83RDe__GPE0vQAmhLr788XyZGbCqnWe00NliLa'),
-                NetworkImage(
-                    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsCB6Ul9W22Fsrvi9YJroYmZCjBz8Y5VY3UAY9P0Z4sGiwxuJbyQ')
-              ],
-              autoplay: true,
-              animationCurve: Curves.easeInOutBack,
-              animationDuration: Duration(microseconds: 500),
-              overlayShadowSize: 0.7,
-              dotSize: 4.0,
-              indicatorBgPadding: 5.0,
-            ),
-          ),
+          // Container(
+          //   width: 350,
+          //   alignment: Alignment.topCenter,
+          //   padding: EdgeInsets.only(top: 90, right: 20.0, left: 70.0),
+          //   child: Carousel(
+          //     images: [
+          //       NetworkImage(
+          //           'https://www.kfc.com.au/sites/default/files/WEBSITE_CATERING_768x432px_V2.jpg'),
+          //       NetworkImage(
+          //           'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqWibJNYq3NL83RDe__GPE0vQAmhLr788XyZGbCqnWe00NliLa'),
+          //       NetworkImage(
+          //           'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsCB6Ul9W22Fsrvi9YJroYmZCjBz8Y5VY3UAY9P0Z4sGiwxuJbyQ')
+          //     ],
+          //     autoplay: true,
+          //     animationCurve: Curves.easeInOutBack,
+          //     animationDuration: Duration(microseconds: 500),
+          //     overlayShadowSize: 0.7,
+          //     dotSize: 4.0,
+          //     indicatorBgPadding: 5.0,
+          //   ),
+          // ),
         ],
       ),
     );

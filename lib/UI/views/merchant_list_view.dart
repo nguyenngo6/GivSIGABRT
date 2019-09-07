@@ -34,7 +34,7 @@ class _MerchantListViewState extends State<MerchantListView> {
         backgroundColor: Colors.white,
                   appBar: AppBar(
                     elevation: 0,
-                    backgroundColor: Colors.white,
+                    backgroundColor: Colors.deepPurpleAccent,
                     leading:  FlatButton(
                   child: Icon(Icons.arrow_back),
                   onPressed: () {

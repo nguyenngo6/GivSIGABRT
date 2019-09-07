@@ -161,7 +161,7 @@ class _CustomerHomeViewState extends State<CustomerHomeView> {
         return _errorUi(context, model);
       case ViewState.DataFetched:
         return selectedWidget == WidgetMarker.home
-            ? CustomerHomeWidget(customer: widget.user, coupons: model.coupons, merchants: model.merchants,
+            ? CustomerHomeWidget(customer: widget.user, coupons: model.getUnusedCoupons(), merchants: model.merchants,
 
              ):
             selectedWidget == WidgetMarker.charityOrganizations

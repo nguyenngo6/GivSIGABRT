@@ -145,6 +145,15 @@ class UserHomeViewModel extends BaseModel {
 
     return result;
   }
+  List<Coupon> getUnusedCoupons() {
+    var result = List<Coupon>();
+    for (Coupon coupon in coupons){
+      if (coupon.isPending == false && coupon.isUsed == false ) {
+        result.add(coupon);
+      }
+    }
+    return result;
+  }
 
   List<Coupon> getCouponsByMerchantId(List<Coupon> coupons,String merchantId){
     setState(ViewState.Busy);

@@ -38,12 +38,7 @@ class MerchantProfileView extends StatelessWidget {
                       backgroundColor: Colors.transparent,
                       leading: FlatButton(
                           onPressed: () {
-                            Navigator.pushReplacement(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => CustomerHomeView(
-                                          user: customer,
-                                        )));
+                            Navigator.pop(context);
                           },
                           child: Container(
                             color: Colors.black,
@@ -149,13 +144,14 @@ class MerchantProfileView extends StatelessWidget {
           Coupon coupon) =>
       GestureDetector(
           onTap: () {
-            Navigator.pushReplacement(
+            Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => CouponInfoView(
                           coupon: coupon,
                           customer: customer,
                           merchant: merchant,
+                          buildContext: context,
                           navigate: () {
                                 
                     Navigator.push(

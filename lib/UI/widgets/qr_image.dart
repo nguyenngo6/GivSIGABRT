@@ -13,6 +13,9 @@ class QrWidget extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(name),
+        leading: FlatButton(
+          child: Icon(Icons.arrow_back),
+          onPressed:() => Navigator.pop(context),),
       ),
       body: Center(
         child: Column(

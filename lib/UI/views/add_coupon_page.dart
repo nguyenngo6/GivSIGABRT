@@ -139,83 +139,91 @@ class _AddCouponsState extends State<AddCoupon> {
 
               Row(
                 children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Radio(
-                        value: 1,
-                        groupValue: selectRadio,
-                        onChanged: (val) {
-                          setState(() {
-                            selectedImageUrl = imageUrl1;
-                          });
-                          setSelectedRadio(val);
-                        },
-                      ),
-                      Container(
-                        width: 125,
-                        height: 125,
-                        margin: EdgeInsets.only(left: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                  Expanded(flex: 3,
+                                      child: Column(
+                      children: <Widget>[
+                        Radio(
+                          value: 1,
+                          groupValue: selectRadio,
+                          onChanged: (val) {
+                            setState(() {
+                              selectedImageUrl = imageUrl1;
+                            });
+                            setSelectedRadio(val);
+                          },
                         ),
-                        child: FittedBox(
-                          fit: BoxFit.fill,
-                          child: Image.network(imageUrl1),
+                        Container(
+                          width: 125,
+                          height: 125,
+                          margin: EdgeInsets.only(left: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: FittedBox(
+                            fit: BoxFit.fill,
+                            child: Image.network(imageUrl1),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                  Column(
-                    children: <Widget>[
-                      Radio(
-                        value: 2,
-                        groupValue: selectRadio,
-                        onChanged: (val) {
-                          setState(() {
-                            selectedImageUrl = imageUrl2;
-                          });
-                          setSelectedRadio(val);
-                        },
-                      ),
-                      Container(
-                        width: 125,
-                        height: 125,
-                        margin: EdgeInsets.only(left: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                  Expanded(
+                    flex: 3,
+                                      child: Column(
+                      children: <Widget>[
+                        Radio(
+                          value: 2,
+                          groupValue: selectRadio,
+                          onChanged: (val) {
+                            setState(() {
+                              selectedImageUrl = imageUrl2;
+                            });
+                            setSelectedRadio(val);
+                          },
                         ),
-                        child: FittedBox(
-                          fit: BoxFit.fill,
-                          child: Image.network(imageUrl2),
+                        Container(
+                          width: 125,
+                          height: 125,
+                          margin: EdgeInsets.only(left: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: FittedBox(
+                            fit: BoxFit.fill,
+                            child: Image.network(imageUrl2),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                  Column(
-                    children: <Widget>[
-                      Radio(
-                        value: 3,
-                        groupValue: selectRadio,
-                        onChanged: (val) {
-                          setState(() {
-                            selectedImageUrl = imageUrl3;
-                          });
-                          setSelectedRadio(val);
-                        },
-                      ),
-                      Container(
-                        width: 125,
-                        height: 125,
-                        margin: EdgeInsets.only(left: 10),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
+                  Expanded(
+                    flex: 3,
+                                      child: Column(
+                      children: <Widget>[
+                        Radio(
+                          value: 3,
+                          groupValue: selectRadio,
+                          onChanged: (val) {
+                            setState(() {
+                              selectedImageUrl = imageUrl3;
+                            });
+                            setSelectedRadio(val);
+                          },
                         ),
-                        child: FittedBox(
-                          fit: BoxFit.fill,
-                          child: Image.network(imageUrl3),
+                        Container(
+                          width: 125,
+                          height: 125,
+                          margin: EdgeInsets.only(left: 10),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: FittedBox(
+                            fit: BoxFit.fill,
+                            child: Image.network(imageUrl3),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),

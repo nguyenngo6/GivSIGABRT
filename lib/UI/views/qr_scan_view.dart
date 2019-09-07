@@ -42,7 +42,7 @@ class _QrScanViewState extends State<QrScanView> {
                   onPressed: () {
                     _resetData();
                     model.setState(ViewState.DataFetched);
-                    Navigator.pushReplacement(
+                    Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) => CustomerHomeView(

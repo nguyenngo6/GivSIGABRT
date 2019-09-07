@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:giver_app/UI/Views/sign_in_page.dart';
@@ -6,10 +7,12 @@ import 'package:giver_app/UI/shared/text_style.dart';
 import 'package:giver_app/UI/views/top_screen_design.dart';
 import 'package:giver_app/UI/widgets/merchant_history_entry.dart';
 import 'package:giver_app/UI/widgets/pending_coupon_entry.dart';
+import 'package:giver_app/UI/widgets/qr_image.dart';
 import 'package:giver_app/model/coupon.dart';
 import 'package:giver_app/model/user.dart';
 import 'package:giver_app/scoped_model/user_home_view_model.dart';
 import 'package:giver_app/UI/views/base_view.dart';
+import 'package:qr_flutter/qr_flutter.dart';
 import 'add_coupon_page.dart';
 import 'edit_coupon_page.dart';
 import 'merchant_edit_info_view.dart';
@@ -90,6 +93,31 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
       case 1:
         return getHistoryView(model);
     }
+  }
+  showConfirmationDialog(Coupon coupon,User merchant) {
+    String name = coupon.code;
+    showDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoAlertDialog(
+            title: Text('Confirmation'),
+            content: Text('Are you sure to delete this $name coupon'),
+            actions: <Widget>[
+              FlatButton(
+                  onPressed: () {
+                    _deleteCoupon(coupon, merchant);
+                    Navigator.pop(context);
+                  },
+                  child: Text('Ok')),
+              FlatButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancel'),
+              )
+            ],
+          );
+        });
   }
 
   Widget getHomeView(UserHomeViewModel model) {
@@ -202,7 +230,7 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
                                                       IconButton(
                                                         onPressed: () {
                                                           Navigator
-                                                              .pushReplacement(
+                                                              .push(
                                                                   context,
                                                                   MaterialPageRoute(
                                                                       builder:
@@ -215,9 +243,21 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
                                                         icon: Icon(Icons.edit,size: 20,),
                                                       ),
                                                       IconButton(
+                                                        icon: Icon(Icons.wallpaper,size:20),
+                                                        onPressed: () { Navigator
+                                                              .push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              QrWidget(coupon: coupon,
+                                                                                
+                                                                                
+                                                                              )));},
+                                                      ),
+                                                      IconButton(
                                                         onPressed: () {
-                                                          _deleteCoupon(coupon,
-                                                              widget.user);
+                                                          showConfirmationDialog(coupon, widget.user);
                                                         },
                                                         icon: Icon(Icons.delete,size: 20,),
                                                       )
@@ -305,9 +345,9 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
                                               model.merchants, widget.user.id),
                                         ))))),
                     ListTile(
-                      title: Text("Link2"),
+                      title: Text("Pending Coupons"),
                       trailing: IconButton(
-                          icon: Icon(Icons.arrow_left), onPressed: () { Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)
+                          icon: Icon(Icons.arrow_left), onPressed: () { Navigator.push(context, MaterialPageRoute(builder: (context)
                           => PendingCouponEntry(merchant: widget.user,)));})
                     ),
                     ListTile(

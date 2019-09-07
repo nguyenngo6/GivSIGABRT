@@ -103,7 +103,7 @@ class _PendingCouponEntryState extends State<PendingCouponEntry> {
             appBar: AppBar(
               title: Text("Pending Coupons"),
               elevation: 0,
-              backgroundColor: Colors.blueAccent,
+              backgroundColor: Colors.deepPurpleAccent,
               leading: FlatButton(
                   onPressed: () => {Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)
                           => MerchantHomeView(user: widget.merchant,)))},
