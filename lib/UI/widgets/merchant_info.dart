@@ -103,7 +103,7 @@ checkIfLikedOrNot() async{
                               widget.merchant.address,
                               style: Style.baseTextStyle,
                               overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
+                              maxLines: 2,
                             ),
                           )
                         ],
