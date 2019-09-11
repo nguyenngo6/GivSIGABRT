@@ -317,14 +317,8 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
                 child:  ListView(
                   children: <Widget>[
                     UserAccountsDrawerHeader(
-                      accountName: Text(widget.user.username, style: TextStyle( color: Colors.tealAccent)),
-                      accountEmail: Text(widget.user.email, style: TextStyle( color: Colors.tealAccent, fontSize: 12, fontStyle: FontStyle.italic),),
-//                      currentAccountPicture: GestureDetector(
-//                        onTap: () => print("avatar tap"),
-//                        child: CircleAvatar(
-//                          backgroundImage: widget.user.imageUrl==null||widget.user.imageUrl=='' ? ExactAssetImage('assets/merchant.jpg'):NetworkImage(widget.user.imageUrl),
-//                        ),
-//                      ),
+                      accountName: Text(widget.user.username, style: TextStyle( color: Colors.yellowAccent, fontWeight: FontWeight.bold)),
+                      accountEmail: Text(widget.user.email, style: TextStyle( color: Colors.yellowAccent, fontWeight: FontWeight.bold, fontSize: 12, fontStyle: FontStyle.italic),),
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               fit: BoxFit.fill,
@@ -334,13 +328,12 @@ class _MerchantHomeViewState extends State<MerchantHomeView> {
                         title: Text("Edit"),
                         trailing: IconButton(
                             icon: Icon(Icons.edit),
-                            onPressed: () => Navigator.pushReplacement(
+                            onPressed: () => Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        MerchantUpdateInfoView(
-                                          merchant: model.getCurrentUser(
-                                              model.merchants, widget.user.id),
+                                        MerchantEditInfoView(
+                                          user: widget.user,
                                         ))))),
                     ListTile(
                       title: Text("Pending Coupons"),

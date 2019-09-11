@@ -13,6 +13,8 @@ enum ViewState {
   EditUsername,
   EditPhone,
   EditImageUrl,
+  EditLocation,
+  EditCategory,
   FoodMerchant,
   ClothingMerchant,
   AccessoriesMerchant // The starting state that a form view is in

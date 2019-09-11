@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:giver_app/UI/views/home_view.dart';
 import 'package:giver_app/UI/views/block_home_page.dart';
-
 import 'package:giver_app/UI/views/sign_up_page.dart';
 import 'package:giver_app/UI/widgets/busy_overlay.dart';
 import 'package:giver_app/enum/view_state.dart';
@@ -40,7 +39,6 @@ class _SignInPageState extends State<SignInPage> {
       currentFocus.unfocus();
       FocusScope.of(context).requestFocus(nextFocus);
     }
-
     return BusyOverlay(
         show: this._state == ViewState.Busy,
         child: Scaffold(
@@ -81,7 +79,7 @@ class _SignInPageState extends State<SignInPage> {
                                           BorderRadius.circular(32.0))),
                               onSaved: (input) => _email = input,
                             ),
-                            new Container(height: 5.0),
+                            Container(height: 5.0),
                             TextFormField(
                               autofocus: true,
                               textInputAction: TextInputAction.done,
@@ -110,7 +108,7 @@ class _SignInPageState extends State<SignInPage> {
                               obscureText: true,
                             ),
                             Container(
-                                height: 5.0,
+                                height: 15.0,
                                 child: Text(
                                   _errorMessage,
                                   style: TextStyle(color: Colors.red),

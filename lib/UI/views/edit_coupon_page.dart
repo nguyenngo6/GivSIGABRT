@@ -63,6 +63,7 @@ class _EditCouponState extends State<EditCoupon> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.deepPurpleAccent,
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: _navigateToMerchantHomeView),
@@ -70,101 +71,66 @@ class _EditCouponState extends State<EditCoupon> {
           child: Text('Edit Coupon'),
         ),
       ),
-      body: Material(
-          child: Form(
-            key: _key,
-            autovalidate: _validate,
-            child: Column(
-              children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: TextFormField(
-                    initialValue: widget.coupon.code,
-                    onSaved: (input) => code = input,
-                    decoration: new InputDecoration(
-                        icon: Icon(Icons.title),
-                        hintText: "Coupon Name"),
+      body: SingleChildScrollView(
+        child: Material(
+            child: Form(
+              key: _key,
+              autovalidate: _validate,
+              child: Column(
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: TextFormField(
+                      initialValue: widget.coupon.code,
+                      onSaved: (input) => code = input,
+                      decoration: new InputDecoration(
+                          icon: Icon(Icons.title),
+                          hintText: "Coupon Name"),
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: TextFormField(
-                    initialValue: widget.coupon.description,
-                    onSaved: (input) => description = input,
-                    decoration: new InputDecoration(
-                        icon: Icon(Icons.dashboard),
-                        hintText: "Coupon Description"),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: TextFormField(
+                      initialValue: widget.coupon.description,
+                      onSaved: (input) => description = input,
+                      decoration: new InputDecoration(
+                          icon: Icon(Icons.dashboard),
+                          hintText: "Coupon Description"),
+                    ),
                   ),
-                ),
 
-                Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: TextFormField(
-                    initialValue: widget.coupon.points.toString(),
-                    onSaved: (input) => points = int.parse(input),
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.control_point),
+                  Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: TextFormField(
+                      initialValue: widget.coupon.points.toString(),
+                      onSaved: (input) => points = int.parse(input),
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.control_point),
 //                 hintText: "${widget.user.points}",
+                      ),
+                      keyboardType: TextInputType.number,
+                      inputFormatters: <TextInputFormatter>[
+                        WhitelistingTextInputFormatter.digitsOnly
+                      ],
                     ),
-                    keyboardType: TextInputType.number,
-                    inputFormatters: <TextInputFormatter>[
-                      WhitelistingTextInputFormatter.digitsOnly
-                    ],
                   ),
-                ),
-//                Padding(
-//                  padding: const EdgeInsets.all(16.0),
-//                  child: Column(children: <Widget>[
-//                    Row(
-//                      children: <Widget>[
-//                        Radio(
-////
-//                          value: true,
-////                  title: Text('True'),
-//                          groupValue: isUsed,
-//                          onChanged: (newValue) => setState(() => isUsed = newValue),
-////                  onChanged: (bool value) => isUsed = value,
-////                  selected: widget.coupon.isUsed,
-//                          activeColor: Colors.red,
-////                  subtitle: Text('used'),
-//                        ),
-//                        Text("True")
-//                      ],
-//                    ),
-//                    Row(
-//                      children: <Widget>[
-//                        Radio(
-////                  selected: widget.coupon.isUsed,
-//                          value: false,
-////                  title: Text('False'),
-//                          groupValue: isUsed,
-//                          onChanged:  (newValue) => setState(() => isUsed = newValue),
-////                  onChanged: (bool value) => isUsed = value,
-////                  selected: widget.coupon.isUsed,
-//                          activeColor: Colors.red,
-////                  subtitle: Text('not used'),
-//                        ),
-//                        Text("False")
-//                      ],
-//                    )
-//                  ],),
-//                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: <Widget>[
-                    RaisedButton(
-                      onPressed: _editCoupon,
-                      child: Text('Update'),
-                    ),
-                    RaisedButton(
-                      onPressed: _navigateToMerchantHomeView,
-                      child: Text('Cancel'),
-                    )
-                  ],
-                )
-              ],
-            ),
-          )),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: <Widget>[
+                      RaisedButton(
+                        onPressed: _editCoupon,
+                        child: Text('Update'),
+                      ),
+                      RaisedButton(
+                        onPressed: _navigateToMerchantHomeView,
+                        child: Text('Cancel'),
+                      )
+                    ],
+                  )
+                ],
+              ),
+            )),
+      ),
     );
   }
 }

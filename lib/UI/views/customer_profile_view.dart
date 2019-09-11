@@ -54,24 +54,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
       StorageReference firebaseStorageRef = FirebaseStorage.instance
           .ref()
           .child('profileImages/' + widget.user.id);
-
-      if (firebaseStorageRef == null) {
-        print('no old image to delete');
-        updateNewImage(firebaseStorageRef, context, model);
-      } else {
-        
-        bool result = await firebaseStorageRef.delete().catchError((error) {
-          print(
-              'this error occur when delete file in Firebase Storage:' + error);
-          setState(() {
-            isEditProfileImage = false;
-            uploadFile = null;
-          });
-        }).whenComplete(() {
-          print('comleted deleting old image');
-        }).then((_) => updateNewImage(firebaseStorageRef, context, model));
-        print('result add new Image is: $result');
-      }
+      updateNewImage(firebaseStorageRef, context, model);
     }
 
     imageSelectorGallery() async {
@@ -128,7 +111,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
               child: GestureDetector(
                 child: CircleAvatar(
                   radius: 100,
-                  backgroundColor: Color(0xff476cfb),
+                  backgroundColor: Colors.deepPurpleAccent ,
                   child: ClipOval(
                     child: new SizedBox(
                       width: 190.0,
@@ -285,6 +268,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
         show: model.state == ViewState.Busy || model.state == ViewState.EditImageUrl,
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.deepPurpleAccent,
             leading: FlatButton(
                 onPressed: () => Navigator.pop(context),
                 child: Icon(Icons.backspace)),

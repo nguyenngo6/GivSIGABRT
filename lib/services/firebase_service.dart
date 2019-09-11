@@ -304,6 +304,22 @@ class FirebaseService {
     return true;
   }
 
+  Future<bool> editLocation(String newAddress, String uid) async {
+    await Firestore.instance
+        .collection("users")
+        .document(uid)
+        .updateData({'address': newAddress});
+    return true;
+  }
+
+  Future<bool> editCategory(String newCate, String uid) async {
+    await Firestore.instance
+        .collection("users")
+        .document(uid)
+        .updateData({'category': newCate});
+    return true;
+  }
+
   Future<bool> editUsername(String newUsername, String uid) async {
     await Firestore.instance
         .collection("users")

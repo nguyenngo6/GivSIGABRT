@@ -19,7 +19,7 @@ class _SignUpPageState extends State<SignUpPage> {
   String _username;
   String _address;
   String _selected;
-  String _errorMessage='';
+  String _errorMessage = '';
   var _state;
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -43,8 +43,6 @@ class _SignUpPageState extends State<SignUpPage> {
     'Food',
     'Clothing',
     'Accessories',
-    'Electronics',
-    'Beauty & personal care',
   ];
   final List<DropdownMenuItem<String>> _dropdownMenuCategories = menuCategories
       .map(
@@ -78,7 +76,12 @@ class _SignUpPageState extends State<SignUpPage> {
     return BusyOverlay(
         show: this._state == ViewState.Busy,
         child: Scaffold(
-          appBar: AppBar(title: Center(child: Text('Register'),),),
+          appBar: AppBar(
+            backgroundColor: Colors.deepPurpleAccent,
+            title: Center(
+              child: Text('Register'),
+            ),
+          ),
           body: SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.all(16.0),
@@ -316,27 +319,29 @@ class _SignUpPageState extends State<SignUpPage> {
       _formKey.currentState.save();
       try {
         FirebaseUser user = await FirebaseAuth.instance
-            .createUserWithEmailAndPassword(email: _email, password: _password).catchError((error){
-              setState(() {
-                _errorMessage = error.code=='ERROR_EMAIL_ALREADY_IN_USE'? 'Email is already exist!':'Please try again!';
-              });
-              return null;
+            .createUserWithEmailAndPassword(email: _email, password: _password)
+            .catchError((error) {
+          setState(() {
+            _errorMessage = error.code == 'ERROR_EMAIL_ALREADY_IN_USE'
+                ? 'Email is already exist!'
+                : 'Please try again!';
+          });
+          return null;
         });
-        if(user!=null){
+        if (user != null) {
           user.sendEmailVerification();
           print("send email to-->");
           print(_emailController.text);
           Firestore.instance.runTransaction((Transaction transaction) async {
             CollectionReference reference =
-            Firestore.instance.collection('users');
-            if(_selected=='Customer'){
+                Firestore.instance.collection('users');
+            if (_selected == 'Customer') {
               await reference.document(user.uid).setData({
                 "email": _email,
                 "username": _username,
                 "level": 1,
-                               
               });
-            }else{
+            } else {
               await reference.document(user.uid).setData({
                 "email": _email,
                 "username": _username,
@@ -348,12 +353,10 @@ class _SignUpPageState extends State<SignUpPage> {
           });
           Navigator.pushReplacement(
               context, MaterialPageRoute(builder: (context) => SignInPage()));
-
         }
         setState(() {
           _state == ViewState.DataFetched;
         });
-
       } catch (e) {
         print(e);
       }

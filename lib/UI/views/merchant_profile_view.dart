@@ -56,10 +56,10 @@ class MerchantProfileView extends StatelessWidget {
                         child: Container(),
                       ),
                       Expanded(
-                        flex: 3,
+                        flex: 2,
                         child: Container(
+                          height: 50.0,
                           color: Colors.white,
-                          height: 100,
                           child: MerchantInfo(
                             merchant: merchant,
                             customer: customer,
@@ -67,7 +67,7 @@ class MerchantProfileView extends StatelessWidget {
                         ),
                       ),
                       Expanded(
-                        flex: 8,
+                        flex: 7,
                         child: Container(
                             color: Colors.white,
                             height: screenHeight(context,

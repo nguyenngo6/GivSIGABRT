@@ -41,51 +41,56 @@ class CharityInfo extends StatelessWidget {
     }
 
     var currentCharity = model.getCharityById(model.charities, charityId);
+
+
     final topContentText = Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: <Widget>[
-        SizedBox(height: 265.0),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: <Widget>[
-            Expanded(
-                flex: 6,
-                child: Padding(
-                  padding: EdgeInsets.only(left: 10.0),
-                )),
-            Expanded(
-                flex: 2,
-                child: Container(
-                  padding: EdgeInsets.only(top: 30.0),
+        Expanded(flex:8,child: SizedBox(height: 265.0)),
+        Expanded(
+          flex: 2,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              Expanded(
+                  flex: 6,
+                  child: Padding(
+                    padding: EdgeInsets.only(left: 10.0),
+                  )),
+              Expanded(
+                  flex: 2,
                   child: Container(
-                    alignment: Alignment.center,
-                    padding: EdgeInsets.all(4.0),
-                    decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Color.fromRGBO(220, 220, 220, 1.0),
-                          )
-                        ],
-                        border: Border.all(color: Colors.black, width: 1.0),
-                        borderRadius: BorderRadius.circular(18.0)),
-                    child: RichText(
-                      text: TextSpan(
-                        text: '\$',
-                        style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.brown,
-                            fontWeight: FontWeight.bold),
-                        children: <TextSpan>[
-                          TextSpan(
-                              text: currentCharity.credits.toString(),
-                              style:
-                                  TextStyle(color: Colors.red, fontSize: 20.0)),
-                        ],
+                    padding: EdgeInsets.only(top: 30.0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.all(4.0),
+                      decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color.fromRGBO(220, 220, 220, 1.0),
+                            )
+                          ],
+                          border: Border.all(color: Colors.black, width: 1.0),
+                          borderRadius: BorderRadius.circular(18.0)),
+                      child: RichText(
+                        text: TextSpan(
+                          text: '\$',
+                          style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.brown,
+                              fontWeight: FontWeight.bold),
+                          children: <TextSpan>[
+                            TextSpan(
+                                text: currentCharity.credits.toString(),
+                                style:
+                                    TextStyle(color: Colors.red, fontSize: 20.0)),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ))
-          ],
+                  ))
+            ],
+          ),
         ),
       ],
     );
@@ -229,11 +234,13 @@ class CharityInfo extends StatelessWidget {
               resizeToAvoidBottomInset: false,
               body: Column(
                 children: <Widget>[
-                  topContent,
-                  Divider(
-                    color: Colors.blue,
+                  Expanded(flex:5,child: topContent),
+                  Expanded(
+                    flex:1, child: Divider(
+                      color: Colors.blue,
+                    ),
                   ),
-                  bottomContent
+                  Expanded(flex: 4,child: bottomContent)
                 ],
               ),
             ));
