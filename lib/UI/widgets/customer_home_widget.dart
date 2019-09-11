@@ -483,34 +483,40 @@ class CustomerHomeWidget extends StatelessWidget {
           padding: EdgeInsets.only(top: MediaQuery.of(context).size.height*0.44),
           child: Column(
             children: <Widget>[
-              Row(
-                children: <Widget>[
-                  Expanded(
-                      flex: 5,
+              Expanded(
+                flex: 1,
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                        flex: 5,
+                        child: Container(
+                            padding: EdgeInsets.only(left: 35,),
+                            child: Text(
+                              "Coupon List",
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w600),
+                            ))),
+                    Expanded(
+                      flex: 3,
                       child: Container(
-                          padding: EdgeInsets.only(left: 35,),
-                          child: Text(
-                            "Coupon List",
-                            style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.w600),
-                          ))),
-                  Expanded(
-                    flex: 3,
-                    child: Container(
-                      padding: EdgeInsets.only(right: 10, ),
-                      child: FlatButton(
-                        child: Text("View all >"),
-                        onPressed: null,
+                        padding: EdgeInsets.only(right: 10, ),
+                        child: FlatButton(
+                          child: Text("View all >"),
+                          onPressed: null,
+                        ),
+                        alignment: Alignment.centerRight,
                       ),
-                      alignment: Alignment.centerRight,
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
-              Container(
-                  height: screenHeight(context, decreasedBy: 470),
-                  padding: EdgeInsets.only(left: 28, right: 28),
-                  child: _getListUi(context))
+              Expanded(
+                flex: 9,
+                child: Container(
+                    height: screenHeight(context, decreasedBy: 470),
+                    padding: EdgeInsets.only(left: 28, right: 28),
+                    child: _getListUi(context)),
+              )
             ],
           ),
         ),

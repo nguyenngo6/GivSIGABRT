@@ -44,14 +44,12 @@ class _SignInPageState extends State<SignInPage> {
     return BusyOverlay(
         show: this._state == ViewState.Busy,
         child: Scaffold(
-          appBar: AppBar(
-            title: Center(child: Text('Giver App')),
-          ),
           body: SingleChildScrollView(
             child: Container(
-                padding: EdgeInsets.all(16.0),
+                padding: EdgeInsets.all(20.0),
                 child: Column(
                   children: <Widget>[
+                    Container(height: 20.0,),
                     Image.asset('assets/upup.png'),
                     Form(
                         key: _formKey,

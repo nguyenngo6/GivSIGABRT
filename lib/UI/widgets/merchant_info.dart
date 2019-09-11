@@ -63,50 +63,53 @@ checkIfLikedOrNot() async{
   Widget build(BuildContext context) {
    
     return SizedBox(
-        
         height: 150,
         child: Card(
           color: Colors.white,
           child: Row(
             children: <Widget>[
               Expanded(
-                flex: 6,
+                flex: 8,
                 child: Container(
                   padding: EdgeInsets.only(left: 10),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Container(
-                        height: 5,
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          widget.merchant.username,
+                          style: Style.merchantNameTextStyle,
+                        ),
                       ),
-                      Text(
-                        widget.merchant.username,
-                        style: Style.merchantNameTextStyle,
+                      Expanded(
+                        flex: 2,
+                        child: Text(
+                          "Fast Food and Beverage",
+                          style: Style.commonTextStyle,
+                        ),
                       ),
-                      Container(
-                        height: 5,
-                      ),
-                      Text(
-                        "Fast Food and Beverage",
-                        style: Style.commonTextStyle,
-                      ),
-                      Container(
-                        height: 5,
-                      ),
-                    
-                      Row(
-                        children: <Widget>[
-                          Icon(Icons.location_on),
-                          Container(
-                            width: 260,
-                            child: Text(
-                              widget.merchant.address,
-                              style: Style.baseTextStyle,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                            ),
-                          )
-                        ],
+
+                      Expanded(
+                        flex: 5,
+                        child: Row(
+                          children: <Widget>[
+                            Expanded(child: Icon(Icons.location_on), flex: 1,),
+                            Expanded(
+                              flex: 9,
+                              child: Container(
+                                width: 260,
+                                child: Text(
+                                  widget.merchant.address,
+                                  style: Style.baseTextStyle,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
+
                       )
                     ],
                   ),

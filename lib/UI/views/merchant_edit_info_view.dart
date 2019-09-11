@@ -192,15 +192,14 @@ class _MerchantUpdateInfoViewState extends State<MerchantUpdateInfoView> {
                     child: new SizedBox(
                       width: 190.0,
                       height: 190.0,
-                      child: uploadFile == null
-                          ? Image.network(
-                              widget.merchant.imageUrl,
-                              fit: BoxFit.fill,
-                            )
-                          : Image.file(
+                      child: uploadFile != null
+                          ?Image.file(
                               uploadFile,
                               fit: BoxFit.fill,
-                            ),
+                            )
+                                :widget.merchant.imageUrl==null||widget.merchant.imageUrl==''
+                          ? Image.asset('assets/merchant.jpg')
+                          : Image.network(widget.merchant.imageUrl)
                     ),
                   ),
                   onTap: () => imageSelectorGallery(),
@@ -254,7 +253,7 @@ class _MerchantUpdateInfoViewState extends State<MerchantUpdateInfoView> {
         new TextFormField(
             initialValue: widget.merchant.address,
             decoration: new InputDecoration(hintText: 'Address'),
-            maxLength: 32,
+            maxLength: 44,
             validator: validate,
             onSaved: (String val) {
               _address = val;

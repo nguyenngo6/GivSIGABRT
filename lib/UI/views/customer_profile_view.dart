@@ -133,15 +133,14 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
                     child: new SizedBox(
                       width: 190.0,
                       height: 190.0,
-                      child: uploadFile == null
-                          ? Image.network(
-                              url,
-                              fit: BoxFit.fill,
-                            )
-                          : Image.file(
+                      child: uploadFile != null
+                          ? Image.file(
                               uploadFile,
                               fit: BoxFit.fill,
-                            ),
+                            )
+                          : url==null||url==''
+                          ? Image.asset('assets/customer.png')
+                          : Image.network(url)
                     ),
                   ),
                 ),
@@ -194,7 +193,7 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   Text(
-                    message,
+                    message??'',
                     style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.w800,
@@ -248,13 +247,13 @@ class _CustomerProfileViewState extends State<CustomerProfileView> {
                 Divider(),
                 ListTile(
                   leading: Icon(Icons.email),
-                  title: Text(currentUser.email),
+                  title: Text(currentUser.email??''),
                 ),
                 Divider(),
                 ListTile(
                   leading: Icon(Icons.phone),
                   title: model.state != ViewState.EditPhone
-                      ? Text(currentUser.phone)
+                      ? Text(currentUser.phone??'')
                       : TextFormField(
                           onFieldSubmitted: (newInput) => onSubmit(newInput, currentUser.phone, model),
                           initialValue: currentUser.phone,

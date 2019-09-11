@@ -1,6 +1,6 @@
+import 'package:date_format/date_format.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
 import '../../model/user.dart';
 import '../views/customer_profile_view.dart';
 import '../views/sign_in_page.dart';
@@ -20,7 +20,6 @@ class _CustomerDrawerState extends State<CustomerDrawer> {
       Navigator.pushReplacement(
           context, MaterialPageRoute(builder: (context) => SignInPage()));
     }
-
     return Drawer(
       child: ListView(
         children: <Widget>[
@@ -37,7 +36,7 @@ class _CustomerDrawerState extends State<CustomerDrawer> {
             currentAccountPicture: GestureDetector(
               onTap: () => print("avatar tap"),
               child: CircleAvatar(
-                backgroundImage: NetworkImage(widget.customer.imageUrl),
+                backgroundImage: widget.customer.imageUrl==null||widget.customer.imageUrl=='' ? ExactAssetImage('assets/customer.png'):NetworkImage(widget.customer.imageUrl),
               ),
             ),
             decoration: BoxDecoration(
@@ -57,10 +56,6 @@ class _CustomerDrawerState extends State<CustomerDrawer> {
                     MaterialPageRoute(
                         builder: (context) =>
                             CustomerProfileView(user: widget.customer)))),
-          ),
-          ListTile(
-            title: Text("Link2"),
-            trailing: IconButton(icon: Icon(Icons.arrow_left), onPressed: null),
           ),
           ListTile(
             title: Text("Sign Out"),

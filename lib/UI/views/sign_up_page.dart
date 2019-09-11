@@ -78,7 +78,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return BusyOverlay(
         show: this._state == ViewState.Busy,
         child: Scaffold(
-          appBar: AppBar(),
+          appBar: AppBar(title: Center(child: Text('Register'),),),
           body: SingleChildScrollView(
             child: Container(
               padding: EdgeInsets.all(16.0),

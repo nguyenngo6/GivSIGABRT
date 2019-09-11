@@ -51,22 +51,29 @@ class MerchantProfileView extends StatelessWidget {
                   ),
                   body: Column(
                     children: <Widget>[
-                      Container(
-                        height: 70,
+                      Expanded(
+                        flex: 1,
+                        child: Container(),
                       ),
-                      Container(
-                        color: Colors.white,
-                        height: 100,
-                        child: MerchantInfo(
-                          merchant: merchant,
-                          customer: customer,
+                      Expanded(
+                        flex: 3,
+                        child: Container(
+                          color: Colors.white,
+                          height: 100,
+                          child: MerchantInfo(
+                            merchant: merchant,
+                            customer: customer,
+                          ),
                         ),
                       ),
-                      Container(
-                          color: Colors.white,
-                          height: screenHeight(context,
-                              decreasedBy: 194 + appBarHeight),
-                          child: _getBodyUi(context, model)),
+                      Expanded(
+                        flex: 8,
+                        child: Container(
+                            color: Colors.white,
+                            height: screenHeight(context,
+                                decreasedBy: 194 + appBarHeight),
+                            child: _getBodyUi(context, model)),
+                      ),
                     ],
                   ))
             ]));
