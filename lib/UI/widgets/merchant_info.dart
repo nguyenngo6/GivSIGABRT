@@ -89,6 +89,7 @@ checkIfLikedOrNot() async{
                           style: Style.commonTextStyle,
                         ),
                       ),
+
                       Expanded(
                         flex: 5,
                         child: Row(
@@ -108,6 +109,7 @@ checkIfLikedOrNot() async{
                             )
                           ],
                         ),
+
                       )
                     ],
                   ),
