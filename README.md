@@ -8,9 +8,7 @@ This project is a on-going development of the GiverApp application.
 Supervisor : Anna Felipe
 
 Team Member : 
-Nguyen Ngo Vu
-Toan Do Quoc
-Toan Le Minh
+Nguyen Ngo Vu, Toan Do Quoc, Toan Le Minh
 
 
 
