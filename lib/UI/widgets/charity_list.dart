@@ -16,35 +16,17 @@ class _CharityListState extends State<CharityList> {
   @override
   Widget build(BuildContext context) {
     var charityList = widget.model.charities;
-    return Column(
-      children: <Widget>[
-        Expanded(
-          child: TextField(
-            controller: editingController,
-            decoration: InputDecoration(
-              labelText: "Search",
-              hintText: "Search",
-              prefixIcon: Icon(Icons.search),
-            ),
-          ),
-          flex: 1,
-        ),
-        Expanded(
-          child: Scaffold(
-            body: ListView.builder(
-              itemCount: charityList.length,
-              itemBuilder: (context, rowNumber) {
-                var charityItem = charityList[rowNumber];
-                return CharityItem(context: context, model: widget.model,
-                  customer: widget.customer,
-                  charity: charityItem,
-                );
-              },
-            ),
-          ),
-          flex: 9,
-        ),
-      ],
+    return Scaffold(
+      body: ListView.builder(
+        itemCount: charityList.length,
+        itemBuilder: (context, rowNumber) {
+          var charityItem = charityList[rowNumber];
+          return CharityItem(context: context, model: widget.model,
+            customer: widget.customer,
+            charity: charityItem,
+          );
+        },
+      ),
     );
   }
 }

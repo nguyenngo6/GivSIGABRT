@@ -94,12 +94,8 @@ class _CouponInfoViewState extends State<CouponInfoView> {
         alignment: FractionalOffset.topCenter,
         child: Hero(
           tag: "tag",
-          child: Image.network(
-            merchant.imageUrl,
-            width: 92,
-            height: 92,
-            fit: BoxFit.fill,
-          )
+          child: merchant.imageUrl==null||merchant.imageUrl==''?Image.asset('assets/merchant.jpg', fit: BoxFit.fill,width: 92,height: 92,):Image.network(merchant.imageUrl,
+              fit: BoxFit.fill,width: 92,height: 92)
         ));
   }
 

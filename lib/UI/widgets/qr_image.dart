@@ -12,6 +12,7 @@ class QrWidget extends StatelessWidget {
     String name = coupon.code;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.deepPurpleAccent,
         title: Text(name),
         leading: FlatButton(
           child: Icon(Icons.arrow_back),
@@ -24,7 +25,7 @@ class QrWidget extends StatelessWidget {
             Text("Scan this to redeem ",
               textAlign: TextAlign.center,
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 14,
               ),
             ),
             SizedBox(height: 30,),

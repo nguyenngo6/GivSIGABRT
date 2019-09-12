@@ -48,10 +48,10 @@ class TopScreenDesign extends StatelessWidget implements PreferredSizeWidget {
                         ),
                         Expanded(
                           child: Container(
-                            margin: EdgeInsets.only(left: 20,top: 10),
+                            margin: EdgeInsets.only(left: 20,top: 30),
                             child: Text(
                               '${user.username}',
-                              style: TextStyle(fontSize: 30),
+                              style: TextStyle(fontSize: 30, color: Colors.greenAccent),
                             ),
                           ),
                           flex: 5,

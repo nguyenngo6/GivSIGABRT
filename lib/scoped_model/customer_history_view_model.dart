@@ -78,7 +78,7 @@ class CustomerHistoryViewModel extends BaseModel{
     setState(ViewState.Busy);
     var finalList = List<Coupon>();
     for(Coupon coupon in couponList){
-      if(coupon.isUsed == true && coupon.usedBy == uid){
+      if(coupon.isUsed == true && coupon.usedBy == uid && coupon.isPending == false){
         finalList.add(coupon);
       }
     }

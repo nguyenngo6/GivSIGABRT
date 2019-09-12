@@ -91,8 +91,9 @@ export const sendCouponNotification = functions.firestore
 
       };
       tokens.forEach(function (value) {
-        return fcm.sendToDevice(value, payload);
+         fcm.sendToDevice(value, payload);
       });
+      return coupon;
     };
 
     return null;

@@ -83,7 +83,7 @@ class _AddCouponsState extends State<AddCoupon> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.lightBlueAccent,
+        backgroundColor: Colors.deepPurpleAccent,
         leading: IconButton(
             icon: Icon(Icons.arrow_back),
             onPressed: _navigateToMerchantHomeView),

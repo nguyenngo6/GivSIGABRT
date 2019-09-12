@@ -76,7 +76,7 @@ class _PendingCouponEntryState extends State<PendingCouponEntry> {
                         ),
                       ),
                       Container(
-                        width: 15,
+                        width: 30,
                         child: IconButton(
                           icon: Icon(
                             Icons.close,

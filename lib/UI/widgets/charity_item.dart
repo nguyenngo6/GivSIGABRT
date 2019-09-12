@@ -16,37 +16,36 @@ class CharityItem extends StatelessWidget {
     return Container(
         height: 200.0,
         padding: EdgeInsets.all(10.0),
-        child: Container(
-            child: Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8.0))),
-                child: InkWell(
-                  onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => CharityInfo(context: context, model: model,
-                              customer: customer, charityId: charity.id))),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch, // add this
-                    children: <Widget>[
-                      Expanded(
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(8.0),
-                            topRight: Radius.circular(8.0),
-                          ),
-                          child: Image.network(charity.imageUrl,
-                              // width: 300,
-                              fit: BoxFit.fill),
-                        ),
-                        flex: 8,
+        child: Card(
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(8.0))),
+            child: InkWell(
+              onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CharityInfo(context: context, model: model,
+                          customer: customer, charityId: charity.id))),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch, // add this
+                children: <Widget>[
+                  Expanded(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(8.0),
+                        topRight: Radius.circular(8.0),
                       ),
-                      Expanded(
-                        child: Center(child: Text(charity.name)),
-                        flex: 2,
-                      ),
-                    ],
+                      child: Image.network(charity.imageUrl,
+                          // width: 300,
+                          fit: BoxFit.fill),
+                    ),
+                    flex: 8,
                   ),
-                ))));
+                  Expanded(
+                    child: Center(child: Text(charity.name)),
+                    flex: 2,
+                  ),
+                ],
+              ),
+            )));
   }
 }
